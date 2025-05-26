@@ -1,38 +1,50 @@
 .App {
-  text-align: center;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Header {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.About {
+  background-color: #e0e0e0;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #bbb;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.Projects {
+  background-color: #d0d0d0;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #aaa;
 }
 
-.App-link {
-  color: #61dafb;
+.Contact {
+  background-color: #c0c0c0;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #999;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Footer {
+  background-color: #b0b0b0;
+  padding: 10px;
+  border: 1px solid #888;
+  text-align: center; /* Center the links */
+}
+
+.Footer a {
+  margin: 0 10px; /* Add some space between the links */
+  color: #333; /* Change link color for better visibility */
+  text-decoration: none; /* Remove underline */
+}
+
+.Footer a:hover {
+  text-decoration: underline; /* Add underline on hover */
 }
