@@ -21,7 +21,7 @@ export default function App() {
         <header className="header fade-in">
           <div className="container">
             <img
-              src="/assets/profile.jpg"
+              src={process.env.PUBLIC_URL + "/assets/profile.jpg"}
               alt="Mohan Babu Doddapaneni"
               className="profile-img"
             />
