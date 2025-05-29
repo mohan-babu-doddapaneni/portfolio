@@ -8,6 +8,7 @@ export default function App() {
         <div className="nav-container">
           <h1 className="nav-logo">Mohan Babu</h1>
           <ul className="nav-links">
+            <li><a href="/">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#experience">Experience</a></li>
