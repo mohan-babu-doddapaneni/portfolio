@@ -8,7 +8,7 @@ export default function App() {
         <div className="nav-container">
           <h1 className="nav-logo">Mohan Babu</h1>
           <ul className="nav-links">
-            <li><a href="/">Home</a></li>
+            <li><a href="#top">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#experience">Experience</a></li>
@@ -19,7 +19,7 @@ export default function App() {
       </nav>
 
       <main className="main-content">
-        <header className="header fade-in">
+        <header id="top" className="header fade-in">
           <div className="container">
             <img
               src={process.env.PUBLIC_URL + "/assets/profile.jpg"}
