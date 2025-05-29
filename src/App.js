@@ -1,31 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 
 export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
+
+  const handleMenuToggle = () => setMenuOpen(!menuOpen);
+  const handleLinkClick = () => setMenuOpen(false);
+  const toggleImageModal = () => setShowImageModal(!showImageModal);
+
   return (
     <div className="App dark-theme">
       <nav className="navbar">
         <div className="nav-container">
-          <h1 className="nav-logo">Mohan Babu</h1>
-          <ul className="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
+          <h1 className="nav-logo">
+            <a href="#" onClick={handleLinkClick}>Mohan Babu Doddapaneni</a>
+          </h1>
+          <div className="menu-icon" onClick={handleMenuToggle}>
+            <span>{menuOpen ? "✖" : "☰"}</span>
+          </div>
+          <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
+            <li><a href="#" onClick={handleLinkClick}>Home</a></li>
+            <li><a href="#about" onClick={handleLinkClick}>About</a></li>
+            <li><a href="#skills" onClick={handleLinkClick}>Skills</a></li>
+            <li><a href="#experience" onClick={handleLinkClick}>Experience</a></li>
+            <li><a href="#projects" onClick={handleLinkClick}>Projects</a></li>
+            <li><a href="#contact" onClick={handleLinkClick}>Contact</a></li>
           </ul>
         </div>
       </nav>
 
       <main className="main-content">
-        <header className="header fade-in">
+        <header id="home" className="header fade-in">
           <div className="container">
+            {/* <img
+              src={process.env.PUBLIC_URL + "/assets/profile.jpg"}
+              alt="Mohan Babu Doddapaneni"
+              className="profile-img"
+            /> */}
             <img
               src={process.env.PUBLIC_URL + "/assets/profile.jpg"}
               alt="Mohan Babu Doddapaneni"
               className="profile-img"
+              onClick={toggleImageModal}
             />
+
+            {showImageModal && (
+              <div className="modal-overlay" onClick={toggleImageModal}>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                  <button className="close-button" onClick={toggleImageModal}>✖</button>
+                  <img
+                    src={process.env.PUBLIC_URL + "/assets/profile.jpg"}
+                    alt="Full Profile"
+                    className="full-image"
+                  />
+                </div>
+              </div>
+            )}
             <h1>Mohan Babu Doddapaneni</h1>
             <p>Java Full Stack Developer | Angular, Java, Spring Boot</p>
             <div className="contact-links">
