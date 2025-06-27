@@ -72,7 +72,7 @@ export default function App() {
         <section id="about" className="about container fade-in">
           <h2>About Me</h2>
           <p>
-            Full Stack Developer with 3+ years of experience in building scalable,
+            Full Stack Developer with 5 years of experience in building scalable,
             secure, and responsive web applications using Angular, Java, Spring
             Boot, and MySQL. Passionate about AI-driven development, REST APIs,
             microservices, and Agile methodologies.
