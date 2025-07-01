@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/mohan-babu-doddapaneni/portfolio/static/css/main.7580ff60.css",
+    "main.js": "/mohan-babu-doddapaneni/portfolio/static/js/main.9ce2a4b8.js",
+    "static/js/453.ad7768ec.chunk.js": "/mohan-babu-doddapaneni/portfolio/static/js/453.ad7768ec.chunk.js",
+    "index.html": "/mohan-babu-doddapaneni/portfolio/index.html",
+    "main.7580ff60.css.map": "/mohan-babu-doddapaneni/portfolio/static/css/main.7580ff60.css.map",
+    "main.9ce2a4b8.js.map": "/mohan-babu-doddapaneni/portfolio/static/js/main.9ce2a4b8.js.map",
+    "453.ad7768ec.chunk.js.map": "/mohan-babu-doddapaneni/portfolio/static/js/453.ad7768ec.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7580ff60.css",
+    "static/js/main.9ce2a4b8.js"
+  ]
+}
