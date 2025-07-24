@@ -93,7 +93,7 @@ export default function App() {
               <span> | </span>
               <a href="https://github.com/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">GitHub</a>
             </div>
-            <a href="/Mohan_Resume.pdf" download className="resume-download">📄 Download Resume</a>
+            <a href="/Mohan_Babu_Doddapaneni.pdf" download className="resume-download">📄 Download Resume</a>
           </div>
         </header>
 
