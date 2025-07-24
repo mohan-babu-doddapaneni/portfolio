@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const handleMenuToggle = () => setMenuOpen(!menuOpen);
   const handleLinkClick = () => setMenuOpen(false);
   const toggleImageModal = () => setShowImageModal(!showImageModal);
+  const toggleTheme = () => setIsDarkTheme(!isDarkTheme);
+
+  useEffect(() => {
+    document.body.className = isDarkTheme ? "" : "light-theme";
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isDarkTheme]);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <div className="App dark-theme">
+    <div className={`App ${isDarkTheme ? "dark-theme" : "light-theme"}`}>
       <nav className="navbar">
         <div className="nav-container">
           <h1 className="nav-logo">
@@ -27,6 +43,9 @@ export default function App() {
             <li><a href="#projects" onClick={handleLinkClick}>Projects</a></li>
             <li><a href="#contact" onClick={handleLinkClick}>Contact</a></li>
           </ul>
+          <button className="theme-toggle" onClick={toggleTheme}>
+            {isDarkTheme ? "☀️ Light" : "🌙 Dark"}
+          </button>
         </div>
       </nav>
 
@@ -34,7 +53,7 @@ export default function App() {
         <header id="home" className="header fade-in">
           <div className="container">
             <img
-              src={process.env.PUBLIC_URL + "/assets/profile.jpg"}
+              src={process.env.PUBLIC_URL + "/assets/profile.png"}
               alt="Mohan Babu"
               className="profile-img"
               onClick={toggleImageModal}
@@ -45,7 +64,7 @@ export default function App() {
                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                   <button className="close-button" onClick={toggleImageModal}>✖</button>
                   <img
-                    src={process.env.PUBLIC_URL + "/assets/profile.jpg"}
+                    src={process.env.PUBLIC_URL + "/assets/profile.png"}
                     alt="Full Profile"
                     className="full-image"
                   />
@@ -53,21 +72,35 @@ export default function App() {
               </div>
             )}
             <h1>Mohan Babu Doddapaneni</h1>
-            <p>Full Stack Developer | Java, Spring Boot, React, AWS</p>
+            <p className="headline">Full Stack Developer | Java, Spring Boot, React, AWS</p>
+            <div className="icon-row">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" title="Java" />
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" title="React" />
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring Boot" title="Spring Boot" />
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" title="Docker" />
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" className={`github-icon ${isDarkTheme ? "dark-mode" : ""}`} alt="GitHub" />
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg"
+                alt="AWS"
+                className={`aws-icon ${isDarkTheme ? 'dark-mode' : ''}`}
+              />            </div>
             <div className="contact-links">
-              <a href="mailto:doddapanenimohanbabu3@gmail.com">Gmail</a>
+              <a href="mailto:mohanbabu.d325@gmail.com">Gmail</a>
+              <span> | </span>
+              <a href="tel:+17743516990">+1 (774) 351-6990</a>
               <span> | </span>
               <a href="https://linkedin.com/in/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">LinkedIn</a>
               <span> | </span>
               <a href="https://github.com/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">GitHub</a>
             </div>
+            <a href="/Mohan_Resume.pdf" download className="resume-download">📄 Download Resume</a>
           </div>
         </header>
 
         <section id="about" className="about container fade-in">
           <h2>About Me</h2>
           <p>
-            Full Stack Developer with 5+ years of experience building scalable, secure, and cloud-native web applications using Java, Spring Boot, React, and AWS. Strong focus on REST APIs, microservices, and DevOps with Docker and Jenkins.
+            Full Stack Developer with 5+ years of experience building scalable, secure, and cloud-native web applications using Java, Spring Boot, React, and AWS. Strong focus on REST APIs, microservices, and DevOps with Docker and Jenkins. Passionate about clean code, system design, and building meaningful software products.
           </p>
         </section>
 
@@ -121,10 +154,19 @@ export default function App() {
 
         <section id="contact" className="contact-links">
           <h2>Contact</h2>
-          <p>Email: <a href="mailto:doddapanenimohanbabu3@gmail.com">doddapanenimohanbabu3@gmail.com</a></p>
+          <p>Email: <a href="mailto:mohanbabu.d325@gmail.com">mohanbabu.d325@gmail.com</a></p>
+          <p>Phone: <a href="tel:+17743516990">+1 (774) 351-6990</a></p>
           <p>LinkedIn: <a href="https://linkedin.com/in/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">@mohan-babu-doddapaneni</a></p>
           <p>GitHub: <a href="https://github.com/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">@mohan-babu-doddapaneni</a></p>
         </section>
+
+        {showScrollTop && (
+          <button className="scroll-to-top" onClick={scrollToTop}>↑</button>
+        )}
+
+        <a href="tel:+17743516990" className="contact-float" aria-label="Call Me">
+          📞 <span>Call Me</span>
+        </a>
       </main>
 
       <footer className="container">
