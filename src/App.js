@@ -93,7 +93,19 @@ export default function App() {
               <span> | </span>
               <a href="https://github.com/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">GitHub</a>
             </div>
-            <a href="/Mohan_Babu_Doddapaneni.pdf" download className="resume-download">📄 Download Resume</a>
+            <button
+              className="resume-download"
+              onClick={() => {
+                const link = document.createElement("a");
+                link.href = `${process.env.PUBLIC_URL}/Mohan_Babu_Doddapaneni.pdf`;
+                link.download = "Mohan_Babu_Doddapaneni.pdf";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+            >
+              📄 Download Resume
+            </button>
           </div>
         </header>
 
