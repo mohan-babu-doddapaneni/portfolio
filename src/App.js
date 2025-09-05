@@ -84,11 +84,6 @@ export default function App() {
                 alt="AWS"
                 className={`aws-icon ${isDarkTheme ? 'dark-mode' : ''}`}
               />
-              <img
-                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
-                alt="Docker"
-                title="Docker"
-              />
             </div>
             <div className="contact-links">
               <a href="mailto:mohanbabud25@gmail.com">Gmail</a>
