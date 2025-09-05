@@ -72,7 +72,7 @@ export default function App() {
               </div>
             )}
             <h1>Mohan Babu Doddapaneni</h1>
-            <p className="headline">Full Stack Developer | Java, Spring Boot, React, AWS</p>
+            <p className="headline">Full Stack Developer (5+ yrs) · Java, Spring Boot, React/Angular, AWS · Microservices & Event‑Driven Systems</p>
             <div className="icon-row">
               <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" title="Java" />
               <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" title="React" />
@@ -83,9 +83,15 @@ export default function App() {
                 src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg"
                 alt="AWS"
                 className={`aws-icon ${isDarkTheme ? 'dark-mode' : ''}`}
-              />            </div>
+              />
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
+                alt="Docker"
+                title="Docker"
+              />
+            </div>
             <div className="contact-links">
-              <a href="mailto:mohanbabu.d325@gmail.com">Gmail</a>
+              <a href="mailto:mohanbabud25@gmail.com">Gmail</a>
               <span> | </span>
               <a href="tel:+17743516990">+1 (774) 351-6990</a>
               <span> | </span>
@@ -112,46 +118,52 @@ export default function App() {
         <section id="about" className="about container fade-in">
           <h2>About Me</h2>
           <p>
-            Full Stack Developer with 5+ years of experience building scalable, secure, and cloud-native web applications using Java, Spring Boot, React, and AWS. Strong focus on REST APIs, microservices, and DevOps with Docker and Jenkins. Passionate about clean code, system design, and building meaningful software products.
+            Full Stack Developer delivering scalable, high‑performance apps with Java/Spring Boot microservices and React/Angular UIs. Strong with AWS (EC2, Lambda, API Gateway, S3), CI/CD (Jenkins, GitHub Actions), containers (Docker, Kubernetes), and event‑driven patterns (Kafka, RabbitMQ). Data‑driven mindset across PostgreSQL/MySQL/MongoDB with indexing & partitioning to cut query times.
           </p>
         </section>
 
         <section id="skills" className="skills container fade-in">
           <h2>Technical Skills</h2>
           <ul>
-            <li><strong>Frontend:</strong> React.js, Angular, JavaScript, TypeScript, HTML5, CSS3, Tailwind CSS</li>
-            <li><strong>Backend:</strong> Java, Spring Boot, REST APIs, GraphQL, Node.js</li>
-            <li><strong>Databases:</strong> PostgreSQL, MySQL, MongoDB</li>
-            <li><strong>Cloud/DevOps:</strong> AWS, Azure, Docker, Jenkins, GitHub Actions</li>
-            <li><strong>Testing:</strong> JUnit, Cypress, Postman, Swagger</li>
-            <li><strong>Other:</strong> Kafka, Redis, Git, GitHub, Linux</li>
+            <li><strong>Frontend:</strong> React, Redux, Angular, TypeScript, JavaScript (ES6+), HTML5, CSS3, Tailwind, Material‑UI, Next.js</li>
+            <li><strong>Backend:</strong> Java (8–17), Spring Boot, Spring MVC, Spring Data JPA, Hibernate, Microservices, REST/GraphQL, Node.js/Express</li>
+            <li><strong>Databases:</strong> PostgreSQL, MySQL, MongoDB, DynamoDB, Redis</li>
+            <li><strong>Cloud/DevOps:</strong> AWS (EC2, S3, API Gateway, Lambda, CloudFormation), Docker, Kubernetes, CI/CD (Jenkins, GitHub Actions), Terraform</li>
+            <li><strong>Messaging:</strong> Kafka, RabbitMQ</li>
+            <li><strong>Security & Testing:</strong> Spring Security, OAuth2, JWT · JUnit, Mockito, Jest, Cypress</li>
+            <li><strong>Tools:</strong> Git/GitHub/Bitbucket, Postman, IntelliJ, VS Code, Jira, Agile/Scrum</li>
           </ul>
         </section>
 
         <section id="experience" className="experience container fade-in">
           <h2>Experience</h2>
           <div className="job">
-            <h3>Athenahealth – Full Stack Developer (Sep 2024 – Present)</h3>
+            <h3>Adobe Inc — Full Stack Developer (Sept 2024 – Present)</h3>
             <ul>
-              <li>Developed microservices with Spring Boot and React-based frontend for patient tracking</li>
-              <li>Integrated Kafka and JWT auth, deployed on AWS with CI/CD using Jenkins</li>
+              <li>Architected cloud‑native asset & collaboration services using Java + Spring Boot microservices; accelerated feature delivery by ~50%.</li>
+              <li>Built modern React/Next.js UIs with Tailwind; improved engagement and reduced UI errors via telemetry‑driven fixes.</li>
+              <li>Implemented event‑driven workflows with Kafka/WebSockets for real‑time notifications and collaboration.</li>
             </ul>
           </div>
           <div className="job">
-            <h3>Capgemini – Associate Consultant (Sep 2020 – Jul 2023)</h3>
+            <h3>Capgemini — Associate Consultant, Full Stack (Sept 2020 – Jul 2023)</h3>
             <ul>
-              <li>Built Angular apps, implemented RxJS state management, optimized REST API handling</li>
-              <li>Led CI/CD migrations and won “Pat on Back” award</li>
+              <li>Delivered REST APIs with Spring Boot & Node.js; cut API latency ~50% and created Swagger‑based API portal.</li>
+              <li>Built React/Angular features and inventory modules; integrated SQL stores (PostgreSQL/MySQL).</li>
+              <li>Deployed on AWS (EC2, Auto Scaling, LB); improved uptime by ~20% with CI/CD via Jenkins/GitHub Actions.</li>
             </ul>
           </div>
           <div className="job">
-            <h3>Birlasoft – Jr. Full Stack Developer (Jul 2019 – Aug 2020)</h3>
+            <h3>Wipro — Jr. Full Stack Developer (Jul 2019 – Aug 2020)</h3>
             <ul>
-              <li>Contributed to KYC apps with Angular, Spring Boot, and PostgreSQL optimization</li>
+              <li>Developed KYC onboarding modules in Angular + Spring Boot with RBAC; accelerated reviews by ~25%.</li>
+              <li>Optimized PostgreSQL queries for AML trails and analyst workflows handling 10k+ transactions.</li>
+              <li>Contributed across Agile ceremonies; strengthened foundations in Git, Maven, and REST integrations.</li>
             </ul>
           </div>
         </section>
 
+        {/* Projects section intentionally unchanged as requested */}
         <section id="projects" className="projects container fade-in">
           <h2>Projects</h2>
           <div className="project">
@@ -166,7 +178,7 @@ export default function App() {
 
         <section id="contact" className="contact-links">
           <h2>Contact</h2>
-          <p>Email: <a href="mailto:mohanbabu.d325@gmail.com">mohanbabu.d325@gmail.com</a></p>
+          <p>Email: <a href="mailto:mohanbabud25@gmail.com">mohanbabud25@gmail.com</a></p>
           <p>Phone: <a href="tel:+17743516990">+1 (774) 351-6990</a></p>
           <p>LinkedIn: <a href="https://linkedin.com/in/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">@mohan-babu-doddapaneni</a></p>
           <p>GitHub: <a href="https://github.com/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">@mohan-babu-doddapaneni</a></p>
