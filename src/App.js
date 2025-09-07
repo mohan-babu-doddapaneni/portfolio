@@ -88,7 +88,7 @@ export default function App() {
             <div className="contact-links">
               <a href="mailto:mohanbabud25@gmail.com">Gmail</a>
               <span> | </span>
-              <a href="tel:+17743516990">+1 (774) 351-6990</a>
+              <a href="tel:+19782084167">+1 (978) 208-4167</a>
               <span> | </span>
               <a href="https://linkedin.com/in/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">LinkedIn</a>
               <span> | </span>
@@ -174,7 +174,7 @@ export default function App() {
         <section id="contact" className="contact-links">
           <h2>Contact</h2>
           <p>Email: <a href="mailto:mohanbabud25@gmail.com">mohanbabud25@gmail.com</a></p>
-          <p>Phone: <a href="tel:+17743516990">+1 (774) 351-6990</a></p>
+          <p>Phone: <a href="tel:+19782084167">+1 (978) 208-4167</a></p>
           <p>LinkedIn: <a href="https://linkedin.com/in/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">@mohan-babu-doddapaneni</a></p>
           <p>GitHub: <a href="https://github.com/mohan-babu-doddapaneni" target="_blank" rel="noreferrer">@mohan-babu-doddapaneni</a></p>
         </section>
@@ -183,7 +183,7 @@ export default function App() {
           <button className="scroll-to-top" onClick={scrollToTop}>↑</button>
         )}
 
-        <a href="tel:+17743516990" className="contact-float" aria-label="Call Me">
+        <a href="tel:+19782084167" className="contact-float" aria-label="Call Me">
           📞 <span>Call Me</span>
         </a>
       </main>
