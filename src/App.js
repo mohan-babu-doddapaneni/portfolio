@@ -189,7 +189,7 @@ export default function App() {
       </main>
 
       <footer className="container">
-        <p>&copy; 2025 Mohan Babu. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Mohan Babu. All rights reserved.</p>
       </footer>
     </div>
   );
