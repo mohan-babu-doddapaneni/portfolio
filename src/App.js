@@ -87,7 +87,7 @@ const SKILLS = [
     Icon: FaGears,
     title: "Backend",
     items: [
-      { Icon: FaJava, label: "Java (8–17)", color: "#f89820" },
+      { Icon: FaJava, label: "Java (8 to 17)", color: "#f89820" },
       { Icon: SiSpringboot, label: "Spring Boot", color: "#6db33f" },
       { Icon: SiNodedotjs, label: "Node.js", color: "#5fa04e" },
       { Icon: SiGraphql, label: "GraphQL", color: "#e10098" },
@@ -141,7 +141,7 @@ const EXPERIENCE = [
   {
     company: "Adobe Inc.",
     role: "Full Stack Developer",
-    period: "Sept 2024 – Present",
+    period: "Sept 2024 - Present",
     location: "United States",
     summary:
       "Building cloud-native asset management & real-time collaboration services at scale.",
@@ -155,8 +155,8 @@ const EXPERIENCE = [
   },
   {
     company: "Capgemini",
-    role: "Associate Consultant — Full Stack",
-    period: "Sept 2020 – Jul 2023",
+    role: "Associate Consultant, Full Stack",
+    period: "Sept 2020 - Jul 2023",
     location: "India",
     summary:
       "Delivered enterprise web platforms and cloud-deployed REST services for global clients.",
@@ -171,7 +171,7 @@ const EXPERIENCE = [
   {
     company: "Wipro",
     role: "Jr. Full Stack Developer",
-    period: "Jul 2019 – Aug 2020",
+    period: "Jul 2019 - Aug 2020",
     location: "India",
     summary:
       "Built banking KYC/AML onboarding and compliance workflows for financial services.",
@@ -505,7 +505,7 @@ export default function App() {
         {/* ABOUT */}
         <section id="about" className="section about container">
           <div className="section-head reveal">
-            <span className="section-kicker">01 — Introduction</span>
+            <span className="section-kicker">01 · Introduction</span>
             <h2 className="section-title">About Me</h2>
           </div>
           <div className="about-body reveal">
@@ -520,7 +520,7 @@ export default function App() {
             <p>
               I love designing <strong>event-driven systems</strong> with Kafka and
               RabbitMQ, and I bring a data-driven mindset across PostgreSQL, MySQL, and
-              MongoDB — applying indexing and partitioning to dramatically cut query
+              MongoDB, applying indexing and partitioning to dramatically cut query
               times. I care about clean architecture, great UX, and shipping value fast.
             </p>
           </div>
@@ -551,7 +551,7 @@ export default function App() {
         {/* SKILLS */}
         <section id="skills" className="section skills container">
           <div className="section-head reveal">
-            <span className="section-kicker">02 — Toolbox</span>
+            <span className="section-kicker">02 · Toolbox</span>
             <h2 className="section-title">Technical Skills</h2>
           </div>
           <div className="skills-grid">
@@ -579,7 +579,7 @@ export default function App() {
         {/* EXPERIENCE */}
         <section id="experience" className="section experience container">
           <div className="section-head reveal">
-            <span className="section-kicker">03 — Career</span>
+            <span className="section-kicker">03 · Career</span>
             <h2 className="section-title">Experience</h2>
           </div>
           <div className="timeline">
@@ -615,7 +615,7 @@ export default function App() {
         {/* PROJECTS */}
         <section id="projects" className="section projects container">
           <div className="section-head reveal">
-            <span className="section-kicker">04 — Selected Work</span>
+            <span className="section-kicker">04 · Selected Work</span>
             <h2 className="section-title">Projects</h2>
           </div>
           <div className="projects-grid">
@@ -644,7 +644,7 @@ export default function App() {
         {/* CONTACT */}
         <section id="contact" className="section contact container">
           <div className="section-head reveal">
-            <span className="section-kicker">05 — Get In Touch</span>
+            <span className="section-kicker">05 · Get In Touch</span>
             <h2 className="section-title">Let's Work Together</h2>
             <p className="section-sub">
               I'm open to full-time roles and exciting collaborations. Let's build something great.
