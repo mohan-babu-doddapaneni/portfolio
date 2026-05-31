@@ -1,6 +1,29 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
+// Self-hosted fonts (no external CDN — better privacy & security)
+import "@fontsource/inter/300.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
+import "@fontsource/sora/600.css";
+import "@fontsource/sora/700.css";
+import "@fontsource/sora/800.css";
+
+// Bundled, crisp SVG icons (no runtime network requests)
+import {
+  SiSpringboot, SiReact, SiAngular, SiTypescript, SiJavascript, SiNodedotjs,
+  SiDocker, SiKubernetes, SiPostgresql, SiMysql, SiMongodb, SiRedis,
+  SiApachekafka, SiGraphql, SiNextdotjs, SiTailwindcss, SiRedux, SiGit,
+  SiTerraform, SiJenkins, SiSpringsecurity, SiJsonwebtokens, SiJest, SiCypress,
+} from "react-icons/si";
+import {
+  FaJava, FaAws, FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaArrowUp,
+  FaDownload, FaLocationDot, FaBriefcase, FaCode, FaPalette, FaGears,
+  FaDatabase, FaCloud, FaTowerBroadcast, FaShieldHalved, FaServer,
+} from "react-icons/fa6";
+
 /* ------------------------------------------------------------------ */
 /*  DATA                                                               */
 /* ------------------------------------------------------------------ */
@@ -28,36 +51,89 @@ const STATS = [
   { value: 20, suffix: "+", label: "Technologies" },
 ];
 
+// Brand-colored tech icons for the marquee
+const TECH = [
+  { Icon: FaJava, name: "Java", color: "#f89820" },
+  { Icon: SiSpringboot, name: "Spring Boot", color: "#6db33f" },
+  { Icon: SiReact, name: "React", color: "#61dafb" },
+  { Icon: SiAngular, name: "Angular", color: "#dd0031" },
+  { Icon: SiTypescript, name: "TypeScript", color: "#3178c6" },
+  { Icon: SiNextdotjs, name: "Next.js", color: "#ffffff" },
+  { Icon: FaAws, name: "AWS", color: "#ff9900" },
+  { Icon: SiDocker, name: "Docker", color: "#2496ed" },
+  { Icon: SiKubernetes, name: "Kubernetes", color: "#326ce5" },
+  { Icon: SiApachekafka, name: "Kafka", color: "#ffffff" },
+  { Icon: SiPostgresql, name: "PostgreSQL", color: "#4169e1" },
+  { Icon: SiMongodb, name: "MongoDB", color: "#47a248" },
+  { Icon: SiGit, name: "Git", color: "#f05032" },
+  { Icon: SiTerraform, name: "Terraform", color: "#7b42bc" },
+];
+
 const SKILLS = [
   {
-    icon: "🎨",
+    Icon: FaPalette,
     title: "Frontend",
-    items: ["React", "Redux", "Angular", "TypeScript", "JavaScript (ES6+)", "Next.js", "Tailwind", "Material-UI", "HTML5", "CSS3"],
+    items: [
+      { Icon: SiReact, label: "React", color: "#61dafb" },
+      { Icon: SiRedux, label: "Redux", color: "#764abc" },
+      { Icon: SiAngular, label: "Angular", color: "#dd0031" },
+      { Icon: SiTypescript, label: "TypeScript", color: "#3178c6" },
+      { Icon: SiJavascript, label: "JavaScript", color: "#f7df1e" },
+      { Icon: SiNextdotjs, label: "Next.js", color: "#ffffff" },
+      { Icon: SiTailwindcss, label: "Tailwind", color: "#38bdf8" },
+    ],
   },
   {
-    icon: "⚙️",
+    Icon: FaGears,
     title: "Backend",
-    items: ["Java (8–17)", "Spring Boot", "Spring MVC", "Spring Data JPA", "Hibernate", "Microservices", "REST / GraphQL", "Node.js / Express"],
+    items: [
+      { Icon: FaJava, label: "Java (8–17)", color: "#f89820" },
+      { Icon: SiSpringboot, label: "Spring Boot", color: "#6db33f" },
+      { Icon: SiNodedotjs, label: "Node.js", color: "#5fa04e" },
+      { Icon: SiGraphql, label: "GraphQL", color: "#e10098" },
+      { Icon: FaCode, label: "REST APIs", color: "#a78bfa" },
+    ],
   },
   {
-    icon: "🗄️",
+    Icon: FaDatabase,
     title: "Databases",
-    items: ["PostgreSQL", "MySQL", "MongoDB", "DynamoDB", "Redis"],
+    items: [
+      { Icon: SiPostgresql, label: "PostgreSQL", color: "#4169e1" },
+      { Icon: SiMysql, label: "MySQL", color: "#4479a1" },
+      { Icon: SiMongodb, label: "MongoDB", color: "#47a248" },
+      { Icon: SiRedis, label: "Redis", color: "#ff4438" },
+    ],
   },
   {
-    icon: "☁️",
+    Icon: FaCloud,
     title: "Cloud & DevOps",
-    items: ["AWS (EC2, S3, Lambda)", "API Gateway", "CloudFormation", "Docker", "Kubernetes", "Jenkins", "GitHub Actions", "Terraform"],
+    items: [
+      { Icon: FaAws, label: "AWS", color: "#ff9900" },
+      { Icon: SiDocker, label: "Docker", color: "#2496ed" },
+      { Icon: SiKubernetes, label: "Kubernetes", color: "#326ce5" },
+      { Icon: SiJenkins, label: "Jenkins", color: "#d33833" },
+      { Icon: SiTerraform, label: "Terraform", color: "#7b42bc" },
+      { Icon: SiGit, label: "Git", color: "#f05032" },
+    ],
   },
   {
-    icon: "📨",
+    Icon: FaTowerBroadcast,
     title: "Messaging",
-    items: ["Apache Kafka", "RabbitMQ", "WebSockets"],
+    items: [
+      { Icon: SiApachekafka, label: "Apache Kafka", color: "#ffffff" },
+      { Icon: FaTowerBroadcast, label: "RabbitMQ", color: "#ff6600" },
+      { Icon: FaCode, label: "WebSockets", color: "#a78bfa" },
+    ],
   },
   {
-    icon: "🔐",
+    Icon: FaShieldHalved,
     title: "Security & Testing",
-    items: ["Spring Security", "OAuth2", "JWT", "JUnit", "Mockito", "Jest", "Cypress"],
+    items: [
+      { Icon: SiSpringsecurity, label: "Spring Security", color: "#6db33f" },
+      { Icon: SiJsonwebtokens, label: "JWT / OAuth2", color: "#d63aff" },
+      { Icon: SiJest, label: "Jest", color: "#c21325" },
+      { Icon: SiCypress, label: "Cypress", color: "#69d3a7" },
+    ],
   },
 ];
 
@@ -66,83 +142,85 @@ const EXPERIENCE = [
     company: "Adobe Inc.",
     role: "Full Stack Developer",
     period: "Sept 2024 – Present",
+    location: "United States",
+    summary:
+      "Building cloud-native asset management & real-time collaboration services at scale.",
     points: [
       "Architected cloud-native asset & collaboration services using Java + Spring Boot microservices, accelerating feature delivery by ~50%.",
       "Built modern React / Next.js UIs with Tailwind; improved engagement and reduced UI errors via telemetry-driven fixes.",
-      "Implemented event-driven workflows with Kafka / WebSockets for real-time notifications and collaboration.",
+      "Implemented event-driven workflows with Kafka / WebSockets for real-time notifications and live collaboration.",
+      "Championed code quality with unit/integration testing, code reviews, and CI/CD automation.",
     ],
-    tags: ["Java", "Spring Boot", "React", "Next.js", "Kafka"],
+    tags: ["Java", "Spring Boot", "React", "Next.js", "Kafka", "AWS"],
   },
   {
     company: "Capgemini",
     role: "Associate Consultant — Full Stack",
     period: "Sept 2020 – Jul 2023",
+    location: "India",
+    summary:
+      "Delivered enterprise web platforms and cloud-deployed REST services for global clients.",
     points: [
-      "Delivered REST APIs with Spring Boot & Node.js; cut API latency ~50% and created a Swagger-based API portal.",
-      "Built React / Angular features and inventory modules; integrated SQL stores (PostgreSQL / MySQL).",
+      "Delivered REST APIs with Spring Boot & Node.js; cut API latency ~50% and built a Swagger-based API portal.",
+      "Developed React / Angular features and inventory modules; integrated SQL stores (PostgreSQL / MySQL).",
       "Deployed on AWS (EC2, Auto Scaling, Load Balancers); improved uptime by ~20% with CI/CD via Jenkins / GitHub Actions.",
+      "Collaborated in Agile/Scrum teams, mentoring juniors and driving sprint deliverables.",
     ],
-    tags: ["Spring Boot", "Angular", "AWS", "CI/CD", "PostgreSQL"],
+    tags: ["Spring Boot", "Angular", "AWS", "CI/CD", "PostgreSQL", "Node.js"],
   },
   {
     company: "Wipro",
     role: "Jr. Full Stack Developer",
     period: "Jul 2019 – Aug 2020",
+    location: "India",
+    summary:
+      "Built banking KYC/AML onboarding and compliance workflows for financial services.",
     points: [
-      "Developed KYC onboarding modules in Angular + Spring Boot with RBAC; accelerated reviews by ~25%.",
-      "Optimized PostgreSQL queries for AML trails and analyst workflows handling 10k+ transactions.",
+      "Developed KYC onboarding modules in Angular + Spring Boot with role-based access control; accelerated reviews by ~25%.",
+      "Optimized PostgreSQL queries for AML audit trails and analyst workflows handling 10k+ transactions.",
       "Contributed across Agile ceremonies; strengthened foundations in Git, Maven, and REST integrations.",
     ],
-    tags: ["Angular", "Spring Boot", "PostgreSQL", "Agile"],
+    tags: ["Angular", "Spring Boot", "PostgreSQL", "RBAC", "Agile"],
   },
 ];
 
 const PROJECTS = [
   {
-    icon: "🧭",
+    Icon: FaCode,
     title: "Career Path Recommendation System",
     description:
-      "AI-powered application built with Django and NLP that suggests ideal career paths by analyzing resumes. Deployed on Render with a PostgreSQL backend.",
+      "AI-powered application built with Django and NLP that analyzes resumes to suggest ideal career paths. Deployed on Render with a PostgreSQL backend.",
     tags: ["Django", "NLP", "PostgreSQL", "Python"],
-    accent: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+    accent: "linear-gradient(135deg, #6366f1, #a855f7)",
   },
   {
-    icon: "🍽️",
+    Icon: FaServer,
     title: "Restaurant Ordering Portal",
     description:
-      "Angular & Java food ordering portal handling 300+ concurrent users, featuring a responsive UI and a real-time backend for live order tracking.",
+      "Angular & Java food-ordering portal handling 300+ concurrent users, featuring a responsive UI and a real-time backend for live order tracking.",
     tags: ["Angular", "Java", "Spring Boot", "Real-time"],
-    accent: "linear-gradient(135deg, #f43f5e, #f59e0b)",
+    accent: "linear-gradient(135deg, #06b6d4, #6366f1)",
   },
-];
-
-const TECH_ICONS = [
-  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg", title: "Java" },
-  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg", title: "Spring Boot" },
-  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", title: "React" },
-  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg", title: "Angular" },
-  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg", title: "TypeScript" },
-  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg", title: "AWS", invertOnDark: true },
-  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg", title: "Docker" },
-  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg", title: "Kubernetes" },
-  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg", title: "PostgreSQL" },
 ];
 
 const CONTACTS = [
-  { icon: "✉️", label: "Email", value: "mohanbabud25@gmail.com", href: "mailto:mohanbabud25@gmail.com" },
-  { icon: "📞", label: "Phone", value: "+1 (978) 208-4167", href: "tel:+19782084167" },
-  { icon: "💼", label: "LinkedIn", value: "/mohan-babu-doddapaneni", href: "https://linkedin.com/in/mohan-babu-doddapaneni" },
-  { icon: "💻", label: "GitHub", value: "/mohan-babu-doddapaneni", href: "https://github.com/mohan-babu-doddapaneni" },
+  { Icon: FaEnvelope, label: "Email", value: "mohanbabud25@gmail.com", href: "mailto:mohanbabud25@gmail.com", color: "#ea4335" },
+  { Icon: FaPhone, label: "Phone", value: "+1 (978) 208-4167", href: "tel:+19782084167", color: "#22c55e" },
+  { Icon: FaLinkedin, label: "LinkedIn", value: "/mohan-babu-doddapaneni", href: "https://linkedin.com/in/mohan-babu-doddapaneni", color: "#0a66c2" },
+  { Icon: FaGithub, label: "GitHub", value: "/mohan-babu-doddapaneni", href: "https://github.com/mohan-babu-doddapaneni", color: "#ffffff" },
 ];
 
 /* ------------------------------------------------------------------ */
 /*  HOOKS & HELPERS                                                    */
 /* ------------------------------------------------------------------ */
 
-// Reveal-on-scroll: adds `.visible` to elements with `.reveal`
 function useScrollReveal() {
   useEffect(() => {
     const els = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      els.forEach((el) => el.classList.add("visible"));
+      return;
+    }
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -159,7 +237,6 @@ function useScrollReveal() {
   }, []);
 }
 
-// Animated rotating role text (typewriter effect)
 function useTypewriter(words, typeSpeed = 90, deleteSpeed = 45, pause = 1600) {
   const [text, setText] = useState("");
   const [wordIndex, setWordIndex] = useState(0);
@@ -168,7 +245,6 @@ function useTypewriter(words, typeSpeed = 90, deleteSpeed = 45, pause = 1600) {
   useEffect(() => {
     const current = words[wordIndex % words.length];
     let timeout;
-
     if (!deleting && text === current) {
       timeout = setTimeout(() => setDeleting(true), pause);
     } else if (deleting && text === "") {
@@ -189,7 +265,6 @@ function useTypewriter(words, typeSpeed = 90, deleteSpeed = 45, pause = 1600) {
   return text;
 }
 
-// Count-up animation for the stat numbers
 function CountUp({ end, suffix = "", duration = 1800 }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
@@ -197,7 +272,10 @@ function CountUp({ end, suffix = "", duration = 1800 }) {
 
   useEffect(() => {
     const node = ref.current;
-    if (!node) return;
+    if (!node || !("IntersectionObserver" in window)) {
+      setCount(end);
+      return;
+    }
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -206,7 +284,7 @@ function CountUp({ end, suffix = "", duration = 1800 }) {
             const startTime = performance.now();
             const tick = (now) => {
               const progress = Math.min((now - startTime) / duration, 1);
-              const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+              const eased = 1 - Math.pow(1 - progress, 3);
               setCount(Math.round(eased * end));
               if (progress < 1) requestAnimationFrame(tick);
             };
@@ -247,12 +325,10 @@ export default function App() {
   const toggleTheme = () => setIsDarkTheme((v) => !v);
   const toggleImageModal = () => setShowImageModal((v) => !v);
 
-  // Theme class on <body>
   useEffect(() => {
     document.body.className = isDarkTheme ? "dark-theme" : "light-theme";
   }, [isDarkTheme]);
 
-  // Lock background scroll while the image modal is open
   useEffect(() => {
     document.body.style.overflow = showImageModal ? "hidden" : "";
     return () => {
@@ -260,24 +336,21 @@ export default function App() {
     };
   }, [showImageModal]);
 
-  // Close modal on Escape
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && setShowImageModal(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Scroll-driven UI: progress bar, back-to-top, active section
   const handleScroll = useCallback(() => {
     const scrollTop = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     setScrollProgress(docHeight > 0 ? (scrollTop / docHeight) * 100 : 0);
     setShowScrollTop(scrollTop > 400);
-
     let current = "home";
     for (const link of NAV_LINKS) {
       const section = document.getElementById(link.id);
-      if (section && section.getBoundingClientRect().top <= 120) {
+      if (section && section.getBoundingClientRect().top <= 130) {
         current = link.id;
       }
     }
@@ -303,14 +376,13 @@ export default function App() {
 
   return (
     <div className="App">
-      {/* Decorative animated background blobs */}
-      <div className="bg-decor" aria-hidden="true">
-        <span className="blob blob-1" />
-        <span className="blob blob-2" />
-        <span className="blob blob-3" />
+      {/* Layered designed background */}
+      <div className="bg-layer" aria-hidden="true">
+        <div className="bg-aurora" />
+        <div className="bg-grid" />
+        <div className="bg-noise" />
       </div>
 
-      {/* Scroll progress bar */}
       <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} />
 
       {/* NAVBAR */}
@@ -336,17 +408,14 @@ export default function App() {
           </ul>
 
           <div className="nav-actions">
-            <button
-              className="theme-toggle"
-              onClick={toggleTheme}
-              aria-label="Toggle color theme"
-            >
-              {isDarkTheme ? "☀️" : "🌙"}
+            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle color theme">
+              {isDarkTheme ? "☀" : "☾"}
             </button>
             <button
               className={`menu-icon ${menuOpen ? "open" : ""}`}
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
+              aria-expanded={menuOpen}
             >
               <span />
               <span />
@@ -361,7 +430,9 @@ export default function App() {
         <header id="home" className="hero">
           <div className="hero-inner container">
             <div className="hero-text">
-              <p className="hero-greeting">👋 Hello, I'm</p>
+              <p className="hero-greeting">
+                <span className="wave">👋</span> Hello, I'm
+              </p>
               <h1 className="hero-name">Mohan Babu Doddapaneni</h1>
               <h2 className="hero-role">
                 <span className="role-text">{role}</span>
@@ -377,21 +448,21 @@ export default function App() {
               <div className="hero-cta">
                 <a href="#projects" className="btn btn-primary">View My Work</a>
                 <button className="btn btn-ghost" onClick={downloadResume}>
-                  📄 Download Resume
+                  <FaDownload /> Download Resume
                 </button>
               </div>
 
               <div className="hero-socials">
-                {CONTACTS.map((c) => (
+                {CONTACTS.map(({ Icon, label, href }) => (
                   <a
-                    key={c.label}
-                    href={c.href}
-                    target={c.href.startsWith("http") ? "_blank" : undefined}
-                    rel="noreferrer"
-                    title={c.label}
-                    aria-label={c.label}
+                    key={label}
+                    href={href}
+                    target={href.startsWith("http") ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    title={label}
+                    aria-label={label}
                   >
-                    {c.icon}
+                    <Icon />
                   </a>
                 ))}
               </div>
@@ -399,6 +470,7 @@ export default function App() {
 
             <div className="hero-visual">
               <div className="profile-ring">
+                <div className="profile-glow" />
                 <img
                   src={process.env.PUBLIC_URL + "/assets/profile.png"}
                   alt="Mohan Babu Doddapaneni"
@@ -406,6 +478,9 @@ export default function App() {
                   onClick={toggleImageModal}
                 />
               </div>
+              <span className="badge badge-1"><FaJava style={{ color: "#f89820" }} /> Java</span>
+              <span className="badge badge-2"><SiReact style={{ color: "#61dafb" }} /> React</span>
+              <span className="badge badge-3"><FaAws style={{ color: "#ff9900" }} /> AWS</span>
             </div>
           </div>
 
@@ -414,13 +489,10 @@ export default function App() {
           </a>
         </header>
 
-        {/* IMAGE MODAL */}
         {showImageModal && (
           <div className="modal-overlay" onClick={toggleImageModal}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="close-button" onClick={toggleImageModal} aria-label="Close">
-                ✖
-              </button>
+              <button className="close-button" onClick={toggleImageModal} aria-label="Close">✖</button>
               <img
                 src={process.env.PUBLIC_URL + "/assets/profile.png"}
                 alt="Mohan Babu Doddapaneni"
@@ -442,14 +514,14 @@ export default function App() {
               delivering scalable, high-performance applications. I specialize in{" "}
               <strong>Java / Spring Boot microservices</strong> and{" "}
               <strong>React / Angular</strong> front-ends, with deep expertise in{" "}
-              <strong>AWS</strong> (EC2, Lambda, API Gateway, S3), CI/CD pipelines
-              (Jenkins, GitHub Actions), and containerization with Docker & Kubernetes.
+              <strong>AWS</strong> (EC2, Lambda, API Gateway, S3), CI/CD pipelines,
+              and containerization with Docker & Kubernetes.
             </p>
             <p>
               I love designing <strong>event-driven systems</strong> with Kafka and
               RabbitMQ, and I bring a data-driven mindset across PostgreSQL, MySQL, and
-              MongoDB — applying indexing and partitioning strategies to dramatically cut
-              query times. I care about clean architecture, great UX, and shipping value fast.
+              MongoDB — applying indexing and partitioning to dramatically cut query
+              times. I care about clean architecture, great UX, and shipping value fast.
             </p>
           </div>
 
@@ -466,14 +538,11 @@ export default function App() {
 
           <div className="tech-marquee reveal" aria-hidden="true">
             <div className="tech-track">
-              {[...TECH_ICONS, ...TECH_ICONS].map((t, i) => (
-                <img
-                  key={i}
-                  src={t.src}
-                  alt={t.title}
-                  title={t.title}
-                  className={t.invertOnDark ? "tech-invert" : ""}
-                />
+              {[...TECH, ...TECH].map(({ Icon, name, color }, i) => (
+                <span className="tech-chip" key={i}>
+                  <Icon style={{ color }} />
+                  <span>{name}</span>
+                </span>
               ))}
             </div>
           </div>
@@ -486,19 +555,24 @@ export default function App() {
             <h2 className="section-title">Technical Skills</h2>
           </div>
           <div className="skills-grid">
-            {SKILLS.map((group, i) => (
-              <div className="skill-card reveal" key={group.title} style={{ transitionDelay: `${i * 80}ms` }}>
-                <div className="skill-card-head">
-                  <span className="skill-icon">{group.icon}</span>
-                  <h3>{group.title}</h3>
+            {SKILLS.map((group, i) => {
+              const Head = group.Icon;
+              return (
+                <div className="skill-card reveal" key={group.title} style={{ transitionDelay: `${i * 70}ms` }}>
+                  <div className="skill-card-head">
+                    <span className="skill-icon"><Head /></span>
+                    <h3>{group.title}</h3>
+                  </div>
+                  <div className="skill-tags">
+                    {group.items.map(({ Icon, label, color }) => (
+                      <span className="skill-tag" key={label}>
+                        <Icon style={{ color }} /> {label}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div className="skill-tags">
-                  {group.items.map((item) => (
-                    <span className="skill-tag" key={item}>{item}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
@@ -511,13 +585,17 @@ export default function App() {
           <div className="timeline">
             {EXPERIENCE.map((job) => (
               <div className="timeline-item reveal" key={job.company}>
-                <div className="timeline-dot" />
+                <div className="timeline-dot"><FaBriefcase /></div>
                 <div className="timeline-card">
                   <div className="timeline-top">
                     <h3>{job.role}</h3>
                     <span className="timeline-period">{job.period}</span>
                   </div>
-                  <h4 className="timeline-company">{job.company}</h4>
+                  <div className="timeline-meta">
+                    <span className="timeline-company">{job.company}</span>
+                    <span className="timeline-location"><FaLocationDot /> {job.location}</span>
+                  </div>
+                  <p className="timeline-summary">{job.summary}</p>
                   <ul>
                     {job.points.map((p, i) => (
                       <li key={i}>{p}</li>
@@ -541,22 +619,25 @@ export default function App() {
             <h2 className="section-title">Projects</h2>
           </div>
           <div className="projects-grid">
-            {PROJECTS.map((p, i) => (
-              <article className="project-card reveal" key={p.title} style={{ transitionDelay: `${i * 100}ms` }}>
-                <div className="project-banner" style={{ background: p.accent }}>
-                  <span className="project-icon">{p.icon}</span>
-                </div>
-                <div className="project-body">
-                  <h3>{p.title}</h3>
-                  <p>{p.description}</p>
-                  <div className="project-tags">
-                    {p.tags.map((t) => (
-                      <span key={t}>{t}</span>
-                    ))}
+            {PROJECTS.map((p, i) => {
+              const PIcon = p.Icon;
+              return (
+                <article className="project-card reveal" key={p.title} style={{ transitionDelay: `${i * 100}ms` }}>
+                  <div className="project-banner" style={{ background: p.accent }}>
+                    <span className="project-icon"><PIcon /></span>
                   </div>
-                </div>
-              </article>
-            ))}
+                  <div className="project-body">
+                    <h3>{p.title}</h3>
+                    <p>{p.description}</p>
+                    <div className="project-tags">
+                      {p.tags.map((t) => (
+                        <span key={t}>{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
@@ -570,26 +651,26 @@ export default function App() {
             </p>
           </div>
           <div className="contact-grid">
-            {CONTACTS.map((c, i) => (
+            {CONTACTS.map(({ Icon, label, value, href, color }, i) => (
               <a
-                key={c.label}
-                href={c.href}
-                target={c.href.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
+                key={label}
+                href={href}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel="noopener noreferrer"
                 className="contact-card reveal"
-                style={{ transitionDelay: `${i * 80}ms` }}
+                style={{ transitionDelay: `${i * 70}ms` }}
               >
-                <span className="contact-icon">{c.icon}</span>
+                <span className="contact-icon" style={{ color }}><Icon /></span>
                 <span className="contact-meta">
-                  <span className="contact-label">{c.label}</span>
-                  <span className="contact-value">{c.value}</span>
+                  <span className="contact-label">{label}</span>
+                  <span className="contact-value">{value}</span>
                 </span>
               </a>
             ))}
           </div>
           <div className="contact-cta reveal">
             <a href="mailto:mohanbabud25@gmail.com" className="btn btn-primary">
-              ✉️ Say Hello
+              <FaEnvelope /> Say Hello
             </a>
           </div>
         </section>
@@ -602,14 +683,13 @@ export default function App() {
         </p>
       </footer>
 
-      {/* Floating helpers */}
       {showScrollTop && (
         <button className="scroll-to-top" onClick={scrollToTop} aria-label="Back to top">
-          ↑
+          <FaArrowUp />
         </button>
       )}
       <a href="tel:+19782084167" className="contact-float" aria-label="Call me">
-        📞<span>Call Me</span>
+        <FaPhone /><span>Call Me</span>
       </a>
     </div>
   );
