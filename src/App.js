@@ -58,11 +58,11 @@ const TECH = [
   { Icon: SiReact, name: "React", color: "#61dafb" },
   { Icon: SiAngular, name: "Angular", color: "#dd0031" },
   { Icon: SiTypescript, name: "TypeScript", color: "#3178c6" },
-  { Icon: SiNextdotjs, name: "Next.js", color: "#ffffff" },
+  { Icon: SiNextdotjs, name: "Next.js", color: "var(--icon-adaptive)" },
   { Icon: FaAws, name: "AWS", color: "#ff9900" },
   { Icon: SiDocker, name: "Docker", color: "#2496ed" },
   { Icon: SiKubernetes, name: "Kubernetes", color: "#326ce5" },
-  { Icon: SiApachekafka, name: "Kafka", color: "#ffffff" },
+  { Icon: SiApachekafka, name: "Kafka", color: "var(--icon-adaptive)" },
   { Icon: SiPostgresql, name: "PostgreSQL", color: "#4169e1" },
   { Icon: SiMongodb, name: "MongoDB", color: "#47a248" },
   { Icon: SiGit, name: "Git", color: "#f05032" },
@@ -79,7 +79,7 @@ const SKILLS = [
       { Icon: SiAngular, label: "Angular", color: "#dd0031" },
       { Icon: SiTypescript, label: "TypeScript", color: "#3178c6" },
       { Icon: SiJavascript, label: "JavaScript", color: "#f7df1e" },
-      { Icon: SiNextdotjs, label: "Next.js", color: "#ffffff" },
+      { Icon: SiNextdotjs, label: "Next.js", color: "var(--icon-adaptive)" },
       { Icon: SiTailwindcss, label: "Tailwind", color: "#38bdf8" },
     ],
   },
@@ -120,7 +120,7 @@ const SKILLS = [
     Icon: FaTowerBroadcast,
     title: "Messaging",
     items: [
-      { Icon: SiApachekafka, label: "Apache Kafka", color: "#ffffff" },
+      { Icon: SiApachekafka, label: "Apache Kafka", color: "var(--icon-adaptive)" },
       { Icon: FaTowerBroadcast, label: "RabbitMQ", color: "#ff6600" },
       { Icon: FaCode, label: "WebSockets", color: "#a78bfa" },
     ],
@@ -207,7 +207,7 @@ const CONTACTS = [
   { Icon: FaEnvelope, label: "Email", value: "mohanbabud25@gmail.com", href: "mailto:mohanbabud25@gmail.com", color: "#ea4335" },
   { Icon: FaPhone, label: "Phone", value: "+1 (978) 208-4167", href: "tel:+19782084167", color: "#22c55e" },
   { Icon: FaLinkedin, label: "LinkedIn", value: "/mohan-babu-doddapaneni", href: "https://linkedin.com/in/mohan-babu-doddapaneni", color: "#0a66c2" },
-  { Icon: FaGithub, label: "GitHub", value: "/mohan-babu-doddapaneni", href: "https://github.com/mohan-babu-doddapaneni", color: "#ffffff" },
+  { Icon: FaGithub, label: "GitHub", value: "/mohan-babu-doddapaneni", href: "https://github.com/mohan-babu-doddapaneni", color: "var(--icon-adaptive)" },
 ];
 
 /* ------------------------------------------------------------------ */
