@@ -27,6 +27,8 @@ body.dark-theme {
   --nav-bg: rgba(8, 11, 20, 0.6);
   --grid-color: rgba(255, 255, 255, 0.035);
   --chip-bg: rgba(255, 255, 255, 0.05);
+  /* For brand icons that are white (GitHub, Kafka, Next.js): light in dark mode */
+  --icon-adaptive: #f5f7fb;
 }
 
 /* LIGHT — clean studio white */
@@ -42,6 +44,8 @@ body.light-theme {
   --nav-bg: rgba(238, 241, 248, 0.72);
   --grid-color: rgba(15, 23, 42, 0.04);
   --chip-bg: #ffffff;
+  /* ...and dark in light mode, so white-logo icons stay visible */
+  --icon-adaptive: #1a2233;
 }
 
 * {
