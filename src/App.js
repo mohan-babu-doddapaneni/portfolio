@@ -23,7 +23,7 @@ import {
   FaJava, FaAws, FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaArrowUp,
   FaDownload, FaLocationDot, FaBriefcase, FaCode, FaPalette, FaGears,
   FaDatabase, FaCloud, FaTowerBroadcast, FaShieldHalved, FaServer,
-  FaGraduationCap, FaAward, FaCircleCheck,
+  FaGraduationCap, FaAward, FaCircleCheck, FaArrowUpRightFromSquare,
 } from "react-icons/fa6";
 
 /* ------------------------------------------------------------------ */
@@ -218,6 +218,9 @@ const CERTIFICATIONS = [
   "Java Cloud Native (Level 1 & 2)",
 ];
 
+// NOTE: replace `code`/`demo` with the real repo & live URLs when ready.
+const GITHUB_PROFILE = "https://github.com/mohan-babu-doddapaneni";
+
 const PROJECTS = [
   {
     Icon: FaCode,
@@ -226,6 +229,8 @@ const PROJECTS = [
       "AI-powered application built with Django and NLP that analyzes resumes to suggest ideal career paths. Deployed on Render with a PostgreSQL backend.",
     tags: ["Django", "NLP", "PostgreSQL", "Python"],
     accent: "linear-gradient(135deg, #6366f1, #a855f7)",
+    code: GITHUB_PROFILE,
+    demo: "",
   },
   {
     Icon: FaServer,
@@ -234,6 +239,8 @@ const PROJECTS = [
       "Angular & Java food-ordering portal handling 300+ concurrent users, featuring a responsive UI and a real-time backend for live order tracking.",
     tags: ["Angular", "Java", "Spring Boot", "Real-time"],
     accent: "linear-gradient(135deg, #06b6d4, #6366f1)",
+    code: GITHUB_PROFILE,
+    demo: "",
   },
 ];
 
@@ -723,6 +730,20 @@ export default function App() {
                         <span key={t}>{t}</span>
                       ))}
                     </div>
+                    {(p.code || p.demo) && (
+                      <div className="project-links">
+                        {p.code && (
+                          <a href={p.code} target="_blank" rel="noopener noreferrer" className="project-link">
+                            <FaGithub /> View Code
+                          </a>
+                        )}
+                        {p.demo && (
+                          <a href={p.demo} target="_blank" rel="noopener noreferrer" className="project-link primary">
+                            <FaArrowUpRightFromSquare /> Live Demo
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </article>
               );
