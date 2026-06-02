@@ -382,7 +382,7 @@ body.light-theme .bg-noise {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
-  gap: 50px;
+  gap: 64px;
 }
 
 .availability-pill {
@@ -587,9 +587,9 @@ body.light-theme .bg-noise {
   animation: floatY 4.5s ease-in-out infinite;
 }
 .badge svg { font-size: 1.05rem; }
-.badge-1 { top: 8%; left: -6%; animation-delay: 0s; }
-.badge-2 { top: 44%; right: -10%; animation-delay: -1.5s; }
-.badge-3 { bottom: 8%; left: 0%; animation-delay: -3s; }
+.badge-1 { top: 8%; left: 2%; animation-delay: 0s; }
+.badge-2 { top: 44%; right: -6%; animation-delay: -1.5s; }
+.badge-3 { bottom: 8%; left: 6%; animation-delay: -3s; }
 
 @keyframes floatY {
   0%, 100% { transform: translateY(0); }
@@ -1205,6 +1205,36 @@ body.light-theme .timeline-tags span {
   border: 1px solid var(--border);
   color: var(--muted);
 }
+.project-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--chip-bg);
+  border: 1px solid var(--border-strong);
+  color: var(--fg);
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+.project-link svg {
+  font-size: 0.95rem;
+}
+.project-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-2);
+}
+.project-link.primary {
+  background: var(--gradient);
+  border-color: transparent;
+  color: #fff;
+}
 
 /* =================================================================== */
 /*  CONTACT                                                             */
@@ -1256,10 +1286,9 @@ body.light-theme .timeline-tags span {
 }
 .contact-value {
   font-weight: 600;
-  font-size: 0.97rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .contact-cta {
   text-align: center;
