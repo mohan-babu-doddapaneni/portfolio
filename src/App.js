@@ -17,11 +17,13 @@ import {
   SiDocker, SiKubernetes, SiPostgresql, SiMysql, SiMongodb, SiRedis,
   SiApachekafka, SiGraphql, SiNextdotjs, SiTailwindcss, SiRedux, SiGit,
   SiTerraform, SiJenkins, SiSpringsecurity, SiJsonwebtokens, SiJest, SiCypress,
+  SiPython, SiVuedotjs, SiHibernate, SiMui, SiExpress,
 } from "react-icons/si";
 import {
   FaJava, FaAws, FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaArrowUp,
   FaDownload, FaLocationDot, FaBriefcase, FaCode, FaPalette, FaGears,
   FaDatabase, FaCloud, FaTowerBroadcast, FaShieldHalved, FaServer,
+  FaGraduationCap, FaAward, FaCircleCheck,
 } from "react-icons/fa6";
 
 /* ------------------------------------------------------------------ */
@@ -40,6 +42,7 @@ const NAV_LINKS = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
+  { id: "education", label: "Education" },
   { id: "projects", label: "Projects" },
   { id: "contact", label: "Contact" },
 ];
@@ -77,10 +80,12 @@ const SKILLS = [
       { Icon: SiReact, label: "React", color: "#61dafb" },
       { Icon: SiRedux, label: "Redux", color: "#764abc" },
       { Icon: SiAngular, label: "Angular", color: "#dd0031" },
+      { Icon: SiVuedotjs, label: "Vue.js", color: "#42b883" },
       { Icon: SiTypescript, label: "TypeScript", color: "#3178c6" },
       { Icon: SiJavascript, label: "JavaScript", color: "#f7df1e" },
       { Icon: SiNextdotjs, label: "Next.js", color: "var(--icon-adaptive)" },
       { Icon: SiTailwindcss, label: "Tailwind", color: "#38bdf8" },
+      { Icon: SiMui, label: "Material-UI", color: "#007fff" },
     ],
   },
   {
@@ -89,7 +94,10 @@ const SKILLS = [
     items: [
       { Icon: FaJava, label: "Java (8 to 17)", color: "#f89820" },
       { Icon: SiSpringboot, label: "Spring Boot", color: "#6db33f" },
+      { Icon: SiPython, label: "Python", color: "#3776ab" },
+      { Icon: SiHibernate, label: "Hibernate", color: "#59666c" },
       { Icon: SiNodedotjs, label: "Node.js", color: "#5fa04e" },
+      { Icon: SiExpress, label: "Express", color: "var(--icon-adaptive)" },
       { Icon: SiGraphql, label: "GraphQL", color: "#e10098" },
       { Icon: FaCode, label: "REST APIs", color: "#a78bfa" },
     ],
@@ -101,6 +109,7 @@ const SKILLS = [
       { Icon: SiPostgresql, label: "PostgreSQL", color: "#4169e1" },
       { Icon: SiMysql, label: "MySQL", color: "#4479a1" },
       { Icon: SiMongodb, label: "MongoDB", color: "#47a248" },
+      { Icon: FaAws, label: "DynamoDB", color: "#4053d6" },
       { Icon: SiRedis, label: "Redis", color: "#ff4438" },
     ],
   },
@@ -142,31 +151,35 @@ const EXPERIENCE = [
     company: "Adobe Inc.",
     role: "Full Stack Developer",
     period: "Sept 2024 - Present",
-    location: "United States",
+    location: "MA, USA",
     summary:
-      "Building cloud-native asset management & real-time collaboration services at scale.",
+      "Architecting a cloud-native asset management and real-time collaboration platform within Adobe Creative Cloud.",
     points: [
-      "Architected cloud-native asset & collaboration services using Java + Spring Boot microservices, accelerating feature delivery by ~50%.",
-      "Built modern React / Next.js UIs with Tailwind; improved engagement and reduced UI errors via telemetry-driven fixes.",
-      "Implemented event-driven workflows with Kafka / WebSockets for real-time notifications and live collaboration.",
-      "Championed code quality with unit/integration testing, code reviews, and CI/CD automation.",
+      "Architected and led the design of a cloud-native asset management and real-time collaboration platform with horizontal scalability, high availability, and seamless integration with Adobe Sensei AI services.",
+      "Built a robust microservices architecture in Java and Spring Boot, enabling modular development and 50% faster delivery of new features across suites like Photoshop and Illustrator.",
+      "Developed responsive, intuitive UIs with React (Redux, Hooks), Next.js, and Tailwind CSS, lifting user engagement by 10% and reducing interface errors by 30% (Adobe Analytics telemetry).",
+      "Built a real-time alerting and notification system over WebSockets and Kafka for asset status changes, collaborative edits, and version conflicts.",
+      "Engineered end-to-end encryption and secure protocols (TLS/SSL, OAuth 2.0) to safeguard digital assets and collaborative work across distributed systems.",
+      "Optimized large-scale asset queries via PostgreSQL table partitioning and indexing, improving response times by 18% for high-volume Creative Cloud projects.",
     ],
-    tags: ["Java", "Spring Boot", "React", "Next.js", "Kafka", "AWS"],
+    tags: ["Java", "Spring Boot", "React", "Next.js", "Kafka", "AWS", "PostgreSQL"],
   },
   {
     company: "Capgemini",
-    role: "Associate Consultant, Full Stack",
+    role: "Associate Consultant, Full Stack Developer",
     period: "Sept 2020 - Jul 2023",
     location: "India",
     summary:
-      "Delivered enterprise web platforms and cloud-deployed REST services for global clients.",
+      "Delivered enterprise web platforms, financial microservices, and cloud-deployed REST services.",
     points: [
-      "Delivered REST APIs with Spring Boot & Node.js; cut API latency ~50% and built a Swagger-based API portal.",
-      "Developed React / Angular features and inventory modules; integrated SQL stores (PostgreSQL / MySQL).",
-      "Deployed on AWS (EC2, Auto Scaling, Load Balancers); improved uptime by ~20% with CI/CD via Jenkins / GitHub Actions.",
-      "Collaborated in Agile/Scrum teams, mentoring juniors and driving sprint deliverables.",
+      "Built RESTful APIs with Spring Boot for authentication, storage, and retrieval, cutting development time by 40% versus traditional approaches.",
+      "Developed microservices for a financial application handling account management, transactions, customer profiles, and fraud detection with a focus on scalability and security.",
+      "Leveraged the Spring Framework for modular backend architecture, streamlining data processing and reducing API latency by 50%.",
+      "Built React and Vue.js dashboards plus a Java-based inventory system for product catalog, orders, and reporting.",
+      "Deployed on AWS EC2 with Auto Scaling and Load Balancing for a 20% improvement in uptime, and used AWS Lambda for serverless event-driven tasks.",
+      "Created a centralized Swagger API portal with interactive docs, and reduced post-deployment issues by 30% through JUnit testing.",
     ],
-    tags: ["Spring Boot", "Angular", "AWS", "CI/CD", "PostgreSQL", "Node.js"],
+    tags: ["Spring Boot", "React", "Node.js", "AWS", "Microservices", "PostgreSQL"],
   },
   {
     company: "Wipro",
@@ -176,12 +189,32 @@ const EXPERIENCE = [
     summary:
       "Built banking KYC/AML onboarding and compliance workflows for financial services.",
     points: [
-      "Developed KYC onboarding modules in Angular + Spring Boot with role-based access control; accelerated reviews by ~25%.",
-      "Optimized PostgreSQL queries for AML audit trails and analyst workflows handling 10k+ transactions.",
-      "Contributed across Agile ceremonies; strengthened foundations in Git, Maven, and REST integrations.",
+      "Developed KYC onboarding modules with Angular and Reactive Forms, enabling accurate registration of 5,000+ customer profiles with dynamic validation.",
+      "Built RESTful backend services in Spring Boot, optimizing JSON responses and reducing AML alert review time by 30%.",
+      "Implemented Spring Security for login, logout, and role-based access control across 4 KYC functional modules.",
+      "Authored optimized PostgreSQL queries for analyst comments, risk scores, and AML audit trails across 10,000+ transaction records, accelerating reviews by 25%.",
+      "Participated in Agile standups, sprint reviews, and backlog grooming; gained hands-on Git, Maven, and REST integration experience.",
     ],
-    tags: ["Angular", "Spring Boot", "PostgreSQL", "RBAC", "Agile"],
+    tags: ["Angular", "Spring Boot", "Spring Security", "PostgreSQL", "Agile"],
   },
+];
+
+const EDUCATION = [
+  {
+    degree: "Master of Science in Computer Science",
+    school: "Clark University",
+    location: "Worcester, MA, USA",
+  },
+  {
+    degree: "Bachelor of Technology in Electronics & Communication Engineering",
+    school: "JNTU Ananthapur",
+    location: "AP, India",
+  },
+];
+
+const CERTIFICATIONS = [
+  "Microsoft Certified: Azure Fundamentals",
+  "Java Cloud Native (Level 1 & 2)",
 ];
 
 const PROJECTS = [
@@ -510,18 +543,22 @@ export default function App() {
           </div>
           <div className="about-body reveal">
             <p>
-              I'm a <strong>Full Stack Developer</strong> with 5+ years of experience
-              delivering scalable, high-performance applications. I specialize in{" "}
-              <strong>Java / Spring Boot microservices</strong> and{" "}
-              <strong>React / Angular</strong> front-ends, with deep expertise in{" "}
-              <strong>AWS</strong> (EC2, Lambda, API Gateway, S3), CI/CD pipelines,
-              and containerization with Docker & Kubernetes.
+              I'm a <strong>Full Stack Developer</strong> with 5 years of experience
+              delivering scalable, high-performance applications using{" "}
+              <strong>Java 8 to 17, Spring Boot microservices</strong>,{" "}
+              <strong>Python (Flask / Django)</strong>, and{" "}
+              <strong>React / Angular</strong> UIs. I have deep expertise in{" "}
+              <strong>AWS</strong> (EC2, Lambda, API Gateway, S3, CloudFormation),
+              CI/CD pipelines, and containerization with Docker & Kubernetes,
+              enabling 99.9% uptime across distributed microservices.
             </p>
             <p>
-              I love designing <strong>event-driven systems</strong> with Kafka and
-              RabbitMQ, and I bring a data-driven mindset across PostgreSQL, MySQL, and
-              MongoDB, applying indexing and partitioning to dramatically cut query
-              times. I care about clean architecture, great UX, and shipping value fast.
+              I design <strong>event-driven systems</strong> with Kafka and RabbitMQ,
+              build <strong>REST & GraphQL APIs</strong> that cut latency by 50%, and
+              apply indexing and partitioning across PostgreSQL, MySQL, MongoDB, and
+              DynamoDB to reduce query times by 30%. Grounded in strong{" "}
+              <strong>Data Structures & Algorithms</strong>, I care about clean
+              architecture, great UX, and shipping value fast.
             </p>
           </div>
 
@@ -612,10 +649,40 @@ export default function App() {
           </div>
         </section>
 
+        {/* EDUCATION & CERTIFICATIONS */}
+        <section id="education" className="section education container">
+          <div className="section-head reveal">
+            <span className="section-kicker">04 · Background</span>
+            <h2 className="section-title">Education & Certifications</h2>
+          </div>
+          <div className="edu-grid">
+            <div className="edu-col reveal">
+              <h3 className="edu-col-title"><FaGraduationCap /> Education</h3>
+              {EDUCATION.map((e) => (
+                <div className="edu-card" key={e.degree}>
+                  <h4>{e.degree}</h4>
+                  <p className="edu-school">{e.school}</p>
+                  <p className="edu-loc"><FaLocationDot /> {e.location}</p>
+                </div>
+              ))}
+            </div>
+            <div className="edu-col reveal">
+              <h3 className="edu-col-title"><FaAward /> Certifications</h3>
+              <div className="edu-card">
+                <ul className="cert-list">
+                  {CERTIFICATIONS.map((c) => (
+                    <li key={c}><FaCircleCheck /> {c}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* PROJECTS */}
         <section id="projects" className="section projects container">
           <div className="section-head reveal">
-            <span className="section-kicker">04 · Selected Work</span>
+            <span className="section-kicker">05 · Selected Work</span>
             <h2 className="section-title">Projects</h2>
           </div>
           <div className="projects-grid">
@@ -644,7 +711,7 @@ export default function App() {
         {/* CONTACT */}
         <section id="contact" className="section contact container">
           <div className="section-head reveal">
-            <span className="section-kicker">05 · Get In Touch</span>
+            <span className="section-kicker">06 · Get In Touch</span>
             <h2 className="section-title">Let's Work Together</h2>
             <p className="section-sub">
               I'm open to full-time roles and exciting collaborations. Let's build something great.
