@@ -24,6 +24,7 @@ import {
   FaDownload, FaLocationDot, FaBriefcase, FaCode, FaPalette, FaGears,
   FaDatabase, FaCloud, FaTowerBroadcast, FaShieldHalved, FaServer,
   FaGraduationCap, FaAward, FaCircleCheck, FaArrowUpRightFromSquare,
+  FaNetworkWired,
 } from "react-icons/fa6";
 
 /* ------------------------------------------------------------------ */
@@ -222,6 +223,16 @@ const CERTIFICATIONS = [
 const GITHUB_PROFILE = "https://github.com/mohan-babu-doddapaneni";
 
 const PROJECTS = [
+  {
+    Icon: FaNetworkWired,
+    title: "Real-Time Event-Driven Order Platform",
+    description:
+      "Cloud-native microservices platform processing high-volume orders in real time. Built with Java/Spring Boot services communicating over Apache Kafka, a React dashboard with live WebSocket updates, and deployed on AWS EKS (Kubernetes) with CI/CD. Sustains 10k+ events/min with sub-200ms latency.",
+    tags: ["Java", "Spring Boot", "Kafka", "React", "Kubernetes", "AWS"],
+    accent: "linear-gradient(135deg, #8b5cf6, #6366f1, #22d3ee)",
+    code: GITHUB_PROFILE,
+    demo: "",
+  },
   {
     Icon: FaCode,
     title: "Career Path Recommendation System",
