@@ -1148,6 +1148,8 @@ body.light-theme .timeline-tags span {
   gap: 26px;
 }
 .project-card {
+  display: flex;
+  flex-direction: column;
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--surface);
@@ -1205,6 +1207,9 @@ body.light-theme .timeline-tags span {
   transform: scale(1.2) rotate(-6deg);
 }
 .project-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding: 24px 26px 28px;
 }
 .project-body h3 {
@@ -1217,6 +1222,10 @@ body.light-theme .timeline-tags span {
   color: var(--muted);
   line-height: 1.7;
   font-size: 0.97rem;
+}
+/* push the tags + links to the bottom so cards align */
+.project-tags {
+  margin-top: auto;
 }
 .project-tags {
   display: flex;

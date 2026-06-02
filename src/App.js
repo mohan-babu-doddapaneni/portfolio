@@ -237,8 +237,8 @@ const PROJECTS = [
     Icon: FaCode,
     title: "Career Path Recommendation System",
     description:
-      "AI-powered application built with Django and NLP that analyzes resumes to suggest ideal career paths. Deployed on Render with a PostgreSQL backend.",
-    tags: ["Django", "NLP", "PostgreSQL", "Python"],
+      "AI-powered web app that analyzes resumes with NLP to recommend ideal career paths and skill gaps. Built with Django and Python ML pipelines, a clean responsive UI, and a PostgreSQL backend for profiles and scoring. Deployed on Render with automated builds, delivering tailored guidance from a single resume upload.",
+    tags: ["Django", "Python", "NLP", "Machine Learning", "PostgreSQL", "REST API"],
     accent: "linear-gradient(135deg, #6366f1, #a855f7)",
     code: GITHUB_PROFILE,
     demo: "",
@@ -247,8 +247,8 @@ const PROJECTS = [
     Icon: FaServer,
     title: "Restaurant Ordering Portal",
     description:
-      "Angular & Java food-ordering portal handling 300+ concurrent users, featuring a responsive UI and a real-time backend for live order tracking.",
-    tags: ["Angular", "Java", "Spring Boot", "Real-time"],
+      "Full-stack food-ordering portal handling 300+ concurrent users with a responsive Angular UI and a Java/Spring Boot backend. Features real-time order tracking, role-based access for staff and customers, secure REST APIs, and a relational data model for menus, carts, and live order status updates.",
+    tags: ["Angular", "Java", "Spring Boot", "REST API", "Real-time", "MySQL"],
     accent: "linear-gradient(135deg, #06b6d4, #6366f1)",
     code: GITHUB_PROFILE,
     demo: "",
