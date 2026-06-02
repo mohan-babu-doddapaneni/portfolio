@@ -84,6 +84,33 @@ a {
   text-decoration: none;
 }
 
+/* Keyboard accessibility: clear focus ring for tab navigation,
+   but not on mouse click (focus-visible only). */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--accent-3);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Skip-to-content link for screen-reader / keyboard users */
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 2000;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: var(--gradient);
+  color: #fff;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 16px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

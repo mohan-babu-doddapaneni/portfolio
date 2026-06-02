@@ -435,6 +435,7 @@ export default function App() {
 
   return (
     <div className="App">
+      <a href="#main-content" className="skip-link">Skip to content</a>
       {/* Layered designed background */}
       <div className="bg-layer" aria-hidden="true">
         <div className="bg-aurora" />
@@ -484,7 +485,7 @@ export default function App() {
         </div>
       </nav>
 
-      <main>
+      <main id="main-content">
         {/* HERO */}
         <header id="home" className="hero">
           <div className="hero-inner container">
