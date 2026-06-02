@@ -385,6 +385,35 @@ body.light-theme .bg-noise {
   gap: 50px;
 }
 
+.availability-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 15px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  animation: fadeUp 0.7s ease both;
+}
+.status-dot {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
 .hero-greeting {
   font-size: 1.05rem;
   color: var(--muted);
@@ -408,11 +437,22 @@ body.light-theme .bg-noise {
   line-height: 1.04;
   margin: 0 0 14px;
   letter-spacing: -0.5px;
-  background: linear-gradient(120deg, var(--fg) 35%, var(--accent-2));
+  background: linear-gradient(
+    100deg,
+    var(--fg) 20%,
+    var(--accent-2) 40%,
+    var(--accent-3) 50%,
+    var(--accent-2) 60%,
+    var(--fg) 80%
+  );
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: fadeUp 0.7s ease 0.1s both;
+  animation: fadeUp 0.7s ease 0.1s both, nameShimmer 8s linear infinite;
+}
+@keyframes nameShimmer {
+  to { background-position: -200% center; }
 }
 
 .hero-role {
@@ -737,6 +777,37 @@ body.light-theme .bg-noise {
   border-color: var(--border-strong);
 }
 @keyframes marquee { to { transform: translateX(-50%); } }
+
+/* =================================================================== */
+/*  CURSOR SPOTLIGHT (interactive glow that follows the mouse)          */
+/* =================================================================== */
+
+.spotlight {
+  position: relative;
+}
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(124, 122, 255, 0.16),
+    transparent 60%
+  );
+  z-index: 1;
+}
+.spotlight:hover::after {
+  opacity: 1;
+}
+/* keep inner content above the glow */
+.spotlight > * {
+  position: relative;
+  z-index: 2;
+}
 
 /* =================================================================== */
 /*  SKILLS                                                              */
@@ -1073,6 +1144,29 @@ body.light-theme .timeline-tags span {
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.4), transparent 60%);
+}
+/* Glossy shine that sweeps across the banner on hover */
+.project-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  transform: skewX(-20deg);
+  z-index: 1;
+}
+.project-card:hover .project-banner::before {
+  animation: shine 0.9s ease;
+}
+@keyframes shine {
+  to { left: 150%; }
 }
 .project-icon {
   font-size: 3rem;

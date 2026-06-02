@@ -13,3 +13,17 @@ class MockIntersectionObserver {
 }
 global.IntersectionObserver = MockIntersectionObserver;
 window.IntersectionObserver = MockIntersectionObserver;
+
+// jsdom doesn't implement matchMedia, used by the cursor-spotlight hook to
+// skip on touch devices. Mock it so it reports a non-touch pointer.
+window.matchMedia =
+  window.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addEventListener() {},
+      removeEventListener() {},
+      addListener() {},
+      removeListener() {},
+    };
+  };

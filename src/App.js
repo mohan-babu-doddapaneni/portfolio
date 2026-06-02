@@ -17,7 +17,7 @@ import {
   SiDocker, SiKubernetes, SiPostgresql, SiMysql, SiMongodb, SiRedis,
   SiApachekafka, SiGraphql, SiNextdotjs, SiTailwindcss, SiRedux, SiGit,
   SiTerraform, SiJenkins, SiSpringsecurity, SiJsonwebtokens, SiJest, SiCypress,
-  SiPython, SiVuedotjs, SiHibernate, SiMui, SiExpress,
+  SiPython, SiVuedotjs, SiHibernate, SiMui, SiExpress, SiElasticsearch,
 } from "react-icons/si";
 import {
   FaJava, FaAws, FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaArrowUp,
@@ -111,6 +111,7 @@ const SKILLS = [
       { Icon: SiMongodb, label: "MongoDB", color: "#47a248" },
       { Icon: FaAws, label: "DynamoDB", color: "#4053d6" },
       { Icon: SiRedis, label: "Redis", color: "#ff4438" },
+      { Icon: SiElasticsearch, label: "Elasticsearch", color: "#43c5a6" },
     ],
   },
   {
@@ -270,6 +271,23 @@ function useScrollReveal() {
   }, []);
 }
 
+// Cursor-following spotlight: tracks the pointer over any `.spotlight` element
+// and writes its local coordinates to CSS vars (--mx, --my) for a glow effect.
+function useSpotlight() {
+  useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return; // skip on touch
+    const onMove = (e) => {
+      const card = e.target.closest(".spotlight");
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+      card.style.setProperty("--my", `${e.clientY - rect.top}px`);
+    };
+    document.addEventListener("pointermove", onMove);
+    return () => document.removeEventListener("pointermove", onMove);
+  }, []);
+}
+
 function useTypewriter(words, typeSpeed = 90, deleteSpeed = 45, pause = 1600) {
   const [text, setText] = useState("");
   const [wordIndex, setWordIndex] = useState(0);
@@ -353,6 +371,7 @@ export default function App() {
 
   const role = useTypewriter(ROLES);
   useScrollReveal();
+  useSpotlight();
 
   const closeMenu = () => setMenuOpen(false);
   const toggleTheme = () => setIsDarkTheme((v) => !v);
@@ -463,6 +482,9 @@ export default function App() {
         <header id="home" className="hero">
           <div className="hero-inner container">
             <div className="hero-text">
+              <span className="availability-pill">
+                <span className="status-dot" /> Available for opportunities
+              </span>
               <p className="hero-greeting">
                 <span className="wave">👋</span> Hello, I'm
               </p>
@@ -595,7 +617,7 @@ export default function App() {
             {SKILLS.map((group, i) => {
               const Head = group.Icon;
               return (
-                <div className="skill-card reveal" key={group.title} style={{ transitionDelay: `${i * 70}ms` }}>
+                <div className="skill-card spotlight reveal" key={group.title} style={{ transitionDelay: `${i * 70}ms` }}>
                   <div className="skill-card-head">
                     <span className="skill-icon"><Head /></span>
                     <h3>{group.title}</h3>
@@ -623,7 +645,7 @@ export default function App() {
             {EXPERIENCE.map((job) => (
               <div className="timeline-item reveal" key={job.company}>
                 <div className="timeline-dot"><FaBriefcase /></div>
-                <div className="timeline-card">
+                <div className="timeline-card spotlight">
                   <div className="timeline-top">
                     <h3>{job.role}</h3>
                     <span className="timeline-period">{job.period}</span>
@@ -689,7 +711,7 @@ export default function App() {
             {PROJECTS.map((p, i) => {
               const PIcon = p.Icon;
               return (
-                <article className="project-card reveal" key={p.title} style={{ transitionDelay: `${i * 100}ms` }}>
+                <article className="project-card spotlight reveal" key={p.title} style={{ transitionDelay: `${i * 100}ms` }}>
                   <div className="project-banner" style={{ background: p.accent }}>
                     <span className="project-icon"><PIcon /></span>
                   </div>
