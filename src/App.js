@@ -784,7 +784,8 @@ export default function App() {
             <span className="section-kicker">06 · Get In Touch</span>
             <h2 className="section-title">Let's Work Together</h2>
             <p className="section-sub">
-              I'm open to full-time roles and exciting collaborations. Let's build something great.
+              I'm open to <strong>Senior Full-Stack &amp; Backend Engineering</strong> roles and
+              exciting collaborations. Let's build something great.
             </p>
           </div>
           <div className="contact-grid">
