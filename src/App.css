@@ -325,16 +325,24 @@ body.light-theme .bg-noise {
 }
 
 .theme-toggle {
+  display: grid;
+  place-items: center;
   width: 40px;
   height: 40px;
   border-radius: 11px;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--fg);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   cursor: pointer;
-  transition: transform 0.25s, background 0.25s;
+  transition: transform 0.25s, background 0.25s, color 0.25s;
 }
+.theme-toggle svg {
+  display: block;
+}
+/* gold sun in dark mode, deep accent moon in light mode */
+body.dark-theme .theme-toggle { color: var(--gold-soft); }
+body.light-theme .theme-toggle { color: var(--accent-1); }
 .theme-toggle:hover {
   transform: rotate(-18deg) scale(1.08);
   background: var(--surface-strong);
