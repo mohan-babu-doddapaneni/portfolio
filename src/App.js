@@ -24,7 +24,7 @@ import {
   FaDownload, FaLocationDot, FaBriefcase, FaCode, FaPalette, FaGears,
   FaDatabase, FaCloud, FaTowerBroadcast, FaShieldHalved, FaServer,
   FaGraduationCap, FaAward, FaCircleCheck, FaArrowUpRightFromSquare,
-  FaNetworkWired,
+  FaNetworkWired, FaSun, FaMoon,
 } from "react-icons/fa6";
 
 /* ------------------------------------------------------------------ */
@@ -495,7 +495,7 @@ export default function App() {
 
           <div className="nav-actions">
             <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle color theme">
-              {isDarkTheme ? "☀" : "☾"}
+              {isDarkTheme ? <FaSun /> : <FaMoon />}
             </button>
             <button
               className={`menu-icon ${menuOpen ? "open" : ""}`}
