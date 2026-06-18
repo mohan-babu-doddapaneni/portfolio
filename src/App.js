@@ -229,7 +229,7 @@ const PROJECTS = [
     description:
       "Cloud-native microservices platform processing high-volume orders in real time. Built with Java/Spring Boot services communicating over Apache Kafka, a React dashboard with live WebSocket updates, and deployed on AWS EKS (Kubernetes) with CI/CD. Sustains 10k+ events/min with sub-200ms latency.",
     tags: ["Java", "Spring Boot", "Kafka", "React", "Kubernetes", "AWS"],
-    accent: "linear-gradient(135deg, #8b5cf6, #6366f1, #22d3ee)",
+    accent: "linear-gradient(135deg, #059669, #10b981, #2dd4bf)",
     code: GITHUB_PROFILE,
     demo: "",
   },
@@ -239,7 +239,7 @@ const PROJECTS = [
     description:
       "AI-powered web app that analyzes resumes with NLP to recommend ideal career paths and skill gaps. Built with Django and Python ML pipelines, a clean responsive UI, and a PostgreSQL backend for profiles and scoring. Deployed on Render with automated builds, delivering tailored guidance from a single resume upload.",
     tags: ["Django", "Python", "NLP", "Machine Learning", "PostgreSQL", "REST API"],
-    accent: "linear-gradient(135deg, #6366f1, #a855f7)",
+    accent: "linear-gradient(135deg, #0d9488, #2dd4bf, #e3b341)",
     code: GITHUB_PROFILE,
     demo: "",
   },
@@ -249,7 +249,7 @@ const PROJECTS = [
     description:
       "Full-stack food-ordering portal handling 300+ concurrent users with a responsive Angular UI and a Java/Spring Boot backend. Features real-time order tracking, role-based access for staff and customers, secure REST APIs, and a relational data model for menus, carts, and live order status updates.",
     tags: ["Angular", "Java", "Spring Boot", "REST API", "Real-time", "MySQL"],
-    accent: "linear-gradient(135deg, #06b6d4, #6366f1)",
+    accent: "linear-gradient(135deg, #2dd4bf, #059669)",
     code: GITHUB_PROFILE,
     demo: "",
   },
