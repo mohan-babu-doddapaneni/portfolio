@@ -50,7 +50,7 @@ const NAV_LINKS = [
 
 const STATS = [
   { value: 5, suffix: "+", label: "Years Experience" },
-  { value: 3, suffix: "", label: "Global Companies" },
+  { value: 4, suffix: "", label: "Global Companies" },
   { value: 50, suffix: "%", label: "Faster Delivery" },
   { value: 20, suffix: "+", label: "Technologies" },
 ];
@@ -150,12 +150,27 @@ const SKILLS = [
 
 const EXPERIENCE = [
   {
+    company: "FenixCommerce",
+    role: "Backend Software Developer",
+    period: "Jan 2026 - Present",
+    location: "USA",
+    summary:
+      "Building backend services for an AI-driven delivery experience platform powering Estimated Delivery Dates (EDD) and post-purchase logistics for e-commerce.",
+    points: [
+      "Developing scalable backend microservices in Java & Spring Boot that power Estimated Delivery Date (EDD) APIs surfaced across product, cart, and checkout for high-traffic e-commerce storefronts.",
+      "Built and documented REST APIs (Swagger/OpenAPI) integrating carrier, warehouse, and transit-time data to compute accurate, real-time delivery predictions.",
+      "Integrated with the Shopify ecosystem and inbound order pipelines, processing shipment and fulfillment events to drive post-purchase tracking and delivery updates.",
+      "Optimized data access and caching for latency-sensitive delivery-date calculations served at scale, and deployed services on AWS with CI/CD automation.",
+    ],
+    tags: ["Java", "Spring Boot", "REST API", "AWS", "Shopify", "Microservices"],
+  },
+  {
     company: "Adobe Inc.",
     role: "Full Stack Developer",
-    period: "Sept 2024 - Present",
+    period: "Sept 2024 - Dec 2025",
     location: "MA, USA",
     summary:
-      "Architecting a cloud-native asset management and real-time collaboration platform within Adobe Creative Cloud.",
+      "Architected a cloud-native asset management and real-time collaboration platform within Adobe Creative Cloud.",
     points: [
       "Architected and led the design of a cloud-native asset management and real-time collaboration platform with horizontal scalability, high availability, and seamless integration with Adobe Sensei AI services.",
       "Built a robust microservices architecture in Java and Spring Boot, enabling modular development and 50% faster delivery of new features across suites like Photoshop and Illustrator.",
