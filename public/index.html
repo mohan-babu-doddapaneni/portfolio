@@ -53,11 +53,40 @@
     <meta name="twitter:image" content="https://mohanbabudoddapaneni.com/og-image.png" />
 
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
+    <link rel="canonical" href="https://mohanbabudoddapaneni.com/" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Structured data: helps Google show a rich result for the name -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mohan Babu Doddapaneni",
+        "url": "https://mohanbabudoddapaneni.com",
+        "image": "https://mohanbabudoddapaneni.com/og-image.png",
+        "jobTitle": "Full Stack Developer",
+        "email": "mailto:mohanbabud25@gmail.com",
+        "telephone": "+1-978-208-4167",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "MA",
+          "addressCountry": "USA"
+        },
+        "worksFor": { "@type": "Organization", "name": "FenixCommerce" },
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "Clark University" },
+          { "@type": "CollegeOrUniversity", "name": "JNTU Ananthapur" }
+        ],
+        "knowsAbout": [
+          "Java", "Spring Boot", "Microservices", "React", "Angular",
+          "AWS", "Apache Kafka", "REST API", "PostgreSQL", "Docker", "Kubernetes"
+        ],
+        "sameAs": [
+          "https://www.linkedin.com/in/mohan-babu-doddapaneni",
+          "https://github.com/mohan-babu-doddapaneni"
+        ]
+      }
+    </script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
