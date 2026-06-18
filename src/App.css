@@ -37,23 +37,42 @@ body.dark-theme {
 
 /* LIGHT — warm ivory / stone (elevated neutrals) */
 body.light-theme {
-  --bg: #f6f4ee;
-  --bg-soft: #fffdf8;
-  --surface: rgba(255, 255, 255, 0.9);
-  --surface-strong: #fffdf8;
-  --border: rgba(5, 150, 105, 0.16);
-  --border-strong: rgba(5, 150, 105, 0.34);
-  --fg: #16241d;
-  --muted: #5c6b62;
-  --nav-bg: rgba(246, 244, 238, 0.82);
-  --grid-color: rgba(5, 150, 105, 0.06);
-  --chip-bg: rgba(255, 255, 255, 0.92);
-  --shadow-sm: 0 8px 26px rgba(5, 150, 105, 0.12);
-  --shadow-lg: 0 28px 64px rgba(5, 150, 105, 0.18);
-  --gold: #b8860b; /* deeper gold so it reads on ivory */
-  --gold-soft: #c9a02b;
+  /* Deeper, saturated greens so gradient text stays legible on ivory */
+  --accent-1: #047857; /* deep emerald */
+  --accent-2: #0d9488; /* deep teal    */
+  --accent-3: #0f766e; /* pine teal    */
+  --gradient: linear-gradient(120deg, var(--accent-1), var(--accent-2) 55%, var(--accent-3));
+  --gradient-gold: linear-gradient(120deg, var(--accent-1), var(--accent-2) 45%, #b8860b);
+  --glow: 5, 150, 105;
+
+  --bg: #eef1ea;
+  --bg-soft: #ffffff;
+  --surface: #ffffff;
+  --surface-strong: #ffffff;
+  --border: rgba(4, 120, 87, 0.18);
+  --border-strong: rgba(4, 120, 87, 0.4);
+  --fg: #122019;
+  --muted: #4d5b53;
+  --nav-bg: rgba(238, 241, 234, 0.85);
+  --grid-color: rgba(4, 120, 87, 0.07);
+  --chip-bg: #f3f6f2;
+  --shadow-sm: 0 8px 24px rgba(4, 120, 87, 0.14);
+  --shadow-lg: 0 26px 60px rgba(4, 120, 87, 0.2);
+  --gold: #a16207; /* deeper amber-gold so it reads on ivory */
+  --gold-soft: #b8860b;
   /* ...and dark in light mode, so white-logo icons stay visible */
   --icon-adaptive: #16241d;
+}
+
+/* Light mode: give cards a soft resting shadow so they lift off the ivory
+   background instead of looking flat (white-on-near-white). */
+body.light-theme .stat-card,
+body.light-theme .skill-card,
+body.light-theme .timeline-card,
+body.light-theme .edu-card,
+body.light-theme .project-card,
+body.light-theme .contact-card {
+  box-shadow: 0 6px 18px rgba(4, 120, 87, 0.08), 0 1px 3px rgba(4, 120, 87, 0.06);
 }
 
 * {
@@ -380,6 +399,10 @@ body.light-theme .bg-noise {
   box-shadow: 0 14px 32px rgba(var(--glow), 0.45);
   animation: gradientShift 7s ease infinite;
 }
+/* Light mode's gradient is deep, so white text reads better there */
+body.light-theme .btn-primary {
+  color: #ffffff;
+}
 .btn-primary:hover {
   transform: translateY(-3px);
   box-shadow: 0 20px 44px rgba(var(--glow), 0.6);
@@ -677,9 +700,11 @@ body.light-theme .bg-noise {
   margin-bottom: 50px;
 }
 .section-kicker {
-  display: inline-flex;
+  display: flex;
+  justify-content: center;
   align-items: center;
   gap: 10px;
+  width: 100%;
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 2.5px;
