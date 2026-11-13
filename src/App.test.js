@@ -1,44 +1,94 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within, act } from "@testing-library/react";
 import App from "./App";
+import NOTES from "./content/notes";
+import { renderMarkdown } from "./lib/markdown";
+import { render as rtlRender } from "@testing-library/react";
 
 beforeAll(() => {
   window.matchMedia =
     window.matchMedia ||
     (() => ({ matches: false, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {} }));
+  window.scrollTo = () => {};
 });
 
-test("renders the name as the main heading", () => {
+afterEach(() => {
+  window.location.hash = "";
+});
+
+test("renders the name as the only h1 on the home page", () => {
   render(<App />);
-  expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Mohan Babu\s*Doddapaneni/);
+  const h1s = screen.getAllByRole("heading", { level: 1 });
+  expect(h1s).toHaveLength(1);
+  expect(h1s[0]).toHaveTextContent(/Mohan Babu\s*Doddapaneni/);
 });
 
-test("primary navigation links to every section", () => {
+test("primary navigation covers the personal-site sections", () => {
   render(<App />);
   const nav = screen.getByRole("navigation", { name: "Primary" });
-  ["Work", "Field notes", "Stack", "Projects", "Contact"].forEach((label) => {
-    expect(nav).toHaveTextContent(label);
-  });
+  ["About", "Built", "Journey", "Notes", "Connect"].forEach((label) =>
+    expect(within(nav).getByRole("link", { name: new RegExp(label) })).toBeInTheDocument()
+  );
 });
 
-test("shows the updated phone number with a tel: link", () => {
+test("no recruitment messaging", () => {
+  render(<App />);
+  expect(screen.queryByText(/hire me|available for|open to (senior|work|roles)|opportunit/i)).toBeNull();
+});
+
+test("phone links use the current number", () => {
   render(<App />);
   const links = screen.getAllByRole("link", { name: "+1 (774) 701-0382" });
-  expect(links.length).toBeGreaterThan(0);
   links.forEach((a) => expect(a).toHaveAttribute("href", "tel:+17747010382"));
 });
 
-test("experience accordion toggles", () => {
+test("journey details expand and collapse", () => {
   render(<App />);
-  const adobe = screen.getByRole("button", { name: /Adobe/ });
-  expect(adobe).toHaveAttribute("aria-expanded", "false");
-  fireEvent.click(adobe);
-  expect(adobe).toHaveAttribute("aria-expanded", "true");
+  const btn = screen.getByRole("button", { name: /details.*for Adobe/i });
+  expect(btn).toHaveAttribute("aria-expanded", "false");
+  fireEvent.click(btn);
+  expect(btn).toHaveAttribute("aria-expanded", "true");
+  fireEvent.click(btn);
+  expect(btn).toHaveAttribute("aria-expanded", "false");
+});
+
+test("a note opens on its own route and links back", () => {
+  render(<App />);
+  act(() => {
+    window.location.hash = `#/notes/${NOTES[0].slug}`;
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  });
+  expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(NOTES[0].title);
+  expect(screen.getByRole("link", { name: /All notes/ })).toHaveAttribute("href", "#notes");
+});
+
+test("unknown note shows a friendly message", () => {
+  render(<App />);
+  act(() => {
+    window.location.hash = "#/notes/does-not-exist";
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  });
+  expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/doesn’t exist/);
+});
+
+test("markdown renderer drops unsafe links and never injects HTML", () => {
+  rtlRender(
+    <div data-testid="md">
+      {renderMarkdown("## Hi\n\n[bad](javascript:alert(1)) and <img src=x onerror=alert(1)> **ok** `code`")}
+    </div>
+  );
+  const md = within(screen.getByTestId("md"));
+  expect(md.queryByRole("link")).toBeNull();
+  expect(md.queryByRole("img")).toBeNull();
+  expect(md.getByRole("heading", { level: 2 })).toHaveTextContent("Hi");
+  expect(md.getByText("ok").tagName).toBe("STRONG");
 });
 
 test("external links open safely", () => {
   render(<App />);
-  document.querySelectorAll('a[target="_blank"]').forEach((a) => {
-    expect(a.getAttribute("rel")).toMatch(/noopener/);
-    expect(a.getAttribute("rel")).toMatch(/noreferrer/);
+  const external = screen.getAllByRole("link").filter((a) => a.getAttribute("target") === "_blank");
+  expect(external.length).toBeGreaterThan(0);
+  external.forEach((a) => {
+    expect(a).toHaveAttribute("rel", expect.stringMatching(/noopener/));
+    expect(a).toHaveAttribute("rel", expect.stringMatching(/noreferrer/));
   });
 });

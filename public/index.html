@@ -20,43 +20,32 @@
     <script src="%PUBLIC_URL%/theme-init.js"></script>
     <!-- ============================================================== -->
 
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link rel="preload" as="image" type="image/webp" href="%PUBLIC_URL%/assets/portrait.webp" imagesrcset="%PUBLIC_URL%/assets/portrait-sm.webp 320w, %PUBLIC_URL%/assets/portrait.webp 640w" imagesizes="(max-width: 900px) 40vw, 230px" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" sizes="any" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="image" type="image/webp" href="%PUBLIC_URL%/assets/portrait.webp" imagesrcset="%PUBLIC_URL%/assets/portrait-sm.webp 320w, %PUBLIC_URL%/assets/portrait.webp 640w" imagesizes="(max-width: 640px) 34vw, 230px" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#efe9de" />
-    <meta
-      name="description"
-      content="Mohan Babu Doddapaneni | Full Stack Developer with 6+ years on Java, Spring Boot, Angular, and React. Owns the admin and data layer of a multi-tenant SaaS commerce platform at Fenix Commerce."
-    />
+    <meta name="description" content="Personal site of Mohan Babu Doddapaneni, a software engineer in Worcester, Massachusetts. Things he has built, his journey from electronics to platform engineering, and notes from production." />
     <meta name="author" content="Mohan Babu Doddapaneni" />
-    <meta
-      name="keywords"
-      content="Mohan Babu Doddapaneni, Full Stack Developer, Java, Spring Boot, React, Angular, AWS, Microservices, Software Engineer"
-    />
-
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Mohan Babu Doddapaneni | Full Stack Developer" />
-    <meta
-      property="og:description"
-      content="6+ years on Java, Spring Boot, Angular, and React. Owns the admin and data layer of a multi-tenant SaaS commerce platform serving 40+ retailers."
-    />
+    <meta property="og:title" content="Mohan Babu Doddapaneni" />
+    <meta property="og:description" content="I build software, explore ideas, and enjoy understanding how things work." />
     <meta property="og:url" content="https://mohanbabudoddapaneni.com" />
     <meta property="og:image" content="https://mohanbabudoddapaneni.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Mohan Babu Doddapaneni" />
+    <meta property="og:image:alt" content="Mohan Babu Doddapaneni — I build software, explore ideas, and enjoy understanding how things work." />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Mohan Babu Doddapaneni | Full Stack Developer" />
-    <meta
-      name="twitter:description"
-      content="6+ years on Java, Spring Boot, Angular, and React, building multi-tenant SaaS at scale."
-    />
+    <meta name="twitter:title" content="Mohan Babu Doddapaneni" />
+    <meta name="twitter:description" content="I build software, explore ideas, and enjoy understanding how things work." />
     <meta name="twitter:image" content="https://mohanbabudoddapaneni.com/og-image.png" />
 
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/apple-touch-icon.png" />
     <link rel="canonical" href="https://mohanbabudoddapaneni.com/" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
@@ -68,7 +57,8 @@
         "name": "Mohan Babu Doddapaneni",
         "url": "https://mohanbabudoddapaneni.com",
         "image": "https://mohanbabudoddapaneni.com/og-image.png",
-        "jobTitle": "Full Stack Developer",
+        "jobTitle": "Software Engineer",
+        "description": "Software engineer in Worcester, Massachusetts. I build software, explore ideas, and enjoy understanding how things work.",
         "email": "mailto:mohanbabud25@gmail.com",
         "telephone": "+1-774-701-0382",
         "address": {
@@ -91,29 +81,17 @@
         ]
       }
     </script>
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Mohan Babu Doddapaneni | Full Stack Developer</title>
+    <title>Mohan Babu Doddapaneni — software engineer</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      <main>
+        <h1>Mohan Babu Doddapaneni</h1>
+        <p>I build software, explore ideas, and enjoy understanding how things work.</p>
+        <p>I’m a software engineer in Worcester, Massachusetts. My journey: B.Tech. in Electronics &amp; Communication Engineering (JNTU Ananthapur), Wipro, Capgemini, M.S. in Computer Science (Clark University), Adobe, and now Fenix Commerce.</p>
+        <p>This site works best with JavaScript turned on. You can reach me at <a href="mailto:mohanbabud25@gmail.com">mohanbabud25@gmail.com</a>, on <a href="https://www.linkedin.com/in/mohan-babu-doddapaneni">LinkedIn</a> or on <a href="https://github.com/mohan-babu-doddapaneni">GitHub</a>.</p>
+      </main>
+    </noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

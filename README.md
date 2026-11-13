@@ -1,21 +1,55 @@
 # mohanbabudoddapaneni.com
 
-Personal portfolio of Mohan Babu Doddapaneni — full-stack engineer (Java, Spring Boot, Angular, React).
+The personal site of Mohan Babu Doddapaneni — a software engineer who builds software, explores ideas, and enjoys understanding how things work.
+
+## Editing content
+
+All visitor-facing text lives in `src/content/`, separate from layout code:
+
+| File | What's in it |
+| --- | --- |
+| `src/content/site.js` | Hero, About, Things I've built, My journey, What I work with, Beyond the code, Connect |
+| `src/content/notes.js` | Notes (Markdown) |
+
+Search for `TODO(mohan)` to find details that still need your input. Nothing marked TODO is shown on the site.
+
+### Publishing a note
+
+Add an object to the **top** of the array in `src/content/notes.js`:
+
+```js
+{
+  slug: "my-new-note",            // URL: /#/notes/my-new-note
+  title: "My new note",
+  date: "2026-12-01",             // optional
+  context: "Where this came from",// optional
+  summary: "One or two sentences for the list.",
+  tags: ["Architecture"],
+  body: `## A heading
+
+Plain **Markdown**: paragraphs, - lists, 1. lists, > quotes, \`code\`, fenced code blocks and [links](https://example.com).`,
+}
+```
+
+The renderer (`src/lib/markdown.js`) builds React elements directly — it never injects raw HTML, and only allows `http(s)`, `mailto`, `tel` and `#` links.
+
+### Beyond the code
+
+`BEYOND` in `src/content/site.js` is empty on purpose. While it's empty the section shows a clearly marked "under construction" state. Add `{ title, text }` items and they replace it automatically.
 
 ## Design
 
-An editorial, print-inspired system rather than a template look:
-
-- **Type:** Fraunces (display serif, variable `SOFT`/`WONK` axes), Instrument Sans (body), JetBrains Mono (margin notes). All self-hosted.
-- **Colour:** warm paper / ink with a single vermilion signal colour; a "darkroom" dark theme that follows the OS and is remembered.
-- **Motion:** masked line reveals, hand-drawn underlines, scroll-linked hero fade (CSS scroll timelines, progressive), accordion via `grid-template-rows`, magnetic buttons on fine pointers, a circular "ink spill" theme switch using the View Transitions API. Everything is disabled under `prefers-reduced-motion`.
+- **Motif — circuits to systems.** The hero is a PCB-style trace routed through the real journey (JNTU → Wipro → Capgemini → Clark → Adobe → Fenix), with a signal pulse; the same idea becomes the scroll-linked "My journey" timeline. Generated from `JOURNEY` data, so it updates itself.
+- **Type:** Fraunces (display), Instrument Sans (body), JetBrains Mono (labels). Self-hosted.
+- **Colour:** paper/ink with one vermilion signal colour; light and dark themes (follows the OS, remembered).
+- **Motion:** masked line reveals, trace draw-on, scroll reveals, view-transition theme switch. All of it switches off under `prefers-reduced-motion`.
+- **Easter egg:** type `blueprint` anywhere to see the 12-column grid (Esc to exit).
 
 ## Security
 
-- Strict Content-Security-Policy in production: no inline scripts **or** styles (`style-src 'self'`, set via `.env.production`). The dev server needs inline styles, so `.env.development` relaxes only that directive locally.
-- No third-party requests: fonts, icons and images are bundled or self-hosted.
-- Clickjacking protection via a same-origin frame-buster (GitHub Pages cannot send `frame-ancestors` headers).
-- No source maps published; external links use `rel="noopener noreferrer"`.
+- Strict Content-Security-Policy in production: no inline scripts or styles (`style-src 'self'` via `.env.production`; `.env.development` relaxes it locally for the dev server).
+- No third-party requests; fonts and images are self-hosted. No source maps published.
+- Clickjacking protection via a same-origin frame-buster (GitHub Pages can't send `frame-ancestors`).
 
 ## Scripts
 

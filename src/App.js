@@ -1,404 +1,46 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 
-// Self-hosted fonts — no third-party CDN requests (privacy + strict CSP).
+// Self-hosted fonts — no third-party requests (privacy + strict CSP).
 import "@fontsource-variable/fraunces/full.css";
 import "@fontsource-variable/fraunces/full-italic.css";
 import "@fontsource-variable/instrument-sans/index.css";
 import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/500.css";
 
-import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
+import {
+  PERSON, LINKS, NAV, HERO, ABOUT, BUILT, JOURNEY, STACK, CERTIFICATIONS, BEYOND, CONNECT,
+} from "./content/site";
+import NOTES, { findNote } from "./content/notes";
+import { renderMarkdown, readingMinutes } from "./lib/markdown";
+import {
+  prefersReducedMotion, safeStorage, initialTheme, useReveal, useMagnetic,
+  useLocalTime, useActiveSection, useHashRoute, useBlueprint, useAnchorScrolling,
+} from "./lib/hooks";
+import Trace from "./components/Trace";
 
-/* ================================================================== */
-/*  CONTENT                                                            */
-/* ================================================================== */
+const SOURCE_URL = "https://github.com/mohan-babu-doddapaneni/portfolio";
+const NAV_IDS = NAV.map((n) => n.id);
+const pad2 = (n) => String(n).padStart(2, "0");
 
-const EMAIL = "mohanbabud25@gmail.com";
-const PHONE_DISPLAY = "+1 (774) 701-0382";
-const PHONE_HREF = "tel:+17747010382";
-const LINKEDIN = "https://www.linkedin.com/in/mohan-babu-doddapaneni";
-const GITHUB = "https://github.com/mohan-babu-doddapaneni";
-const RESUME = `${process.env.PUBLIC_URL}/Mohan_Babu_Doddapaneni.pdf`;
+/* ------------------------------------------------------------------ bits */
 
-const NAV = [
-  { id: "work", label: "Work" },
-  { id: "notes", label: "Field notes" },
-  { id: "stack", label: "Stack" },
-  { id: "projects", label: "Projects" },
-  { id: "contact", label: "Contact" },
-];
-
-const TICKER = [
-  "2.5M+ orders a month",
-  "40+ enterprise retailers",
-  "6M+ products indexed",
-  "Sub-20 ms cache lookups",
-  "12 platform modules",
-  "Java 8 → 21",
-  "Weekly releases, not quarterly",
-  "1.4M-event holiday peak",
-];
-
-const STATS = [
-  { value: 6, suffix: "+", label: "Years shipping production software" },
-  { value: 40, suffix: "+", label: "Enterprise retailers on the platform" },
-  { value: 2.5, suffix: "M", label: "Orders processed every month", decimals: 1 },
-  { value: 12, suffix: "", label: "Platform modules I build across" },
-];
-
-const EXPERIENCE = [
-  {
-    company: "Fenix Commerce",
-    role: "Product Development Engineer",
-    period: "Jan 2026 — Present",
-    location: "Worcester, MA",
-    summary:
-      "I own the multi-tenant Business Console on a Java, Spring Boot, Angular, Elasticsearch and AWS commerce platform serving 40+ retailers across 12 modules at 2.5M+ orders per month.",
-    points: [
-      "Rebuilt a six-year-old Angular console into a modular component architecture with a shared design system and lazy-loaded features. The team now ships console features weekly instead of quarterly.",
-      "Defined a server-side pagination and filtering contract across Spring Boot and Elasticsearch, with virtual scrolling and lazy loading. Views over tens of millions of records now open in seconds inside a fixed memory budget.",
-      "Traced wrong inventory numbers to an unset Elasticsearch trackTotalHits ceiling, then rebuilt the query path on heap-safe cursor traversal. Reporting is accurate again above 6M products.",
-      "Root-caused a real-time ingestion outage during a 1.4M-event holiday surge to a JVM fast-throw optimization hiding the real exception. Hardened the parser and brought event flow back under peak load.",
-      "Closed a data-exposure gap with a server-side cache keyed on SHA-256 composite hashes: sub-20 ms lookups, internal data walled off from tenant-facing surfaces.",
-      "Modeled the permission and access-provisioning scheme in Spring Security, turning dozens of release-gated settings into a self-serve admin layer.",
-      "Use Claude Code, GitHub Copilot and Cursor daily. Refactors that took days land the same day, and every AI-assisted change still clears human review, SonarQube gates and tests. I wrote the prompt and review patterns the team follows.",
-    ],
-    tags: ["Angular", "Spring Boot", "Elasticsearch", "GraphQL", "AWS ECS", "Multi-tenant"],
-  },
-  {
-    company: "Adobe",
-    role: "Full Stack Developer",
-    period: "Sep 2024 — Jan 2026",
-    location: "Massachusetts, USA",
-    summary:
-      "Built a cloud-native asset management and real-time collaboration platform inside Adobe Creative Cloud on Java, Spring Boot, React, Next.js, Kafka and AWS.",
-    points: [
-      "Led the design of a cloud-native asset management and collaboration platform for Creative Cloud: horizontal scaling, high availability, and integration with Adobe Sensei AI services.",
-      "Broke a monolithic delivery path into Spring Boot microservices so teams could deploy independently, supporting 50% faster feature delivery across Photoshop and Illustrator.",
-      "Shipped adaptive interfaces in React, Next.js and Tailwind. Engagement rose 10% and interface errors dropped 30%; tighter Redux state handling cut validation errors 25%.",
-      "Built real-time alerting on WebSockets and Kafka so users stopped losing work to silent overwrites, and connected styluses and tablets through secure, event-driven APIs.",
-      "Shipped AI-driven layout suggestions built from user history and asset metadata, speeding up design creation for new users by 30%.",
-      "Cut query response times 18% by partitioning and indexing the PostgreSQL tables behind large asset searches, and secured assets and session data end to end with TLS and OAuth 2.0.",
-    ],
-    tags: ["Java", "Spring Boot", "React", "Next.js", "Kafka", "AWS", "PostgreSQL"],
-  },
-  {
-    company: "Capgemini",
-    role: "Associate Consultant, Full Stack",
-    period: "Sep 2020 — Jul 2023",
-    location: "Hyderabad, India",
-    summary:
-      "Built enterprise Java, Spring Boot and React applications for financial-services and product-engineering clients.",
-    points: [
-      "Built the microservices behind a financial application: accounts, transactions, customer profiles and fraud detection, with the isolation sensitive data requires.",
-      "Rebuilt the backend on modular Spring Boot services with Hibernate, cutting API latency 50% and feature development time 40%.",
-      "Cut reported security vulnerabilities 90% by hardening Spring Security: RBAC, token auth, method-level access control, CSRF protection and secure sessions.",
-      "Migrated 18 Java projects to Maven in under 30 days and remediated log4j across the portfolio ahead of the client deadline.",
-      "Delivered client dashboards in React over Node.js REST services, and replaced always-on batch jobs with AWS Lambda for event-driven processing, lifting uptime 20%.",
-      "Cut post-deployment defects 30% with JUnit coverage and profiling, and stood up a Swagger API portal documenting every endpoint.",
-    ],
-    tags: ["Spring Boot", "React", "Node.js", "AWS", "Spring Security"],
-  },
-  {
-    company: "Wipro",
-    role: "Junior Full Stack Developer",
-    period: "Jul 2019 — Aug 2020",
-    location: "India",
-    summary:
-      "Built a KYC and AML compliance platform for a banking client on Angular, Spring Boot, Thymeleaf and PostgreSQL.",
-    points: [
-      "Built KYC onboarding in Angular Reactive Forms with dynamic validation, supporting 5,000+ customer profiles.",
-      "Reshaped Spring Boot JSON responses around what analysts actually needed, cutting AML alert review time 30%.",
-      "Configured Spring Security across four KYC modules and designed review screens that made flagging suspicious activity 25% faster.",
-      "Wrote the PostgreSQL queries behind analyst comments, risk scores and audit trails across 10,000+ transaction records.",
-    ],
-    tags: ["Angular", "Spring Boot", "Spring Security", "PostgreSQL"],
-  },
-];
-
-const NOTES = [
-  {
-    title: "The silent ceiling",
-    symptom: "Large-catalog tenants saw inventory totals that were quietly wrong.",
-    cause: "An unset trackTotalHits capped Elasticsearch aggregations at the engine default — every big tenant was reading a fraction of its data.",
-    fix: "Rebuilt the query path on heap-safe cursor traversal that streams full result sets in constant memory.",
-    result: "Accurate reporting above 6M products",
-  },
-  {
-    title: "The missing stack trace",
-    symptom: "Real-time ingestion stalled in the middle of a 1.4M-event holiday surge.",
-    cause: "The JVM's fast-throw optimization was stripping stack traces from an unguarded parsing exception, hiding the real failure while retries piled up.",
-    fix: "Hardened the parser, added failure logging that survives the optimization, and drained the backlog.",
-    result: "Event flow restored under peak load",
-  },
-  {
-    title: "The leak in the inbox",
-    symptom: "Internal data was surfacing in merchant panels and customer emails.",
-    cause: "A third-party API limitation pushed internal fields onto tenant-facing surfaces.",
-    fix: "A server-side cache keyed on SHA-256 composite hashes walls internal data off at the boundary.",
-    result: "Sub-20 ms lookups, no added latency",
-  },
-  {
-    title: "The table that ate the browser",
-    symptom: "Big tenants' console screens froze or crashed outright.",
-    cause: "The console pulled whole tables into the browser and filtered them client-side.",
-    fix: "A server-side pagination and filtering contract across Spring Boot and Elasticsearch, plus virtual scrolling.",
-    result: "Tens of millions of rows, open in seconds",
-  },
-];
-
-const STACK = [
-  { title: "Backend", items: ["Java 8 / 17 / 21", "Spring Boot", "Spring Data JPA", "Hibernate", "REST & GraphQL", "Node.js / Express", "Python"] },
-  { title: "Frontend", items: ["Angular", "React", "Next.js", "TypeScript", "Redux", "Tailwind CSS", "Material UI"] },
-  { title: "Data", items: ["PostgreSQL", "MySQL", "Elasticsearch", "MongoDB", "DynamoDB", "Redis", "Apache Kafka"] },
-  { title: "Cloud & delivery", items: ["AWS (ECS, Lambda, EC2)", "Docker", "Kubernetes", "Terraform", "Jenkins", "Git"] },
-  { title: "Security & quality", items: ["Spring Security", "OAuth 2.0 / JWT", "OWASP & CVE remediation", "SonarQube", "JUnit / Jest", "Cypress"] },
-  { title: "AI-assisted", items: ["Claude Code", "GitHub Copilot", "Cursor", "OpenAI Codex", "AI code review"] },
-];
-
-const PROJECTS = [
-  {
-    title: "Career Path Recommendation System",
-    description:
-      "Parses résumés with NLP, predicts likely career paths and names the skill gaps in the way, then serves the results over REST. Python and Django over PostgreSQL.",
-    tags: ["Python", "Django", "NLP", "PostgreSQL"],
-    href: GITHUB,
-  },
-  {
-    title: "Restaurant Ordering Portal",
-    description:
-      "A normalized schema for menus, modifiers and orders, with transactional placement so a dropped or duplicated request never leaves half an order behind. Processed 300+ real orders.",
-    tags: ["Java", "Angular", "MySQL", "Transactions"],
-    href: GITHUB,
-  },
-];
-
-const EDUCATION = [
-  { degree: "M.S. Computer Science", school: "Clark University", place: "Worcester, MA" },
-  { degree: "B.Tech. Electronics & Communication", school: "JNTU Ananthapur", place: "Andhra Pradesh, India" },
-];
-
-const CERTIFICATIONS = [
-  "AWS Cloud Essentials",
-  "Microsoft Azure Fundamentals (AZ-900)",
-  "Java Cloud Native Developer, L1 & L2",
-  "Python Automation Practitioner",
-];
-
-/* ================================================================== */
-/*  HELPERS                                                            */
-/* ================================================================== */
-
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-const safeStorage = {
-  get(key) {
-    try {
-      return window.localStorage.getItem(key);
-    } catch {
-      return null;
-    }
-  },
-  set(key, value) {
-    try {
-      window.localStorage.setItem(key, value);
-    } catch {
-      /* storage unavailable (private mode etc.) — ignore */
-    }
-  },
-};
-
-function initialTheme() {
-  const saved = safeStorage.get("theme");
-  if (saved === "light" || saved === "dark") return saved;
-  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
-  return "light";
-}
-
-/** Adds `.is-in` to every [data-reveal] element once it scrolls into view. */
-function useReveal() {
-  useEffect(() => {
-    const els = Array.from(document.querySelectorAll("[data-reveal]"));
-    if (!("IntersectionObserver" in window) || prefersReducedMotion()) {
-      els.forEach((el) => el.classList.add("is-in"));
-      return undefined;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-in");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
-    );
-    els.forEach((el) => io.observe(el));
-
-    // Safety net: anything already above the fold line (anchor jumps, fast
-    // flings, momentum scrolling on iOS) is revealed even if IO missed it.
-    let raf = 0;
-    const sweep = () => {
-      raf = 0;
-      const limit = window.innerHeight * 0.92;
-      els.forEach((el) => {
-        if (!el.classList.contains("is-in") && el.getBoundingClientRect().top < limit) {
-          el.classList.add("is-in");
-          io.unobserve(el);
-        }
-      });
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(sweep);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("hashchange", onScroll);
-    return () => {
-      io.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("hashchange", onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
-}
-
-/** Buttons/links with [data-magnetic] lean slightly toward the pointer. */
-function useMagnetic() {
-  useEffect(() => {
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches || prefersReducedMotion()) {
-      return undefined;
-    }
-    const els = Array.from(document.querySelectorAll("[data-magnetic]"));
-    const cleanups = els.map((el) => {
-      const move = (e) => {
-        const r = el.getBoundingClientRect();
-        const x = (e.clientX - (r.left + r.width / 2)) * 0.22;
-        const y = (e.clientY - (r.top + r.height / 2)) * 0.32;
-        el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
-      };
-      const leave = () => {
-        el.style.transform = "";
-      };
-      el.addEventListener("pointermove", move);
-      el.addEventListener("pointerleave", leave);
-      return () => {
-        el.removeEventListener("pointermove", move);
-        el.removeEventListener("pointerleave", leave);
-      };
-    });
-    return () => cleanups.forEach((fn) => fn());
-  }, []);
-}
-
-/** Local time in Worcester, MA — a small human detail in the nav and footer. */
-function useLocalTime() {
-  const format = () =>
-    new Intl.DateTimeFormat("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      timeZone: "America/New_York",
-    }).format(new Date());
-  const [time, setTime] = useState(format);
-  useEffect(() => {
-    const id = setInterval(() => setTime(format()), 20000);
-    return () => clearInterval(id);
-  }, []);
-  return time;
-}
-
-function useActiveSection(ids) {
-  const [active, setActive] = useState("");
-  useEffect(() => {
-    if (!("IntersectionObserver" in window)) return undefined;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px" }
-    );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) io.observe(el);
-    });
-    return () => io.disconnect();
-  }, [ids]);
-  return active;
-}
-
-function CountUp({ end, suffix = "", decimals = 0, duration = 1600 }) {
-  const ref = useRef(null);
-  // Start at the final value: correct for no-JS crawlers, reduced motion, and
-  // anyone who flings past the section before it could animate.
-  const [value, setValue] = useState(end);
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || !("IntersectionObserver" in window) || prefersReducedMotion()) return undefined;
-    if (node.getBoundingClientRect().top < window.innerHeight) return undefined; // already on screen
-    setValue(0);
-    let raf;
-    let started = false;
-    const finish = () => {
-      started = true;
-      setValue(end);
-    };
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting || started) return;
-        started = true;
-        io.disconnect();
-        const start = performance.now();
-        const tick = (now) => {
-          const p = Math.min((now - start) / duration, 1);
-          setValue(end * (1 - Math.pow(1 - p, 4)));
-          if (p < 1) raf = requestAnimationFrame(tick);
-        };
-        raf = requestAnimationFrame(tick);
-      },
-      { threshold: 0, rootMargin: "0px 0px -12% 0px" }
-    );
-    io.observe(node);
-    const onScroll = () => {
-      if (!started && node.getBoundingClientRect().bottom < window.innerHeight * 0.88) {
-        io.disconnect();
-        finish();
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      io.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, [end, duration]);
-  return (
-    <span ref={ref} className="tabular">
-      {decimals ? value.toFixed(decimals) : Math.round(value)}
-      {suffix}
-    </span>
-  );
-}
-
-const Arrow = ({ className = "" }) => (
-  <svg className={`arrow ${className}`} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path d="M6 18 18 6M8 6h10v10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
+const Arrow = ({ dir = "ne" }) => (
+  <svg className={`arrow arrow--${dir}`} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    {dir === "ne" && <path d="M6 18 18 6M8 6h10v10" />}
+    {dir === "e" && <path d="M4 12h15M13 6l6 6-6 6" />}
+    {dir === "w" && <path d="M20 12H5M11 6l-6 6 6 6" />}
   </svg>
 );
 
-function SectionHead({ index, label, title, children }) {
+function SectionHead({ index, label, title, id, children }) {
   return (
     <div className="section-head">
       <div className="section-rule" data-reveal>
         <span className="mono">§ {index}</span>
         <span className="mono">{label}</span>
       </div>
-      <h2 className="section-title" data-reveal>
+      <h2 className="section-title" id={id} data-reveal>
         {title}
       </h2>
       {children}
@@ -406,24 +48,452 @@ function SectionHead({ index, label, title, children }) {
   );
 }
 
-/* ================================================================== */
-/*  APP                                                                */
-/* ================================================================== */
+/* ------------------------------------------------------------------ journey */
+
+function Journey() {
+  const listRef = useRef(null);
+  const [open, setOpen] = useState(() => new Set());
+
+  // Fill the trace and light up each pad as the reader moves down the timeline.
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return undefined;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const r = list.getBoundingClientRect();
+      const mark = window.innerHeight * 0.55;
+      const p = Math.min(1, Math.max(0, (mark - r.top) / r.height));
+      list.style.setProperty("--fill", p.toFixed(4));
+      list.querySelectorAll(".stop").forEach((li) => {
+        const pad = li.querySelector(".stop__pad");
+        if (pad) li.classList.toggle("is-passed", pad.getBoundingClientRect().top < mark);
+      });
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const toggle = (id) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  // newest first reads better in a personal timeline
+  const stops = [...JOURNEY].reverse();
+
+  return (
+    <ol className="timeline" ref={listRef}>
+      {stops.map((s) => {
+        const isOpen = open.has(s.id);
+        const hasMore = s.highlights && s.highlights.length > 0;
+        return (
+          <li key={s.id} id={`journey-${s.id}`} className={`stop stop--${s.kind} ${s.current ? "is-current" : ""}`} data-reveal>
+            <div className="stop__when mono">
+              <span>{s.period || (s.kind === "study" ? "Study" : "")}</span>
+              <span className="stop__place">{s.place}</span>
+            </div>
+            <span className="stop__pad" aria-hidden="true" />
+            <div className="stop__body">
+              <h3 className="stop__org">
+                {s.org}
+                {s.current && <span className="stop__now mono">Now</span>}
+              </h3>
+              <p className="stop__role">{s.role}</p>
+              <p className="stop__story">{s.story}</p>
+              {hasMore && (
+                <>
+                  <button
+                    type="button"
+                    className="stop__toggle mono"
+                    aria-expanded={isOpen}
+                    aria-controls={`stop-more-${s.id}`}
+                    onClick={() => toggle(s.id)}
+                  >
+                    <span className="stop__plus" aria-hidden="true" />
+                    {isOpen ? "Hide details" : `Details · ${pad2(s.highlights.length)}`}
+                    <span className="sr-only"> for {s.org}</span>
+                  </button>
+                  <div className="stop__more" id={`stop-more-${s.id}`}>
+                    <div className="stop__more-inner" inert={!isOpen}>
+                      <ul className="stop__points">
+                        {s.highlights.map((h) => (
+                          <li key={h.slice(0, 48)}>{h}</li>
+                        ))}
+                      </ul>
+                      <ul className="tags" aria-label="Technologies">
+                        {s.tags.map((t) => (
+                          <li key={t}>{t}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+/* ------------------------------------------------------------------ note reader */
+
+function NoteView({ slug }) {
+  const note = findNote(slug);
+  const headingRef = useRef(null);
+  const idx = NOTES.findIndex((n) => n.slug === slug);
+  const prev = idx > 0 ? NOTES[idx - 1] : null;
+  const next = idx >= 0 && idx < NOTES.length - 1 ? NOTES[idx + 1] : null;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (headingRef.current) headingRef.current.focus({ preventScroll: true });
+    const prevTitle = document.title;
+    document.title = note ? `${note.title} — ${PERSON.name}` : `Note not found — ${PERSON.name}`;
+    return () => {
+      document.title = prevTitle;
+    };
+  }, [slug, note]);
+
+  if (!note) {
+    return (
+      <article className="note-page wrap">
+        <a href="#notes" className="back mono">
+          <Arrow dir="w" /> All notes
+        </a>
+        <h1 className="note-page__title" tabIndex={-1} ref={headingRef}>
+          That note doesn’t exist.
+        </h1>
+        <p className="note-page__lede">It may have been renamed. The full list is on the home page.</p>
+      </article>
+    );
+  }
+
+  return (
+    <article className="note-page wrap" aria-labelledby="note-title">
+      <a href="#notes" className="back mono">
+        <Arrow dir="w" /> All notes
+      </a>
+      <header className="note-page__head">
+        {note.context && <p className="mono note-page__context">{note.context}</p>}
+        <h1 className="note-page__title" id="note-title" tabIndex={-1} ref={headingRef}>
+          {note.title}
+        </h1>
+        <p className="note-page__lede">{note.summary}</p>
+        <p className="note-page__meta mono">
+          {note.date && (
+            <>
+              <time dateTime={note.date}>
+                {new Date(`${note.date}T12:00:00`).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+              </time>
+              {" · "}
+            </>
+          )}
+          {readingMinutes(note.body)} min read · {note.tags.join(" · ")}
+        </p>
+      </header>
+      <div className="prose">{renderMarkdown(note.body)}</div>
+      <nav className="note-page__nav" aria-label="More notes">
+        {prev ? (
+          <a href={`#/notes/${prev.slug}`} className="pager pager--prev">
+            <span className="mono">Previous</span>
+            <span className="pager__title">{prev.title}</span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {next && (
+          <a href={`#/notes/${next.slug}`} className="pager pager--next">
+            <span className="mono">Next</span>
+            <span className="pager__title">{next.title}</span>
+          </a>
+        )}
+      </nav>
+    </article>
+  );
+}
+
+/* ------------------------------------------------------------------ home */
+
+function Home() {
+  return (
+    <>
+      {/* ---------------------------------------------- HERO */}
+      <section id="top" className="hero" aria-labelledby="hero-name">
+        <div className="wrap">
+          <p className="hero__meta mono load load--1">Software engineer · {PERSON.placeShort}</p>
+
+          <h1 id="hero-name" className="hero__name">
+            <span className="line">
+              <span className="line__in">{PERSON.first}</span>
+            </span>
+            <span className="line">
+              <span className="line__in">
+                <em>{PERSON.last}</em>
+              </span>
+            </span>
+          </h1>
+
+          <div className="hero__grid">
+            <div className="hero__text">
+              <p className="hero__line load load--2">{HERO.line}</p>
+              <p className="hero__intro load load--3">{HERO.intro}</p>
+              <ul className="hero__links load load--4">
+                {HERO.links.map((l) => (
+                  <li key={l.href}>
+                    <a href={l.href} className="textlink" data-magnetic>
+                      {l.label} <Arrow dir="e" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <figure className="portrait load load--5">
+              <div className="portrait__frame">
+                <img
+                  src={`${process.env.PUBLIC_URL}/assets/portrait.webp`}
+                  srcSet={`${process.env.PUBLIC_URL}/assets/portrait-sm.webp 320w, ${process.env.PUBLIC_URL}/assets/portrait.webp 640w`}
+                  sizes="(max-width: 640px) 34vw, 230px"
+                  width="640"
+                  height="800"
+                  alt={`Portrait of ${PERSON.name}`}
+                  decoding="async"
+                  fetchPriority="high"
+                />
+              </div>
+            </figure>
+          </div>
+        </div>
+
+        <div className="hero__trace load load--6">
+          <div className="wrap">
+            <div className="trace-caption mono">
+              <span>Circuits → systems</span>
+              <span className="trace-caption__hint">Select a stop to jump to it</span>
+            </div>
+            <Trace stops={JOURNEY} />
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------- ABOUT */}
+      <section id="about" className="section" aria-labelledby="about-title">
+        <div className="wrap">
+          <SectionHead index="01" label="About" title={ABOUT.lead} id="about-title" />
+          <div className="about">
+            <div className="about__body" data-reveal>
+              {ABOUT.paragraphs.map((p) => (
+                <p key={p.slice(0, 32)}>{p}</p>
+              ))}
+            </div>
+            <aside className="about__now" data-reveal aria-label={ABOUT.now.label}>
+              <p className="mono">{ABOUT.now.label}</p>
+              <p>{ABOUT.now.text}</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------- BUILT */}
+      <section id="built" className="section" aria-labelledby="built-title">
+        <div className="wrap">
+          <SectionHead index="02" label="Projects" title="Things I’ve built" id="built-title" />
+          <div className="builds">
+            {BUILT.map((b, i) => (
+              <article key={b.id} className={`build ${i % 2 ? "build--flip" : ""}`} data-reveal aria-labelledby={`build-${b.id}`}>
+                <div className="build__main">
+                  <span className="build__num mono">{pad2(i + 1)}</span>
+                  <h3 className="build__name" id={`build-${b.id}`}>
+                    {b.name}
+                  </h3>
+                  <p className="build__idea">
+                    <span className="mono">The idea</span>
+                    {b.idea}
+                  </p>
+                  <p className="build__about">{b.about}</p>
+                  <p className="build__interesting">
+                    <span className="mono">Why it’s interesting</span>
+                    {b.interesting}
+                  </p>
+                  <ul className="tags" aria-label="Technologies">
+                    {b.tech.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                  <a className="textlink build__link" href={b.link.href} target="_blank" rel="noopener noreferrer">
+                    {b.link.label} <Arrow />
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </div>
+                <figure className="build__flow" aria-label={`How it works: ${b.flow.join(", then ")}`}>
+                  <figcaption className="mono">How it flows</figcaption>
+                  <ol>
+                    {b.flow.map((step, j) => (
+                      <li key={step} style={{ "--j": j }}>
+                        <span className="mono build__step">{pad2(j + 1)}</span>
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </figure>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------- JOURNEY */}
+      <section id="journey" className="section" aria-labelledby="journey-title">
+        <div className="wrap">
+          <SectionHead index="03" label="2019 — now" title="My journey" id="journey-title">
+            <p className="section-sub" data-reveal>
+              From electronics to enterprise software to platform engineering. Newest first — open any stop for the details.
+            </p>
+          </SectionHead>
+          <Journey />
+        </div>
+      </section>
+
+      {/* ---------------------------------------------- WORK WITH */}
+      <section id="stack" className="section" aria-labelledby="stack-title">
+        <div className="wrap">
+          <SectionHead index="04" label="Tools" title="What I work with" id="stack-title" />
+          <div className="stack">
+            {STACK.map((g, i) => (
+              <div className="stack__col" key={g.title} data-reveal style={{ "--i": i }}>
+                <h3 className="mono">{g.title}</h3>
+                <ul>
+                  {g.items.map((it) => (
+                    <li key={it}>{it}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <div className="certs" data-reveal>
+            <h3 className="mono">Certifications</h3>
+            <ul>
+              {CERTIFICATIONS.map((c) => (
+                <li key={c}>{c}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------- NOTES */}
+      <section id="notes" className="section section--ink" aria-labelledby="notes-title">
+        <div className="wrap">
+          <SectionHead index="05" label="Writing" title="Notes" id="notes-title">
+            <p className="section-sub" data-reveal>
+              Short write-ups of problems worth remembering. The first ones come from production; new notes will appear
+              here as I write them.
+            </p>
+          </SectionHead>
+          {NOTES.length > 0 ? (
+            <ol className="notes-list">
+              {NOTES.map((n, i) => (
+                <li key={n.slug} data-reveal style={{ "--i": i }}>
+                  <a href={`#/notes/${n.slug}`} className="note-row">
+                    <span className="note-row__num mono">No. {pad2(i + 1)}</span>
+                    <span className="note-row__main">
+                      <span className="note-row__title">{n.title}</span>
+                      <span className="note-row__summary">{n.summary}</span>
+                    </span>
+                    <span className="note-row__meta mono">
+                      {readingMinutes(n.body)} min read
+                      <span className="note-row__go">
+                        Read <Arrow dir="e" />
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="empty" data-reveal>
+              Nothing published yet — the first note is on its way.
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* ---------------------------------------------- BEYOND */}
+      <section id="beyond" className="section" aria-labelledby="beyond-title">
+        <div className="wrap">
+          <SectionHead index="06" label="Off the clock" title="Beyond the code" id="beyond-title" />
+          {BEYOND.length > 0 ? (
+            <ul className="beyond">
+              {BEYOND.map((b) => (
+                <li key={b.title} data-reveal>
+                  <h3>{b.title}</h3>
+                  <p>{b.text}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="beyond-empty" data-reveal>
+              <p className="mono beyond-empty__tag">Under construction</p>
+              <p className="beyond-empty__text">
+                This corner is still being written. It will hold the things that don’t fit on a résumé — and I’d rather
+                leave it blank than fill it with something that isn’t true.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ app */
+
+let greeted = false;
 
 export default function App() {
   const [theme, setTheme] = useState(initialTheme);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [openJob, setOpenJob] = useState(0);
   const [copied, setCopied] = useState(false);
   const [showTop, setShowTop] = useState(false);
   const menuBtnRef = useRef(null);
   const menuRef = useRef(null);
   const progressRef = useRef(null);
 
-  const time = useLocalTime();
-  const active = useActiveSection(NAV.map((n) => n.id));
-  useReveal();
-  useMagnetic();
+  const route = useHashRoute();
+  const routeKey = route.view === "note" ? `note:${route.slug}` : "home";
+  const time = useLocalTime(PERSON.timeZone);
+  const active = useActiveSection(NAV_IDS, routeKey);
+  const [blueprint] = useBlueprint();
+  useReveal(routeKey);
+  useMagnetic(routeKey);
+  useAnchorScrolling(route.view === "home");
+
+  // A hello for anyone who opens the console.
+  useEffect(() => {
+    if (greeted) return;
+    greeted = true;
+    // eslint-disable-next-line no-console
+    console.info(
+      "%cHello, curious engineer.%c\nType “blueprint” anywhere on the page to see the grid this site is built on (Esc to exit).\nSource: " +
+        SOURCE_URL,
+      "font: 600 14px Georgia, serif; color: #d9441f",
+      "font: 12px ui-monospace, monospace; color: inherit"
+    );
+  }, []);
 
   // Apply theme to <html> so CSS variables cascade everywhere.
   useEffect(() => {
@@ -434,6 +504,15 @@ export default function App() {
     if (meta) meta.setAttribute("content", theme === "dark" ? "#141210" : "#efe9de");
   }, [theme]);
 
+  // Returning from a note to "#about" etc.: scroll once the home view exists.
+  useEffect(() => {
+    if (route.view !== "home") return;
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: "instant", block: "start" }));
+  }, [route.view]);
+
   const toggleTheme = (e) => {
     const next = theme === "dark" ? "light" : "dark";
     safeStorage.set("theme", next);
@@ -441,13 +520,11 @@ export default function App() {
       setTheme(next);
       return;
     }
-    // Circular "ink spill" reveal from the toggle button.
     const r = e.currentTarget.getBoundingClientRect();
     const x = r.left + r.width / 2;
     const y = r.top + r.height / 2;
     const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
     const vt = document.startViewTransition(() => {
-      // flushSync-free: set the attribute directly so the snapshot is correct.
       document.documentElement.dataset.theme = next;
       setTheme(next);
     });
@@ -461,7 +538,7 @@ export default function App() {
       .catch(() => {});
   };
 
-  // Scroll progress + back-to-top, written straight to the DOM (no re-render per frame).
+  // Scroll progress + back-to-top (progress written to the DOM, no re-render per frame).
   useEffect(() => {
     let ticking = false;
     const update = () => {
@@ -486,7 +563,7 @@ export default function App() {
     };
   }, []);
 
-  // Mobile menu: lock scroll, close on Escape, move focus in and back out.
+  // Mobile menu: lock scroll, close on Escape, trap focus, restore focus.
   const closeMenu = useCallback((returnFocus = false) => {
     setMenuOpen(false);
     if (returnFocus && menuBtnRef.current) menuBtnRef.current.focus();
@@ -524,16 +601,15 @@ export default function App() {
     let ok = false;
     try {
       if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(EMAIL);
+        await navigator.clipboard.writeText(LINKS.email);
         ok = true;
       }
     } catch {
       ok = false;
     }
     if (!ok) {
-      // Fallback for older browsers / non-secure contexts.
       const ta = document.createElement("textarea");
-      ta.value = EMAIL;
+      ta.value = LINKS.email;
       ta.setAttribute("readonly", "");
       ta.style.position = "fixed";
       ta.style.opacity = "0";
@@ -550,15 +626,25 @@ export default function App() {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2200);
     } else {
-      window.location.href = `mailto:${EMAIL}`;
+      window.location.href = `mailto:${LINKS.email}`;
     }
   };
 
   const year = new Date().getFullYear();
+  const onNote = route.view === "note";
 
   return (
     <>
-      <a href="#main" className="skip-link">
+      <a
+        href="#main"
+        className="skip-link"
+        onClick={(e) => {
+          // don't change the hash — that would leave an open note
+          e.preventDefault();
+          const main = document.getElementById("main");
+          if (main) main.focus();
+        }}
+      >
         Skip to content
       </a>
       <div className="grain" aria-hidden="true" />
@@ -567,17 +653,23 @@ export default function App() {
       {/* ------------------------------------------------ NAV */}
       <header className={`nav ${menuOpen ? "nav--open" : ""}`}>
         <div className="nav__inner">
-          <a href="#top" className="wordmark" onClick={() => closeMenu()} aria-label="Mohan Babu D. — back to top">
+          <a href="#top" className="wordmark" onClick={() => closeMenu()} aria-label={`${PERSON.short} — home`}>
             <span className="wordmark__mark" aria-hidden="true" />
             <span className="wordmark__text">
-              Mohan Babu<span className="wordmark__dim"> D.</span>
+              {PERSON.first}
+              <span className="wordmark__dim"> D.</span>
             </span>
           </a>
 
           <nav className="nav__links" aria-label="Primary">
             {NAV.map((n, i) => (
-              <a key={n.id} href={`#${n.id}`} className={active === n.id ? "is-active" : ""} aria-current={active === n.id ? "true" : undefined}>
-                <span className="mono nav__num">0{i + 1}</span>
+              <a
+                key={n.id}
+                href={`#${n.id}`}
+                className={!onNote && active === n.id ? "is-active" : ""}
+                aria-current={!onNote && active === n.id ? "true" : undefined}
+              >
+                <span className="mono nav__num">{pad2(i + 1)}</span>
                 {n.label}
               </a>
             ))}
@@ -585,7 +677,7 @@ export default function App() {
 
           <div className="nav__tools">
             <span className="nav__clock mono" title="My local time">
-              Worcester, MA · {time}
+              {PERSON.placeShort} · {time}
             </span>
             <button
               type="button"
@@ -618,7 +710,7 @@ export default function App() {
             {NAV.map((n, i) => (
               <li key={n.id} style={{ "--i": i }}>
                 <a href={`#${n.id}`} onClick={() => closeMenu()}>
-                  <span className="mono">0{i + 1}</span>
+                  <span className="mono">{pad2(i + 1)}</span>
                   {n.label}
                 </a>
               </li>
@@ -626,331 +718,31 @@ export default function App() {
           </ol>
         </nav>
         <div className="sheet__foot mono">
-          <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-          <a href={PHONE_HREF}>{PHONE_DISPLAY}</a>
+          <a href={`mailto:${LINKS.email}`}>{LINKS.email}</a>
+          <a href={LINKS.phoneHref}>{LINKS.phoneDisplay}</a>
         </div>
       </div>
 
-      <main id="main">
-        {/* ------------------------------------------------ HERO */}
-        <section id="top" className="hero" aria-labelledby="hero-name">
-          <div className="wrap">
-            <div className="hero__meta mono">
-              <span className="load load--1">Full-stack engineer · Worcester, MA</span>
-              <span className="load load--2 status">
-                <span className="status__dot" aria-hidden="true" />
-                Open to senior full-stack &amp; backend roles
-              </span>
-            </div>
+      <main id="main" tabIndex={-1}>
+        {onNote ? <NoteView slug={route.slug} /> : <Home />}
 
-            <h1 id="hero-name" className="hero__name">
-              <span className="line">
-                <span className="line__in">Mohan Babu</span>
-              </span>
-              <span className="line">
-                <span className="line__in">
-                  <em>Doddapaneni</em>
-                </span>
-              </span>
-            </h1>
-
-            <div className="hero__grid">
-              <p className="hero__lede load load--3">
-                I build full-stack products in Java, Spring Boot, Angular and React — six years of keeping multi-tenant
-                platforms fast, correct and reliable at scale.
-              </p>
-
-              <div className="hero__side load load--4">
-                <dl className="facts">
-                  <div>
-                    <dt className="mono">Currently</dt>
-                    <dd>Product Development Engineer, Fenix Commerce</dd>
-                  </div>
-                  <div>
-                    <dt className="mono">Before</dt>
-                    <dd>Adobe · Capgemini · Wipro</dd>
-                  </div>
-                  <div>
-                    <dt className="mono">Based in</dt>
-                    <dd>Worcester, Massachusetts</dd>
-                  </div>
-                </dl>
-                <div className="hero__cta">
-                  <a href="#work" className="btn btn--solid" data-magnetic>
-                    See the work
-                    <span aria-hidden="true" className="btn__down">↓</span>
-                  </a>
-                  <a href={RESUME} className="btn btn--line" download="Mohan_Babu_Doddapaneni.pdf" data-magnetic>
-                    Résumé <span className="mono btn__small">PDF</span>
-                  </a>
-                </div>
-              </div>
-
-              <figure className="portrait load load--5">
-                <div className="portrait__frame">
-                  <img
-                    src={`${process.env.PUBLIC_URL}/assets/portrait.webp`}
-                    srcSet={`${process.env.PUBLIC_URL}/assets/portrait-sm.webp 320w, ${process.env.PUBLIC_URL}/assets/portrait.webp 640w`}
-                    sizes="(max-width: 900px) 40vw, 230px"
-                    width="640"
-                    height="800"
-                    alt="Portrait of Mohan Babu Doddapaneni"
-                    decoding="async"
-                    fetchPriority="high"
-                  />
-                </div>
-              </figure>
-            </div>
-          </div>
-
-          <div className="ticker" aria-hidden="true">
-            <div className="ticker__track">
-              {[0, 1].map((k) => (
-                <span className="ticker__group" key={k}>
-                  {TICKER.map((t) => (
-                    <span className="ticker__item" key={t}>
-                      {t}
-                      <span className="ticker__sep">✳</span>
-                    </span>
-                  ))}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------ PROFILE */}
-        <section id="profile" className="section" aria-labelledby="profile-title">
+        {/* ------------------------------------------------ CONNECT */}
+        <section id="connect" className="connect" aria-labelledby="connect-title">
           <div className="wrap">
             <div className="section-rule" data-reveal>
-              <span className="mono">§ 01</span>
-              <span className="mono">Profile</span>
-            </div>
-            <div className="profile">
-              <h2 className="pull" data-reveal id="profile-title">
-                I do my best work on the problems <em>dashboards don’t show</em>: data that is quietly wrong, screens
-                that slow down as tenants grow, and failures that hide their real cause.
-              </h2>
-              <div className="profile__body" data-reveal>
-                <p>
-                  I ship production systems on Java (8 to 21), Spring Boot microservices, Angular and React. Today I own
-                  the admin and data-access layer of a multi-tenant SaaS commerce platform serving 40+ enterprise
-                  retailers, from the data model through REST and GraphQL APIs to the screens on top.
-                </p>
-                <p>
-                  I focus on the work that keeps a platform trustworthy: pagination and caching
-                  contracts that hold at tens of millions of records, tenant isolation enforced in one place, and data
-                  bugs that are easy to miss. I use AI coding tools every day, and every change still goes through
-                  code review, SonarQube and tests.
-                </p>
-              </div>
-            </div>
-
-            <ul className="ledger" aria-label="At a glance">
-              {STATS.map((s, i) => (
-                <li key={s.label} data-reveal style={{ "--i": i }}>
-                  <span className="ledger__value">
-                    <CountUp end={s.value} suffix={s.suffix} decimals={s.decimals || 0} />
-                  </span>
-                  <span className="ledger__label">{s.label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------ WORK */}
-        <section id="work" className="section" aria-labelledby="work-title">
-          <div className="wrap">
-            <SectionHead index="02" label="2019 — Present" title={<span id="work-title">Experience</span>} />
-
-            <ol className="jobs">
-              {EXPERIENCE.map((job, i) => {
-                const open = openJob === i;
-                return (
-                  <li key={job.company} className={`job ${open ? "is-open" : ""}`} data-reveal style={{ "--i": i }}>
-                    <h3 className="job__h">
-                      <button
-                        type="button"
-                        className="job__head"
-                        aria-expanded={open}
-                        aria-controls={`job-${i}`}
-                        id={`job-btn-${i}`}
-                        onClick={() => setOpenJob(open ? -1 : i)}
-                      >
-                        <span className="job__period mono">{job.period}</span>
-                        <span className="job__company">{job.company}</span>
-                        <span className="job__role">{job.role}</span>
-                        <span className="job__loc mono">{job.location}</span>
-                        <span className="job__toggle" aria-hidden="true" />
-                      </button>
-                    </h3>
-                    <div className="job__panel" id={`job-${i}`} role="region" aria-labelledby={`job-btn-${i}`}>
-                      <div className="job__inner">
-                        <div className="job__content" inert={!open}>
-                          <p className="job__summary">{job.summary}</p>
-                          <ul className="job__points">
-                            {job.points.map((p) => (
-                              <li key={p.slice(0, 40)}>{p}</li>
-                            ))}
-                          </ul>
-                          <ul className="tags" aria-label="Technologies">
-                            {job.tags.map((t) => (
-                              <li key={t}>{t}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------ FIELD NOTES */}
-        <section id="notes" className="section section--ink" aria-labelledby="notes-title">
-          <div className="wrap">
-            <SectionHead index="03" label="Field notes" title={<span id="notes-title">Notes from production</span>}>
-              <p className="section-sub" data-reveal>
-                Four real incidents, written up the way I’d write a post-mortem. The fix is rarely the hard part —
-                finding the cause is.
-              </p>
-            </SectionHead>
-
-            <div className="notes">
-              {NOTES.map((n, i) => (
-                <article className="note" key={n.title} data-reveal style={{ "--i": i }}>
-                  <header className="note__head">
-                    <span className="mono">No. {String(i + 1).padStart(2, "0")}</span>
-                    <h3>{n.title}</h3>
-                  </header>
-                  <dl className="note__body">
-                    <div>
-                      <dt className="mono">Symptom</dt>
-                      <dd>{n.symptom}</dd>
-                    </div>
-                    <div>
-                      <dt className="mono">Cause</dt>
-                      <dd>{n.cause}</dd>
-                    </div>
-                    <div>
-                      <dt className="mono">Fix</dt>
-                      <dd>{n.fix}</dd>
-                    </div>
-                  </dl>
-                  <p className="note__result">
-                    <span className="mono">Result →</span> {n.result}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------ STACK */}
-        <section id="stack" className="section" aria-labelledby="stack-title">
-          <div className="wrap">
-            <SectionHead index="04" label="Technical skills" title={<span id="stack-title">Skills &amp; tools</span>} />
-            <div className="stack">
-              {STACK.map((g, i) => (
-                <div className="stack__col" key={g.title} data-reveal style={{ "--i": i }}>
-                  <h3 className="mono">
-                    {g.title}
-                    <span className="stack__count">{String(g.items.length).padStart(2, "0")}</span>
-                  </h3>
-                  <ul>
-                    {g.items.map((it) => (
-                      <li key={it}>{it}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            <p className="aside" data-reveal>
-              <span className="mono">On AI tools —</span> I use Claude Code, GitHub Copilot and Cursor daily for
-              scaffolding, migrations and reading unfamiliar code. Every AI-assisted change still goes through code review,
-              SonarQube quality gates and tests before it merges.
-            </p>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------ PROJECTS */}
-        <section id="projects" className="section" aria-labelledby="projects-title">
-          <div className="wrap">
-            <SectionHead index="05" label="Selected projects" title={<span id="projects-title">Projects</span>} />
-            <ul className="projects">
-              {PROJECTS.map((p, i) => (
-                <li key={p.title} data-reveal style={{ "--i": i }}>
-                  <a className="project" href={p.href} target="_blank" rel="noopener noreferrer">
-                    <span className="project__num mono">0{i + 1}</span>
-                    <span className="project__main">
-                      <span className="project__title">{p.title}</span>
-                      <span className="project__desc">{p.description}</span>
-                      <span className="tags tags--inline" aria-hidden="true">
-                        {p.tags.map((t) => (
-                          <span key={t}>{t}</span>
-                        ))}
-                      </span>
-                    </span>
-                    <span className="project__meta mono">
-                      <span className="project__go">
-                        GitHub profile <Arrow />
-                      </span>
-                    </span>
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------ EDUCATION */}
-        <section id="education" className="section" aria-labelledby="edu-title">
-          <div className="wrap">
-            <SectionHead index="06" label="Education & certifications" title={<span id="edu-title">Education</span>} />
-            <div className="edu">
-              <ul className="edu__list">
-                {EDUCATION.map((e, i) => (
-                  <li key={e.degree} data-reveal style={{ "--i": i }}>
-                    <span className="edu__degree">{e.degree}</span>
-                    <span className="edu__school">{e.school}</span>
-                    <span className="mono edu__place">{e.place}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="certs" data-reveal>
-                <h3 className="mono">Certifications</h3>
-                <ul>
-                  {CERTIFICATIONS.map((c) => (
-                    <li key={c}>{c}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ------------------------------------------------ CONTACT */}
-        <section id="contact" className="contact" aria-labelledby="contact-title">
-          <div className="wrap">
-            <div className="section-rule section-rule--light" data-reveal>
               <span className="mono">§ 07</span>
-              <span className="mono">Contact</span>
+              <span className="mono">Connect</span>
             </div>
-            <h2 id="contact-title" className="contact__title" data-reveal>
-              Let’s build something that <em>lasts.</em>
+            <h2 id="connect-title" className="connect__title" data-reveal>
+              {CONNECT.title}
             </h2>
-            <p className="contact__lede" data-reveal>
-              I’m looking for senior full-stack and backend roles where the systems are big and the details matter. The
-              fastest way to reach me is email.
+            <p className="connect__lede" data-reveal>
+              {CONNECT.text}
             </p>
 
-            <div className="contact__email" data-reveal>
-              <a href={`mailto:${EMAIL}`} className="email-link">
-                {EMAIL}
+            <div className="connect__email" data-reveal>
+              <a href={`mailto:${LINKS.email}`} className="email-link">
+                {LINKS.email}
               </a>
               <button type="button" className="copy-btn mono" onClick={copyEmail} data-magnetic>
                 {copied ? "Copied ✓" : "Copy"}
@@ -960,45 +752,73 @@ export default function App() {
               </span>
             </div>
 
-            <ul className="contact__list" data-reveal>
-              <li>
-                <span className="mono">Phone</span>
-                <a href={PHONE_HREF}>{PHONE_DISPLAY}</a>
-              </li>
+            <ul className="connect__list" data-reveal>
               <li>
                 <span className="mono">LinkedIn</span>
-                <a href={LINKEDIN} target="_blank" rel="noopener noreferrer">
-                  <FaLinkedinIn aria-hidden="true" /> mohan-babu-doddapaneni
+                <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">
+                  {LINKS.linkedinHandle}
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               </li>
               <li>
                 <span className="mono">GitHub</span>
-                <a href={GITHUB} target="_blank" rel="noopener noreferrer">
-                  <FaGithub aria-hidden="true" /> mohan-babu-doddapaneni
+                <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
+                  {LINKS.githubHandle}
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               </li>
               <li>
+                <span className="mono">Phone</span>
+                <a href={LINKS.phoneHref}>{LINKS.phoneDisplay}</a>
+              </li>
+              <li>
                 <span className="mono">Résumé</span>
-                <a href={RESUME} download="Mohan_Babu_Doddapaneni.pdf">
-                  Download PDF
+                <a href={LINKS.resume} download="Mohan_Babu_Doddapaneni.pdf">
+                  PDF download
                 </a>
               </li>
             </ul>
           </div>
 
           <footer className="footer wrap">
-            <span className="mono">© {year} Mohan Babu Doddapaneni</span>
-                        <span className="mono">Worcester, MA · {time}</span>
+            <span className="mono">© {year} {PERSON.name}</span>
+            <a className="mono footer__src" href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
+              View source<span className="sr-only"> (opens in a new tab)</span>
+            </a>
+            <span className="mono">
+              {PERSON.placeShort} · {time}
+            </span>
           </footer>
         </section>
-        <a href="#top" className={`to-top ${showTop ? "is-shown" : ""}`} aria-label="Back to top" tabIndex={showTop ? 0 : -1}>
-        <span aria-hidden="true">↑</span>
-      </a>
+
+        <button
+          type="button"
+          className={`to-top ${showTop ? "is-shown" : ""}`}
+          aria-label="Back to top"
+          tabIndex={showTop ? 0 : -1}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+            const target = document.querySelector(".wordmark");
+            if (target) target.focus({ preventScroll: true });
+          }}
+        >
+          <span aria-hidden="true">↑</span>
+        </button>
       </main>
 
-
+      {blueprint && (
+        <div className="blueprint-layer" aria-hidden="true">
+          <div className="wrap blueprint-cols">
+            {Array.from({ length: 12 }, (_, i) => (
+              <span key={i} />
+            ))}
+          </div>
+        </div>
+      )}
+      <p className="sr-only" role="status" aria-live="polite">
+        {blueprint ? "Blueprint mode on. Press Escape to exit." : ""}
+      </p>
+      {blueprint && <p className="blueprint-badge mono">Blueprint · 12 cols · Esc to exit</p>}
     </>
   );
 }
