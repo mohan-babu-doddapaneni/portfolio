@@ -59,16 +59,6 @@ function TraceSvg({ stops, variant }) {
       <path d={route} className="trace__bed" />
       <path id={pathId} d={route} className="trace__line" pathLength="1" />
 
-      {/* a couple of stubs ending in vias, purely for texture */}
-      {desktop && (
-        <g className="trace__stubs" aria-hidden="true">
-          <path d={`M ${(xs[1] + xs[2]) / 2} ${y + 34} V ${y + 62} H ${(xs[1] + xs[2]) / 2 + 30}`} />
-          <rect x={(xs[1] + xs[2]) / 2 + 30} y={y + 58} width="8" height="8" />
-          <path d={`M ${(xs[3] + xs[4]) / 2} ${y - 34} V ${y - 50} H ${(xs[3] + xs[4]) / 2 - 26}`} />
-          <rect x={(xs[3] + xs[4]) / 2 - 34} y={y - 54} width="8" height="8" />
-        </g>
-      )}
-
       {animate && (
         <circle className="trace__pulse" r={desktop ? 4 : 3}>
           <animateMotion dur={desktop ? "9s" : "7s"} repeatCount="indefinite" rotate="auto" begin="1.6s">

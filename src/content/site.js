@@ -52,16 +52,16 @@ export const HERO = {
 export const ABOUT = {
   lead: "I started with circuits and signals, and ended up in the parts of software most people never see.",
   paragraphs: [
-    "My degree is in electronics and communication engineering. Software came next: my first production work was a compliance platform for a bank, and over the six years since I’ve built enterprise Java and React applications, worked on Adobe Creative Cloud, and now look after the Business Console of a multi-tenant commerce platform.",
-    "What keeps me interested is the gap between how a system is supposed to behave and how it actually behaves under real load. Some of the problems I’ve learned the most from started as a number that looked slightly wrong — a capped search total, an exception with no stack trace.",
-    "When something breaks, I try to find the real cause before writing the fix, and to put important rules — like keeping one tenant’s data away from another — in one place instead of everywhere.",
+    // Every sentence below restates something from the original site.
+    "My degree is in electronics and communication engineering. My first software role was at Wipro, on a compliance platform for a bank. Since then I’ve spent more than six years building production systems in Java, Spring Boot, Angular and React — at Capgemini, at Adobe on Creative Cloud, and now at Fenix Commerce, where I own the admin and data-access layer of a multi-tenant commerce platform.",
+    "The work I’m strongest at is the kind that keeps a platform trustworthy at scale: pagination and caching that hold up at tens of millions of records, tenant isolation enforced in one place, and the quiet data bugs that dashboards never surface.",
   ],
   now: {
-    label: "Lately",
-    text: "I’ve been working out how AI coding tools fit into careful engineering. I use Claude Code, GitHub Copilot and Cursor every day, and I wrote the prompt and review patterns my team follows — the speed only counts if the code still passes review and tests.",
+    label: "Day to day",
+    text: "I use AI coding tools — Claude Code, GitHub Copilot and Cursor — every day, without letting speed cost quality. Every AI-assisted change still goes through code review, SonarQube and tests, and I wrote the prompt and review patterns my team follows.",
   },
   // TODO(mohan): how you got into technology, what you enjoy building outside
-  // work, anything you'd like visitors to know. Add as extra paragraphs above.
+  // work, what you're exploring now. Add as extra paragraphs above.
 };
 
 /* ---------------------------------------------------------------- things I've built */
@@ -69,26 +69,26 @@ export const BUILT = [
   {
     id: "career-path",
     name: "Career Path Recommendation System",
-    idea: "Given a résumé, what roles could this person grow into — and what’s missing on the way there?",
+    idea: "Read a résumé, predict where a career could go, and name the skills missing on the way.",
     about:
       "Parses résumés with NLP, predicts likely career paths, and names the skill gaps between where someone is and where they could go. Results are served over REST APIs, with profiles and scoring kept in PostgreSQL.",
     interesting:
-      "It turns unstructured text into something a program can reason about, then into advice a person can act on.",
+      "It takes unstructured résumé text and turns it into structured data, then into predicted career paths and specific skill gaps.",
     flow: ["Résumé", "NLP parsing", "Path prediction", "Skill gaps", "REST API"],
     tech: ["Python", "Django", "NLP", "PostgreSQL", "REST"],
-    link: { href: LINKS.github, label: "GitHub profile" }, // TODO(mohan): repo URL
+    link: { href: LINKS.github, kind: "profile" }, // TODO(mohan): replace with { href: "<repo url>", kind: "repo" }
   },
   {
     id: "restaurant-portal",
     name: "Restaurant Ordering Portal",
-    idea: "An order should either happen completely or not at all — even when the network drops a request or sends it twice.",
+    idea: "An order should happen completely or not at all — even if a request is dropped or sent twice.",
     about:
-      "An ordering portal with a normalized schema for menus, modifiers and orders, and transactional order placement. Built on Java, Angular and MySQL, and used for 300+ orders.",
+      "An ordering portal with a normalized schema for menus, modifiers and orders. Built on Java, Angular and MySQL; it processed 300+ orders.",
     interesting:
-      "The interesting part is invisible: the data model and transaction boundaries that make a half-placed order impossible.",
+      "Transactional placement means a dropped or duplicate request never leaves a partial order behind.",
     flow: ["Menu + modifiers", "Order request", "One transaction", "MySQL"],
     tech: ["Java", "Angular", "MySQL", "Transactions"],
-    link: { href: LINKS.github, label: "GitHub profile" }, // TODO(mohan): repo URL
+    link: { href: LINKS.github, kind: "profile" }, // TODO(mohan): replace with { href: "<repo url>", kind: "repo" }
   },
 ];
 
@@ -104,7 +104,7 @@ export const JOURNEY = [
     role: "B.Tech., Electronics & Communication Engineering",
     period: null, // TODO(mohan): graduation year
     place: "Andhra Pradesh, India",
-    story: "Where it started — circuits, signals and communication systems, before any of it was software.",
+    story: "Where it started: electronics and communication engineering, before software.",
   },
   {
     id: "wipro",
@@ -114,7 +114,7 @@ export const JOURNEY = [
     role: "Junior Full Stack Developer",
     period: "Jul 2019 — Aug 2020",
     place: "India",
-    story: "My first production work: a KYC and AML compliance platform for a bank, built on Angular, Spring Boot and PostgreSQL.",
+    story: "A KYC and AML compliance platform for a banking client, built on Angular, Spring Boot and PostgreSQL.",
     highlights: [
       "Built KYC onboarding in Angular Reactive Forms with dynamic validation, supporting 5,000+ customer profiles.",
       "Reshaped Spring Boot JSON responses around what analysts actually needed, cutting AML alert review time 30%.",
@@ -131,7 +131,7 @@ export const JOURNEY = [
     role: "Associate Consultant, Full Stack",
     period: "Sep 2020 — Jul 2023",
     place: "Hyderabad, India",
-    story: "Three years of enterprise Java and React for financial-services clients — including security hardening and an 18-project migration against a deadline.",
+    story: "Enterprise Java, Spring Boot and React for financial-services and product-engineering clients — including security hardening and an 18-project migration ahead of a client deadline.",
     highlights: [
       "Built the microservices behind a financial application: accounts, transactions, customer profiles and fraud detection, with the isolation sensitive data requires.",
       "Rebuilt the backend on modular Spring Boot services with Hibernate, cutting API latency 50% and feature development time 40%.",
@@ -150,7 +150,7 @@ export const JOURNEY = [
     role: "M.S., Computer Science",
     period: null, // TODO(mohan): dates (likely 2023 — 2024?) — confirm before showing
     place: "Worcester, Massachusetts",
-    story: "A master’s in computer science, and a move to Worcester.",
+    story: "A master’s degree in computer science.",
   },
   {
     id: "adobe",
@@ -180,7 +180,7 @@ export const JOURNEY = [
     role: "Product Development Engineer",
     period: "Jan 2026 — Present",
     place: "Worcester, MA",
-    story: "I look after the Business Console of a multi-tenant commerce platform — 40+ retailers, 12 modules, 2.5M+ orders a month.",
+    story: "I own the Business Console of a multi-tenant commerce platform — 40+ retailers, 12 modules, 2.5M+ orders a month.",
     highlights: [
       "Rebuilt a six-year-old Angular console into a modular component architecture with a shared design system and lazy-loaded features. The team now ships console features weekly instead of quarterly.",
       "Defined a server-side pagination and filtering contract across Spring Boot and Elasticsearch, with virtual scrolling and lazy loading. Views over tens of millions of records now open in seconds inside a fixed memory budget.",
@@ -196,11 +196,11 @@ export const JOURNEY = [
 
 /* ---------------------------------------------------------------- what I work with */
 export const STACK = [
-  { title: "Backend & systems", items: ["Java 8 / 17 / 21", "Spring Boot", "Spring Data JPA · Hibernate", "REST & GraphQL", "Microservices", "Node.js · Express", "Python"] },
+  { title: "Backend & systems", items: ["Java 8 / 17 / 21", "Spring Boot", "Spring Data JPA · Hibernate", "Spring Security · OAuth 2.0 / JWT", "REST & GraphQL", "Microservices", "Node.js · Express", "Python"] },
   { title: "Frontend & interfaces", items: ["Angular", "React", "Next.js", "TypeScript", "Redux", "Tailwind CSS", "Material UI"] },
   { title: "Cloud & infrastructure", items: ["AWS (ECS, Lambda, EC2)", "Docker", "Kubernetes", "Terraform", "Jenkins", "Git"] },
   { title: "Databases & data", items: ["PostgreSQL", "MySQL", "Elasticsearch", "MongoDB", "DynamoDB", "Redis", "Apache Kafka"] },
-  { title: "Tools & experimentation", items: ["Claude Code", "GitHub Copilot", "Cursor", "OpenAI Codex", "Spring Security · OAuth 2.0 / JWT", "SonarQube", "JUnit · Jest · Cypress"] },
+  { title: "Tools & experimentation", items: ["Claude Code", "GitHub Copilot", "Cursor", "OpenAI Codex", "SonarQube", "JUnit · Jest · Cypress"] },
 ];
 
 export const CERTIFICATIONS = [

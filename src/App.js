@@ -33,12 +33,11 @@ const Arrow = ({ dir = "ne" }) => (
   </svg>
 );
 
-function SectionHead({ index, label, title, id, children }) {
+function SectionHead({ index, title, id, children }) {
   return (
     <div className="section-head">
-      <div className="section-rule" data-reveal>
-        <span className="mono">§ {index}</span>
-        <span className="mono">{label}</span>
+      <div className="section-rule" data-reveal aria-hidden="true">
+        <span className="section-num">{index}</span>
       </div>
       <h2 className="section-title" id={id} data-reveal>
         {title}
@@ -117,13 +116,13 @@ function Journey() {
                 <>
                   <button
                     type="button"
-                    className="stop__toggle mono"
+                    className="stop__toggle"
                     aria-expanded={isOpen}
                     aria-controls={`stop-more-${s.id}`}
                     onClick={() => toggle(s.id)}
                   >
                     <span className="stop__plus" aria-hidden="true" />
-                    {isOpen ? "Hide details" : `Details · ${pad2(s.highlights.length)}`}
+                    {isOpen ? "Hide details" : "Show details"}
                     <span className="sr-only"> for {s.org}</span>
                   </button>
                   <div className="stop__more" id={`stop-more-${s.id}`}>
@@ -172,7 +171,7 @@ function NoteView({ slug }) {
   if (!note) {
     return (
       <article className="note-page wrap">
-        <a href="#notes" className="back mono">
+        <a href="#notes" className="back">
           <Arrow dir="w" /> All notes
         </a>
         <h1 className="note-page__title" tabIndex={-1} ref={headingRef}>
@@ -185,16 +184,16 @@ function NoteView({ slug }) {
 
   return (
     <article className="note-page wrap" aria-labelledby="note-title">
-      <a href="#notes" className="back mono">
+      <a href="#notes" className="back">
         <Arrow dir="w" /> All notes
       </a>
       <header className="note-page__head">
-        {note.context && <p className="mono note-page__context">{note.context}</p>}
+        {note.context && <p className="note-page__context">{note.context}</p>}
         <h1 className="note-page__title" id="note-title" tabIndex={-1} ref={headingRef}>
           {note.title}
         </h1>
         <p className="note-page__lede">{note.summary}</p>
-        <p className="note-page__meta mono">
+        <p className="note-page__meta">
           {note.date && (
             <>
               <time dateTime={note.date}>
@@ -281,9 +280,9 @@ function Home() {
 
         <div className="hero__trace load load--6">
           <div className="wrap">
-            <div className="trace-caption mono">
-              <span>Circuits → systems</span>
-              <span className="trace-caption__hint">Select a stop to jump to it</span>
+            <div className="trace-caption">
+              <span className="trace-caption__title">From circuits to systems</span>
+              <span className="trace-caption__hint">Select a stop to read that part of the story</span>
             </div>
             <Trace stops={JOURNEY} />
           </div>
@@ -293,7 +292,7 @@ function Home() {
       {/* ---------------------------------------------- ABOUT */}
       <section id="about" className="section" aria-labelledby="about-title">
         <div className="wrap">
-          <SectionHead index="01" label="About" title={ABOUT.lead} id="about-title" />
+          <SectionHead index="01" title={ABOUT.lead} id="about-title" />
           <div className="about">
             <div className="about__body" data-reveal>
               {ABOUT.paragraphs.map((p) => (
@@ -311,7 +310,7 @@ function Home() {
       {/* ---------------------------------------------- BUILT */}
       <section id="built" className="section" aria-labelledby="built-title">
         <div className="wrap">
-          <SectionHead index="02" label="Projects" title="Things I’ve built" id="built-title" />
+          <SectionHead index="02" title="Things I’ve built" id="built-title" />
           <div className="builds">
             {BUILT.map((b, i) => (
               <article key={b.id} className={`build ${i % 2 ? "build--flip" : ""}`} data-reveal aria-labelledby={`build-${b.id}`}>
@@ -320,27 +319,31 @@ function Home() {
                   <h3 className="build__name" id={`build-${b.id}`}>
                     {b.name}
                   </h3>
-                  <p className="build__idea">
-                    <span className="mono">The idea</span>
-                    {b.idea}
-                  </p>
+                  <p className="build__idea">{b.idea}</p>
                   <p className="build__about">{b.about}</p>
-                  <p className="build__interesting">
-                    <span className="mono">Why it’s interesting</span>
-                    {b.interesting}
-                  </p>
+                  <p className="build__interesting">{b.interesting}</p>
                   <ul className="tags" aria-label="Technologies">
                     {b.tech.map((t) => (
                       <li key={t}>{t}</li>
                     ))}
                   </ul>
-                  <a className="textlink build__link" href={b.link.href} target="_blank" rel="noopener noreferrer">
-                    {b.link.label} <Arrow />
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </a>
+                  {b.link.kind === "repo" ? (
+                    <a className="textlink build__link" href={b.link.href} target="_blank" rel="noopener noreferrer">
+                      View the code <Arrow />
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  ) : (
+                    <p className="build__linkwrap">
+                      <a className="textlink build__link" href={b.link.href} target="_blank" rel="noopener noreferrer">
+                        My GitHub profile <Arrow />
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                      <span className="build__linknote">My general profile — not a link to this project.</span>
+                    </p>
+                  )}
                 </div>
                 <figure className="build__flow" aria-label={`How it works: ${b.flow.join(", then ")}`}>
-                  <figcaption className="mono">How it flows</figcaption>
+                  <figcaption>How it works</figcaption>
                   <ol>
                     {b.flow.map((step, j) => (
                       <li key={step} style={{ "--j": j }}>
@@ -359,9 +362,9 @@ function Home() {
       {/* ---------------------------------------------- JOURNEY */}
       <section id="journey" className="section" aria-labelledby="journey-title">
         <div className="wrap">
-          <SectionHead index="03" label="2019 — now" title="My journey" id="journey-title">
+          <SectionHead index="03" title="My journey" id="journey-title">
             <p className="section-sub" data-reveal>
-              From electronics to enterprise software to platform engineering. Newest first — open any stop for the details.
+              From electronics to enterprise software to the platform I work on today. Newest first.
             </p>
           </SectionHead>
           <Journey />
@@ -371,7 +374,7 @@ function Home() {
       {/* ---------------------------------------------- WORK WITH */}
       <section id="stack" className="section" aria-labelledby="stack-title">
         <div className="wrap">
-          <SectionHead index="04" label="Tools" title="What I work with" id="stack-title" />
+          <SectionHead index="04" title="What I work with" id="stack-title" />
           <div className="stack">
             {STACK.map((g, i) => (
               <div className="stack__col" key={g.title} data-reveal style={{ "--i": i }}>
@@ -398,10 +401,9 @@ function Home() {
       {/* ---------------------------------------------- NOTES */}
       <section id="notes" className="section section--ink" aria-labelledby="notes-title">
         <div className="wrap">
-          <SectionHead index="05" label="Writing" title="Notes" id="notes-title">
+          <SectionHead index="05" title="Notes" id="notes-title">
             <p className="section-sub" data-reveal>
-              Short write-ups of problems worth remembering. The first ones come from production; new notes will appear
-              here as I write them.
+              Short write-ups of problems worth remembering, starting with a few from production.
             </p>
           </SectionHead>
           {NOTES.length > 0 ? (
@@ -409,12 +411,12 @@ function Home() {
               {NOTES.map((n, i) => (
                 <li key={n.slug} data-reveal style={{ "--i": i }}>
                   <a href={`#/notes/${n.slug}`} className="note-row">
-                    <span className="note-row__num mono">No. {pad2(i + 1)}</span>
+                    <span className="note-row__num">{pad2(i + 1)}</span>
                     <span className="note-row__main">
                       <span className="note-row__title">{n.title}</span>
                       <span className="note-row__summary">{n.summary}</span>
                     </span>
-                    <span className="note-row__meta mono">
+                    <span className="note-row__meta">
                       {readingMinutes(n.body)} min read
                       <span className="note-row__go">
                         Read <Arrow dir="e" />
@@ -432,11 +434,12 @@ function Home() {
         </div>
       </section>
 
-      {/* ---------------------------------------------- BEYOND */}
-      <section id="beyond" className="section" aria-labelledby="beyond-title">
-        <div className="wrap">
-          <SectionHead index="06" label="Off the clock" title="Beyond the code" id="beyond-title" />
-          {BEYOND.length > 0 ? (
+      {/* ---------------------------------------------- BEYOND
+          Rendered only once BEYOND (content/site.js) has real entries. */}
+      {BEYOND.length > 0 && (
+        <section id="beyond" className="section" aria-labelledby="beyond-title">
+          <div className="wrap">
+            <SectionHead index="06" title="Beyond the code" id="beyond-title" />
             <ul className="beyond">
               {BEYOND.map((b) => (
                 <li key={b.title} data-reveal>
@@ -445,17 +448,9 @@ function Home() {
                 </li>
               ))}
             </ul>
-          ) : (
-            <div className="beyond-empty" data-reveal>
-              <p className="mono beyond-empty__tag">Under construction</p>
-              <p className="beyond-empty__text">
-                This corner is still being written. It will hold the things that don’t fit on a résumé — and I’d rather
-                leave it blank than fill it with something that isn’t true.
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
     </>
   );
 }
@@ -503,6 +498,17 @@ export default function App() {
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", theme === "dark" ? "#141210" : "#efe9de");
   }, [theme]);
+
+  // Any navigation (links, Back/Forward) closes the mobile menu.
+  useEffect(() => {
+    const close = () => setMenuOpen(false);
+    window.addEventListener("hashchange", close);
+    window.addEventListener("popstate", close);
+    return () => {
+      window.removeEventListener("hashchange", close);
+      window.removeEventListener("popstate", close);
+    };
+  }, []);
 
   // Returning from a note to "#about" etc.: scroll once the home view exists.
   useEffect(() => {
@@ -662,14 +668,13 @@ export default function App() {
           </a>
 
           <nav className="nav__links" aria-label="Primary">
-            {NAV.map((n, i) => (
+            {NAV.map((n) => (
               <a
                 key={n.id}
                 href={`#${n.id}`}
                 className={!onNote && active === n.id ? "is-active" : ""}
                 aria-current={!onNote && active === n.id ? "true" : undefined}
               >
-                <span className="mono nav__num">{pad2(i + 1)}</span>
                 {n.label}
               </a>
             ))}
@@ -710,7 +715,7 @@ export default function App() {
             {NAV.map((n, i) => (
               <li key={n.id} style={{ "--i": i }}>
                 <a href={`#${n.id}`} onClick={() => closeMenu()}>
-                  <span className="mono">{pad2(i + 1)}</span>
+                  <span className="sheet__num">{pad2(i + 1)}</span>
                   {n.label}
                 </a>
               </li>
@@ -729,9 +734,8 @@ export default function App() {
         {/* ------------------------------------------------ CONNECT */}
         <section id="connect" className="connect" aria-labelledby="connect-title">
           <div className="wrap">
-            <div className="section-rule" data-reveal>
-              <span className="mono">§ 07</span>
-              <span className="mono">Connect</span>
+            <div className="section-rule" data-reveal aria-hidden="true">
+              <span className="section-num">{BEYOND.length ? "07" : "06"}</span>
             </div>
             <h2 id="connect-title" className="connect__title" data-reveal>
               {CONNECT.title}

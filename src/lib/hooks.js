@@ -215,14 +215,14 @@ export function useAnchorScrolling(enabled) {
         const y = window.scrollY;
         stable = Math.abs(y - last) < 1 ? stable + 1 : 0;
         last = y;
-        if (stable >= 2) {
-          // settled: correct if we stopped short (or the layout moved)
-          if (Math.abs(el.getBoundingClientRect().top - offsetFor(el)) > 4) {
-            window.scrollTo({ top: targetY(el), behavior: "auto" });
-          }
-          return;
+        if (stable >= 3) {
+          // Settled. If we stopped short (or layout moved), jump the rest of
+          // the way and keep verifying until we're actually on target.
+          if (Math.abs(el.getBoundingClientRect().top - offsetFor(el)) <= 4) return;
+          window.scrollTo({ top: targetY(el), behavior: "auto" });
+          stable = 0;
         }
-        if (tries < 60) timer = window.setTimeout(check, 80);
+        if (tries < 80) timer = window.setTimeout(check, 80);
       };
       timer = window.setTimeout(check, 120);
     };
@@ -236,6 +236,9 @@ export function useAnchorScrolling(enabled) {
       const el = document.getElementById(href.slice(1));
       if (!el) return; // not on this view — let the router take it
       e.preventDefault();
+      // The mobile menu locks page scroll; release it *before* scrolling so
+      // Safari doesn't abandon the scroll when the lock is lifted mid-way.
+      document.body.classList.remove("menu-open");
       if (window.location.hash !== href) window.history.pushState(null, "", href);
       go(el, prefersReducedMotion() ? "auto" : "smooth");
       if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");

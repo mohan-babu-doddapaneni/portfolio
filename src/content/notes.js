@@ -17,24 +17,25 @@
    }
 
    The four notes below are written up from incidents already described
-   on this site (Fenix Commerce, 2026). No details were added.
+   on the original site (Fenix Commerce, 2026). No details were added, and
+   the employer is not named in the notes themselves.
    TODO(mohan): add your own "what I learned" paragraph to each if you like.
    ===================================================================== */
 
-const NOTES = [
+const ALL_NOTES = [
   {
     slug: "the-silent-ceiling",
     title: "The silent ceiling",
-    context: "From the Business Console at Fenix Commerce",
+    context: "From a multi-tenant commerce platform I work on",
     summary: "Inventory totals were quietly wrong for our largest tenants. Nothing was failing — a default limit was doing exactly what it was told.",
     tags: ["Elasticsearch", "Data correctness"],
     body: `## Symptom
 
-Tenants with large catalogs were seeing inventory totals that were quietly wrong. No errors, no alerts — just numbers that didn't add up.
+Tenants with large catalogs were seeing inventory totals that were quietly wrong. Nothing failed loudly; the numbers just didn't add up.
 
 ## Cause
 
-The query path never set \`trackTotalHits\`, so Elasticsearch capped aggregations at its engine default. Every large-catalog tenant was reading a fraction of its own data, and nothing in the system thought that was unusual.
+The query path never set \`trackTotalHits\`, so Elasticsearch silently capped aggregations at its engine default. Every large-catalog tenant was reading a fraction of its own data.
 
 ## Fix
 
@@ -47,7 +48,7 @@ Accurate reporting above **6M products**.`,
   {
     slug: "the-missing-stack-trace",
     title: "The missing stack trace",
-    context: "From the Business Console at Fenix Commerce",
+    context: "From a multi-tenant commerce platform I work on",
     summary: "Real-time ingestion stalled in the middle of a 1.4M-event holiday surge, and the JVM was hiding the one clue that mattered.",
     tags: ["JVM", "Incidents"],
     body: `## Symptom
@@ -70,8 +71,12 @@ Event flow restored under peak load.`,
   },
   {
     slug: "the-leak-in-the-inbox",
+    // DRAFT — not published. Describes a data-exposure incident at a current
+    // employer. TODO(mohan): confirm you're comfortable (and allowed) to
+    // publish this before setting draft: false.
+    draft: true,
     title: "The leak in the inbox",
-    context: "From the Business Console at Fenix Commerce",
+    context: "From a multi-tenant commerce platform I work on",
     summary: "Internal data was showing up in merchant panels and customer emails. The fix was a boundary, not a patch.",
     tags: ["Multi-tenancy", "Caching"],
     body: `## Symptom
@@ -93,12 +98,12 @@ A server-side cache keyed on **SHA-256 composite hashes** sits at the boundary a
   {
     slug: "the-table-that-ate-the-browser",
     title: "The table that ate the browser",
-    context: "From the Business Console at Fenix Commerce",
-    summary: "Large tenants' screens froze or crashed. The browser was being asked to do the database's job.",
+    context: "From a multi-tenant commerce platform I work on",
+    summary: "Screens for the largest tenants were unusable, because the browser was being asked to do the database's job.",
     tags: ["Architecture", "Performance"],
     body: `## Symptom
 
-Console screens for our largest tenants froze, or crashed the tab outright.
+Console screens for the largest tenants were unusable.
 
 ## Cause
 
@@ -113,6 +118,9 @@ A **server-side pagination and filtering contract** across Spring Boot and Elast
 Views over **tens of millions of records** now open in seconds, inside a fixed memory budget.`,
   },
 ];
+
+// Drafts are never rendered and their URLs don't resolve.
+const NOTES = ALL_NOTES.filter((n) => !n.draft);
 
 export default NOTES;
 
