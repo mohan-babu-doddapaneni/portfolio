@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.5f55119f.css",
-    "main.js": "/static/js/main.4129a39d.js",
+    "main.css": "/static/css/main.e78ce004.css",
+    "main.js": "/static/js/main.c719530b.js",
     "static/js/206.d36e6037.chunk.js": "/static/js/206.d36e6037.chunk.js",
     "static/media/fraunces-latin-full-italic.woff2": "/static/media/fraunces-latin-full-italic.8579045a49929fa6344f.woff2",
     "static/media/fraunces-latin-ext-full-italic.woff2": "/static/media/fraunces-latin-ext-full-italic.e741f5e734e5202b29b1.woff2",
@@ -38,7 +38,7 @@
     "static/media/jetbrains-mono-cyrillic-ext-400-normal.woff2": "/static/media/jetbrains-mono-cyrillic-ext-400-normal.7347c7bfed47f1ef0b25.woff2"
   },
   "entrypoints": [
-    "static/css/main.5f55119f.css",
-    "static/js/main.4129a39d.js"
+    "static/css/main.e78ce004.css",
+    "static/js/main.c719530b.js"
   ]
 }
