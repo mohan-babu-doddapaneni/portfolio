@@ -6,20 +6,24 @@
     <!-- ===================== SECURITY HARDENING ===================== -->
     <!-- Strict Content-Security-Policy: everything is self-hosted (fonts,
          icons, images), so we lock origins down to 'self'. This blocks
-         injected/3rd-party scripts, data exfiltration, and most XSS. -->
+         injected/3rd-party scripts, data exfiltration, and most XSS.
+         style-src comes from .env.production ('self' only, no inline styles)
+         and .env.development (dev server injects <style> tags). -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+      content="default-src 'self'; script-src 'self'; style-src %REACT_APP_CSP_STYLE_SRC%; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <!-- Anti-clickjacking: same-origin frame-buster (CSP-compliant). -->
     <script src="%PUBLIC_URL%/framebuster.js"></script>
+    <script src="%PUBLIC_URL%/theme-init.js"></script>
     <!-- ============================================================== -->
 
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="preload" as="image" type="image/webp" href="%PUBLIC_URL%/assets/portrait.webp" imagesrcset="%PUBLIC_URL%/assets/portrait-sm.webp 320w, %PUBLIC_URL%/assets/portrait.webp 640w" imagesizes="(max-width: 900px) 40vw, 230px" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#059669" />
+    <meta name="theme-color" content="#efe9de" />
     <meta
       name="description"
       content="Mohan Babu Doddapaneni | Full Stack Developer with 6+ years on Java, Spring Boot, Angular, and React. Owns the admin and data layer of a multi-tenant SaaS commerce platform at Fenix Commerce."
@@ -66,7 +70,7 @@
         "image": "https://mohanbabudoddapaneni.com/og-image.png",
         "jobTitle": "Full Stack Developer",
         "email": "mailto:mohanbabud25@gmail.com",
-        "telephone": "+1-978-208-4167",
+        "telephone": "+1-774-701-0382",
         "address": {
           "@type": "PostalAddress",
           "addressRegion": "MA",

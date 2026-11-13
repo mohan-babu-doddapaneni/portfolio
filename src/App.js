@@ -1,732 +1,951 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 
-// Self-hosted fonts (no external CDN, better privacy & security)
-import "@fontsource/inter/300.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/600.css";
-import "@fontsource/inter/700.css";
-import "@fontsource/sora/600.css";
-import "@fontsource/sora/700.css";
-import "@fontsource/sora/800.css";
+// Self-hosted fonts — no third-party CDN requests (privacy + strict CSP).
+import "@fontsource-variable/fraunces/full.css";
+import "@fontsource-variable/fraunces/full-italic.css";
+import "@fontsource-variable/instrument-sans/index.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
 
-// Bundled, crisp SVG icons (no runtime network requests)
-import {
-  SiSpringboot, SiReact, SiAngular, SiTypescript, SiJavascript, SiNodedotjs,
-  SiDocker, SiKubernetes, SiPostgresql, SiMysql, SiMongodb, SiRedis,
-  SiApachekafka, SiGraphql, SiNextdotjs, SiTailwindcss, SiRedux, SiGit,
-  SiTerraform, SiJenkins, SiSpringsecurity, SiJsonwebtokens, SiJest, SiCypress,
-  SiPython, SiVuedotjs, SiHibernate, SiMui, SiExpress, SiElasticsearch,
-  SiClaude, SiOpenai,
-} from "react-icons/si";
-import {
-  FaJava, FaAws, FaEnvelope, FaPhone, FaLinkedin, FaGithub, FaArrowUp,
-  FaDownload, FaLocationDot, FaBriefcase, FaCode, FaPalette, FaGears,
-  FaDatabase, FaCloud, FaShieldHalved, FaServer,
-  FaGraduationCap, FaAward, FaCircleCheck, FaArrowUpRightFromSquare,
-  FaSun, FaMoon, FaRobot, FaWandMagicSparkles, FaMagnifyingGlass,
-} from "react-icons/fa6";
+import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
 
-/* ------------------------------------------------------------------ */
-/*  DATA                                                               */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
+/*  CONTENT                                                            */
+/* ================================================================== */
 
-const ROLES = [
-  "Full Stack Developer",
-  "Java & Spring Boot Engineer",
-  "Angular & React Developer",
-  "AI-Assisted Development",
-];
+const EMAIL = "mohanbabud25@gmail.com";
+const PHONE_DISPLAY = "+1 (774) 701-0382";
+const PHONE_HREF = "tel:+17747010382";
+const LINKEDIN = "https://www.linkedin.com/in/mohan-babu-doddapaneni";
+const GITHUB = "https://github.com/mohan-babu-doddapaneni";
+const RESUME = `${process.env.PUBLIC_URL}/Mohan_Babu_Doddapaneni.pdf`;
 
-const NAV_LINKS = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "skills", label: "Skills" },
-  { id: "experience", label: "Experience" },
-  { id: "education", label: "Education" },
+const NAV = [
+  { id: "work", label: "Work" },
+  { id: "notes", label: "Field notes" },
+  { id: "stack", label: "Stack" },
   { id: "projects", label: "Projects" },
   { id: "contact", label: "Contact" },
 ];
 
+const TICKER = [
+  "2.5M+ orders a month",
+  "40+ enterprise retailers",
+  "6M+ products indexed",
+  "Sub-20 ms cache lookups",
+  "12 platform modules",
+  "Java 8 → 21",
+  "Weekly releases, not quarterly",
+  "1.4M-event holiday surge, survived",
+];
+
 const STATS = [
-  { value: 6, suffix: "+", label: "Years Experience" },
-  { value: 40, suffix: "+", label: "Enterprise Retailers" },
-  { value: 2.5, suffix: "M+", label: "Orders / Month", decimals: 1 },
-  { value: 12, suffix: "", label: "Platform Modules" },
-];
-
-// Brand-colored tech icons for the marquee
-const TECH = [
-  { Icon: FaJava, name: "Java", color: "#f89820" },
-  { Icon: SiSpringboot, name: "Spring Boot", color: "#6db33f" },
-  { Icon: SiReact, name: "React", color: "#61dafb" },
-  { Icon: SiAngular, name: "Angular", color: "#dd0031" },
-  { Icon: SiTypescript, name: "TypeScript", color: "#3178c6" },
-  { Icon: SiNextdotjs, name: "Next.js", color: "var(--icon-adaptive)" },
-  { Icon: FaAws, name: "AWS", color: "#ff9900" },
-  { Icon: SiDocker, name: "Docker", color: "#2496ed" },
-  { Icon: SiKubernetes, name: "Kubernetes", color: "#326ce5" },
-  { Icon: SiApachekafka, name: "Kafka", color: "var(--icon-adaptive)" },
-  { Icon: SiPostgresql, name: "PostgreSQL", color: "#4169e1" },
-  { Icon: SiMongodb, name: "MongoDB", color: "#47a248" },
-  { Icon: SiGit, name: "Git", color: "#f05032" },
-  { Icon: SiTerraform, name: "Terraform", color: "#7b42bc" },
-];
-
-const SKILLS = [
-  {
-    Icon: FaPalette,
-    title: "Frontend",
-    items: [
-      { Icon: SiReact, label: "React", color: "#61dafb" },
-      { Icon: SiRedux, label: "Redux", color: "#764abc" },
-      { Icon: SiAngular, label: "Angular", color: "#dd0031" },
-      { Icon: SiVuedotjs, label: "Vue.js", color: "#42b883" },
-      { Icon: SiTypescript, label: "TypeScript", color: "#3178c6" },
-      { Icon: SiJavascript, label: "JavaScript", color: "#f7df1e" },
-      { Icon: SiNextdotjs, label: "Next.js", color: "var(--icon-adaptive)" },
-      { Icon: SiTailwindcss, label: "Tailwind", color: "#38bdf8" },
-      { Icon: SiMui, label: "Material-UI", color: "#007fff" },
-    ],
-  },
-  {
-    Icon: FaGears,
-    title: "Backend",
-    items: [
-      { Icon: FaJava, label: "Java (8 / 17 / 21)", color: "#f89820" },
-      { Icon: SiSpringboot, label: "Spring Boot", color: "#6db33f" },
-      { Icon: SiHibernate, label: "Spring Data JPA", color: "#59666c" },
-      { Icon: SiGraphql, label: "GraphQL", color: "#e10098" },
-      { Icon: FaCode, label: "REST APIs", color: "#a78bfa" },
-      { Icon: SiNodedotjs, label: "Node.js", color: "#5fa04e" },
-      { Icon: SiExpress, label: "Express", color: "var(--icon-adaptive)" },
-      { Icon: SiPython, label: "Python", color: "#3776ab" },
-    ],
-  },
-  {
-    Icon: FaDatabase,
-    title: "Databases",
-    items: [
-      { Icon: SiPostgresql, label: "PostgreSQL", color: "#4169e1" },
-      { Icon: SiMysql, label: "MySQL", color: "#4479a1" },
-      { Icon: SiMongodb, label: "MongoDB", color: "#47a248" },
-      { Icon: FaAws, label: "DynamoDB", color: "#4053d6" },
-      { Icon: SiRedis, label: "Redis", color: "#ff4438" },
-      { Icon: SiElasticsearch, label: "Elasticsearch", color: "#43c5a6" },
-    ],
-  },
-  {
-    Icon: FaCloud,
-    title: "Cloud & DevOps",
-    items: [
-      { Icon: FaAws, label: "AWS", color: "#ff9900" },
-      { Icon: SiDocker, label: "Docker", color: "#2496ed" },
-      { Icon: SiKubernetes, label: "Kubernetes", color: "#326ce5" },
-      { Icon: SiJenkins, label: "Jenkins", color: "#d33833" },
-      { Icon: SiTerraform, label: "Terraform", color: "#7b42bc" },
-      { Icon: SiGit, label: "Git", color: "#f05032" },
-    ],
-  },
-  {
-    Icon: FaRobot,
-    title: "AI-Assisted Development",
-    items: [
-      { Icon: SiClaude, label: "Claude Code", color: "#d97757" },
-      { Icon: FaGithub, label: "GitHub Copilot", color: "var(--icon-adaptive)" },
-      { Icon: FaWandMagicSparkles, label: "Cursor", color: "#a78bfa" },
-      { Icon: SiOpenai, label: "OpenAI Codex", color: "var(--icon-adaptive)" },
-      { Icon: FaMagnifyingGlass, label: "AI Code Review", color: "#38bdf8" },
-    ],
-  },
-  {
-    Icon: FaShieldHalved,
-    title: "Security & Quality",
-    items: [
-      { Icon: SiSpringsecurity, label: "Spring Security", color: "#6db33f" },
-      { Icon: SiJsonwebtokens, label: "OAuth2 / JWT", color: "#d63aff" },
-      { Icon: FaShieldHalved, label: "OWASP / CVE", color: "#f59e0b" },
-      { Icon: FaCircleCheck, label: "SonarQube", color: "#4e9bcd" },
-      { Icon: SiJest, label: "Jest / JUnit", color: "#c21325" },
-      { Icon: SiCypress, label: "Cypress", color: "#69d3a7" },
-    ],
-  },
+  { value: 6, suffix: "+", label: "Years shipping production software" },
+  { value: 40, suffix: "+", label: "Retailers on the platform I own" },
+  { value: 2.5, suffix: "M", label: "Orders processed every month", decimals: 1 },
+  { value: 12, suffix: "", label: "Modules in the Business Console" },
 ];
 
 const EXPERIENCE = [
   {
     company: "Fenix Commerce",
     role: "Product Development Engineer",
-    period: "Jan 2026 - Present",
+    period: "2026 — Now",
     location: "Worcester, MA",
     summary:
-      "I own the multi-tenant Business Console on a Java, Spring Boot, Angular, Elasticsearch, and AWS commerce platform serving 40+ retailers across 12 modules at 2.5M+ orders per month.",
+      "I own the multi-tenant Business Console on a Java, Spring Boot, Angular, Elasticsearch and AWS commerce platform serving 40+ retailers across 12 modules at 2.5M+ orders per month.",
     points: [
-      "Own the Business Console, the surface every retailer and internal team works in across 12 modules. Rebuilt a six-year-old Angular app into a modular component architecture with a shared design system and lazy-loaded features, and the team now ships console features weekly instead of quarterly.",
-      "Fixed large-tenant screens that were unusable because the console pulled full tables into the browser. Defined a server-side pagination and filtering contract across Spring Boot and Elasticsearch with virtual scrolling and lazy loading, so views over tens of millions of records now open in seconds inside a fixed memory budget.",
-      "Traced wrong inventory numbers to an unset Elasticsearch trackTotalHits ceiling that silently capped aggregations at the engine default, leaving every large-catalog tenant reading a fraction of its data. Rebuilt the query path on heap-safe cursor traversal that streams full result sets in constant memory, restoring accurate reporting above 6M products.",
-      "Root-caused a real-time ingestion outage during a 1.4M-event holiday surge, where a JVM fast-throw optimization was stripping stack traces from an unguarded parsing exception and hiding the real failure while retries piled up. Hardened the parser, added failure logging, and brought event flow back under peak load.",
-      "Closed a data-exposure gap where a third-party API limitation pushed internal data into merchant panels and customer emails. Built a server-side cache keyed on SHA-256 composite hashes with sub-20ms lookups, walling internal data off from tenant-facing surfaces with no measurable added latency.",
-      "Modeled the permission and access-provisioning scheme enforced centrally in Spring Security, turning dozens of settings that used to need a backend release into a self-serve admin layer.",
-      "Use Claude Code, GitHub Copilot, and Cursor daily to scaffold Spring Boot services and JUnit suites, migrate legacy Angular components, and read unfamiliar stack traces. Refactors that took days now land the same day, and every AI-assisted change still clears human review, SonarQube gates, and tests before merge. I wrote the prompt and review patterns the team follows.",
+      "Rebuilt a six-year-old Angular console into a modular component architecture with a shared design system and lazy-loaded features. The team now ships console features weekly instead of quarterly.",
+      "Defined a server-side pagination and filtering contract across Spring Boot and Elasticsearch, with virtual scrolling and lazy loading. Views over tens of millions of records now open in seconds inside a fixed memory budget.",
+      "Traced wrong inventory numbers to an unset Elasticsearch trackTotalHits ceiling, then rebuilt the query path on heap-safe cursor traversal. Reporting is accurate again above 6M products.",
+      "Root-caused a real-time ingestion outage during a 1.4M-event holiday surge to a JVM fast-throw optimization hiding the real exception. Hardened the parser and brought event flow back under peak load.",
+      "Closed a data-exposure gap with a server-side cache keyed on SHA-256 composite hashes: sub-20 ms lookups, internal data walled off from tenant-facing surfaces.",
+      "Modeled the permission and access-provisioning scheme in Spring Security, turning dozens of release-gated settings into a self-serve admin layer.",
+      "Use Claude Code, GitHub Copilot and Cursor daily. Refactors that took days land the same day, and every AI-assisted change still clears human review, SonarQube gates and tests. I wrote the prompt and review patterns the team follows.",
     ],
-    tags: ["Angular", "Spring Boot", "Elasticsearch", "GraphQL", "AWS ECS", "AI Tools", "Multi-Tenant"],
+    tags: ["Angular", "Spring Boot", "Elasticsearch", "GraphQL", "AWS ECS", "Multi-tenant"],
   },
   {
-    company: "Adobe Inc.",
+    company: "Adobe",
     role: "Full Stack Developer",
-    period: "Sept 2024 - Jan 2026",
-    location: "MA, USA",
+    period: "2024 — 2026",
+    location: "Massachusetts",
     summary:
-      "Built a cloud-native asset management and real-time collaboration platform inside Adobe Creative Cloud on Java, Spring Boot, React, Next.js, Kafka, and AWS.",
+      "Built a cloud-native asset management and real-time collaboration platform inside Adobe Creative Cloud on Java, Spring Boot, React, Next.js, Kafka and AWS.",
     points: [
-      "Led the design of a cloud-native asset management and collaboration platform for Creative Cloud, covering horizontal scaling, high availability, and integration with third-party tools and Adobe Sensei AI services.",
-      "Broke a monolithic delivery path into Java and Spring Boot microservices so teams could build and deploy independently, supporting 50% faster feature delivery across suites including Photoshop and Illustrator.",
-      "Shipped adaptive interfaces in React (Redux, Hooks), Next.js, and Tailwind CSS. Engagement rose 10% and interface errors dropped 30% against Adobe Analytics telemetry, helped by tighter Redux state handling that cut validation errors 25%.",
-      "Connected creative peripherals like styluses and tablets through secure APIs and an event-driven pipeline, and built real-time alerting on WebSockets and Kafka so users stopped losing work to silent overwrites.",
-      "Shipped AI-driven layout suggestions from user history and asset metadata, speeding up design creation for new users by 30%.",
-      "Cut query response times 18% by partitioning and indexing the PostgreSQL tables behind large asset searches, and secured assets and session data end to end with TLS/SSL and OAuth 2.0.",
+      "Led the design of a cloud-native asset management and collaboration platform for Creative Cloud: horizontal scaling, high availability, and integration with Adobe Sensei AI services.",
+      "Broke a monolithic delivery path into Spring Boot microservices so teams could deploy independently, supporting 50% faster feature delivery across Photoshop and Illustrator.",
+      "Shipped adaptive interfaces in React, Next.js and Tailwind. Engagement rose 10% and interface errors dropped 30%; tighter Redux state handling cut validation errors 25%.",
+      "Built real-time alerting on WebSockets and Kafka so users stopped losing work to silent overwrites, and connected styluses and tablets through secure, event-driven APIs.",
+      "Cut query response times 18% by partitioning and indexing the PostgreSQL tables behind large asset searches.",
     ],
     tags: ["Java", "Spring Boot", "React", "Next.js", "Kafka", "AWS", "PostgreSQL"],
   },
   {
-    company: "Capgemini Technology Services",
-    role: "Associate Consultant, Full Stack Developer",
-    period: "Sept 2020 - Jul 2023",
+    company: "Capgemini",
+    role: "Associate Consultant, Full Stack",
+    period: "2020 — 2023",
     location: "Hyderabad, India",
     summary:
-      "Built enterprise Java, Spring Boot, and React applications for financial services and product-engineering clients.",
+      "Built enterprise Java, Spring Boot and React applications for financial-services and product-engineering clients.",
     points: [
-      "Built the microservices behind a financial application covering account management, transactions, customer profiles, and fraud detection, with the isolation and access controls sensitive data requires.",
-      "Rebuilt the backend on modular Spring Boot services with Hibernate over PostgreSQL and MySQL, cutting API latency 50% and feature development time 40%.",
-      "Cut reported security vulnerabilities 90% across the client portfolio by hardening Spring Security: role-based authorization, token-based authentication, method-level access control, CSRF protection, and secure session management.",
-      "Migrated 18 Java projects to Maven in under 30 days and remediated vulnerable log4j dependencies across the portfolio, bringing every project back into CVE compliance ahead of the client deadline.",
-      "Delivered client dashboards in React over Node.js REST services, and replaced always-on batch jobs with AWS Lambda for event-driven processing on EC2 behind Auto Scaling, lifting uptime 20%.",
-      "Cut post-deployment defects 30% with JUnit coverage and profiling, and stood up a Swagger API portal with interactive docs and auth details for every endpoint.",
+      "Built the microservices behind a financial application: accounts, transactions, customer profiles and fraud detection, with the isolation sensitive data requires.",
+      "Rebuilt the backend on modular Spring Boot services with Hibernate, cutting API latency 50% and feature development time 40%.",
+      "Cut reported security vulnerabilities 90% by hardening Spring Security: RBAC, token auth, method-level access control, CSRF protection and secure sessions.",
+      "Migrated 18 Java projects to Maven in under 30 days and remediated log4j across the portfolio ahead of the client deadline.",
+      "Replaced always-on batch jobs with AWS Lambda for event-driven processing, lifting uptime 20%, and cut post-deployment defects 30% with JUnit coverage.",
     ],
-    tags: ["Spring Boot", "React", "Node.js", "AWS", "Spring Security", "PostgreSQL"],
+    tags: ["Spring Boot", "React", "Node.js", "AWS", "Spring Security"],
   },
   {
     company: "Wipro",
     role: "Junior Full Stack Developer",
-    period: "Jul 2019 - Aug 2020",
+    period: "2019 — 2020",
     location: "India",
     summary:
-      "Built a KYC and AML compliance platform for a banking client on Angular, Spring Boot, Thymeleaf, and PostgreSQL.",
+      "Built a KYC and AML compliance platform for a banking client on Angular, Spring Boot, Thymeleaf and PostgreSQL.",
     points: [
-      "Built KYC onboarding modules in Angular with Reactive Forms and dynamic validation, supporting accurate registration of 5,000+ customer profiles.",
-      "Restructured JSON responses from Spring Boot services so analysts saw the fields they actually needed, cutting AML alert review time 30%.",
-      "Configured Spring Security login, logout, and role-based access control across four KYC modules, and designed Thymeleaf and Bootstrap review screens that made flagging suspicious activity 25% faster.",
-      "Wrote the PostgreSQL queries behind analyst comments, risk scores, and audit trails across 10,000+ transaction records.",
+      "Built KYC onboarding in Angular Reactive Forms with dynamic validation, supporting 5,000+ customer profiles.",
+      "Reshaped Spring Boot JSON responses around what analysts actually needed, cutting AML alert review time 30%.",
+      "Configured Spring Security across four KYC modules and designed review screens that made flagging suspicious activity 25% faster.",
     ],
-    tags: ["Angular", "Spring Boot", "Spring Security", "Thymeleaf", "PostgreSQL"],
+    tags: ["Angular", "Spring Boot", "Spring Security", "PostgreSQL"],
+  },
+];
+
+const NOTES = [
+  {
+    title: "The silent ceiling",
+    symptom: "Large-catalog tenants saw inventory totals that were quietly wrong.",
+    cause: "An unset trackTotalHits capped Elasticsearch aggregations at the engine default — every big tenant was reading a fraction of its data.",
+    fix: "Rebuilt the query path on heap-safe cursor traversal that streams full result sets in constant memory.",
+    result: "Accurate reporting above 6M products",
+  },
+  {
+    title: "The missing stack trace",
+    symptom: "Real-time ingestion stalled in the middle of a 1.4M-event holiday surge.",
+    cause: "The JVM's fast-throw optimization was stripping stack traces from an unguarded parsing exception, hiding the real failure while retries piled up.",
+    fix: "Hardened the parser, added failure logging that survives the optimization, and drained the backlog.",
+    result: "Event flow restored under peak load",
+  },
+  {
+    title: "The leak in the inbox",
+    symptom: "Internal data was surfacing in merchant panels and customer emails.",
+    cause: "A third-party API limitation pushed internal fields onto tenant-facing surfaces.",
+    fix: "A server-side cache keyed on SHA-256 composite hashes walls internal data off at the boundary.",
+    result: "Sub-20 ms lookups, no added latency",
+  },
+  {
+    title: "The table that ate the browser",
+    symptom: "Big tenants' console screens froze or crashed outright.",
+    cause: "The console pulled whole tables into the browser and filtered them client-side.",
+    fix: "A server-side pagination and filtering contract across Spring Boot and Elasticsearch, plus virtual scrolling.",
+    result: "Tens of millions of rows, open in seconds",
+  },
+];
+
+const STACK = [
+  { title: "Backend", items: ["Java 8 / 17 / 21", "Spring Boot", "Spring Data JPA", "Hibernate", "REST & GraphQL", "Node.js / Express", "Python"] },
+  { title: "Frontend", items: ["Angular", "React", "Next.js", "TypeScript", "Redux", "Tailwind CSS", "Material UI"] },
+  { title: "Data", items: ["PostgreSQL", "MySQL", "Elasticsearch", "MongoDB", "DynamoDB", "Redis", "Apache Kafka"] },
+  { title: "Cloud & delivery", items: ["AWS (ECS, Lambda, EC2)", "Docker", "Kubernetes", "Terraform", "Jenkins", "Git"] },
+  { title: "Security & quality", items: ["Spring Security", "OAuth 2.0 / JWT", "OWASP & CVE remediation", "SonarQube", "JUnit / Jest", "Cypress"] },
+  { title: "AI-assisted", items: ["Claude Code", "GitHub Copilot", "Cursor", "OpenAI Codex", "AI code review"] },
+];
+
+const PROJECTS = [
+  {
+    title: "Career Path Recommendation System",
+    year: "Graduate work",
+    description:
+      "Parses résumés with NLP, predicts likely career paths and names the skill gaps in the way, then serves the results over REST. Python and Django over PostgreSQL.",
+    tags: ["Python", "Django", "NLP", "PostgreSQL"],
+    href: GITHUB,
+  },
+  {
+    title: "Restaurant Ordering Portal",
+    year: "Side project",
+    description:
+      "A normalized schema for menus, modifiers and orders, with transactional placement so a dropped or duplicated request never leaves half an order behind. Processed 300+ real orders.",
+    tags: ["Java", "Angular", "MySQL", "Transactions"],
+    href: GITHUB,
   },
 ];
 
 const EDUCATION = [
-  {
-    degree: "Master of Science in Computer Science",
-    school: "Clark University",
-    location: "Worcester, MA, USA",
-  },
-  {
-    degree: "Bachelor of Technology in Electronics & Communication Engineering",
-    school: "JNTU Ananthapur",
-    location: "AP, India",
-  },
+  { degree: "M.S. Computer Science", school: "Clark University", place: "Worcester, MA" },
+  { degree: "B.Tech. Electronics & Communication", school: "JNTU Ananthapur", place: "Andhra Pradesh, India" },
 ];
 
 const CERTIFICATIONS = [
   "AWS Cloud Essentials",
-  "Microsoft Certified: Azure Fundamentals (AZ-900)",
-  "Java Cloud Native Developer L1 & L2",
+  "Microsoft Azure Fundamentals (AZ-900)",
+  "Java Cloud Native Developer, L1 & L2",
   "Python Automation Practitioner",
 ];
 
-// NOTE: replace `code`/`demo` with the real repo & live URLs when ready.
-const GITHUB_PROFILE = "https://github.com/mohan-babu-doddapaneni";
+/* ================================================================== */
+/*  HELPERS                                                            */
+/* ================================================================== */
 
-const PROJECTS = [
-  {
-    Icon: FaCode,
-    title: "Career Path Recommendation System",
-    description:
-      "A recommendation engine that parses resumes with NLP, predicts career paths, and names the skill gaps standing in the way, then serves the results over REST APIs. Built with Python, Django, and a PostgreSQL backend for profiles and scoring.",
-    tags: ["Python", "Django", "NLP", "PostgreSQL", "REST API"],
-    accent: "linear-gradient(135deg, #059669, #10b981, #2dd4bf)",
-    code: GITHUB_PROFILE,
-    demo: "",
-  },
-  {
-    Icon: FaServer,
-    title: "Restaurant Ordering Portal",
-    description:
-      "An ordering portal with a normalized schema for menus, modifiers, and orders, and transactional placement so a dropped or duplicate request never leaves a partial order. Built on Java, Angular, and MySQL, and processed 300+ orders.",
-    tags: ["Java", "Angular", "MySQL", "REST API", "Transactional"],
-    accent: "linear-gradient(135deg, #2dd4bf, #059669)",
-    code: GITHUB_PROFILE,
-    demo: "",
-  },
-];
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const CONTACTS = [
-  { Icon: FaEnvelope, label: "Email", value: "mohanbabud25@gmail.com", href: "mailto:mohanbabud25@gmail.com", color: "#ea4335" },
-  { Icon: FaPhone, label: "Phone", value: "+1 (978) 208-4167", href: "tel:+19782084167", color: "#22c55e" },
-  { Icon: FaLinkedin, label: "LinkedIn", value: "/mohan-babu-doddapaneni", href: "https://linkedin.com/in/mohan-babu-doddapaneni", color: "#0a66c2" },
-  { Icon: FaGithub, label: "GitHub", value: "/mohan-babu-doddapaneni", href: "https://github.com/mohan-babu-doddapaneni", color: "var(--icon-adaptive)" },
-];
-
-/* ------------------------------------------------------------------ */
-/*  HOOKS & HELPERS                                                    */
-/* ------------------------------------------------------------------ */
-
-function useScrollReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
-    if (!("IntersectionObserver" in window)) {
-      els.forEach((el) => el.classList.add("visible"));
-      return;
+const safeStorage = {
+  get(key) {
+    try {
+      return window.localStorage.getItem(key);
+    } catch {
+      return null;
     }
-    const observer = new IntersectionObserver(
+  },
+  set(key, value) {
+    try {
+      window.localStorage.setItem(key, value);
+    } catch {
+      /* storage unavailable (private mode etc.) — ignore */
+    }
+  },
+};
+
+function initialTheme() {
+  const saved = safeStorage.get("theme");
+  if (saved === "light" || saved === "dark") return saved;
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+  return "light";
+}
+
+/** Adds `.is-in` to every [data-reveal] element once it scrolls into view. */
+function useReveal() {
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll("[data-reveal]"));
+    if (!("IntersectionObserver" in window) || prefersReducedMotion()) {
+      els.forEach((el) => el.classList.add("is-in"));
+      return undefined;
+    }
+    const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
+            entry.target.classList.add("is-in");
+            io.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
     );
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-}
+    els.forEach((el) => io.observe(el));
 
-// Cursor-following spotlight: tracks the pointer over any `.spotlight` element
-// and writes its local coordinates to CSS vars (--mx, --my) for a glow effect.
-function useSpotlight() {
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return; // skip on touch
-    const onMove = (e) => {
-      const card = e.target.closest(".spotlight");
-      if (!card) return;
-      const rect = card.getBoundingClientRect();
-      card.style.setProperty("--mx", `${e.clientX - rect.left}px`);
-      card.style.setProperty("--my", `${e.clientY - rect.top}px`);
+    // Safety net: anything already above the fold line (anchor jumps, fast
+    // flings, momentum scrolling on iOS) is revealed even if IO missed it.
+    let raf = 0;
+    const sweep = () => {
+      raf = 0;
+      const limit = window.innerHeight * 0.92;
+      els.forEach((el) => {
+        if (!el.classList.contains("is-in") && el.getBoundingClientRect().top < limit) {
+          el.classList.add("is-in");
+          io.unobserve(el);
+        }
+      });
     };
-    document.addEventListener("pointermove", onMove);
-    return () => document.removeEventListener("pointermove", onMove);
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(sweep);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("hashchange", onScroll);
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("hashchange", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 }
 
-function useTypewriter(words, typeSpeed = 90, deleteSpeed = 45, pause = 1600) {
-  const [text, setText] = useState("");
-  const [wordIndex, setWordIndex] = useState(0);
-  const [deleting, setDeleting] = useState(false);
-
+/** Buttons/links with [data-magnetic] lean slightly toward the pointer. */
+function useMagnetic() {
   useEffect(() => {
-    const current = words[wordIndex % words.length];
-    let timeout;
-    if (!deleting && text === current) {
-      timeout = setTimeout(() => setDeleting(true), pause);
-    } else if (deleting && text === "") {
-      setDeleting(false);
-      setWordIndex((i) => i + 1);
-    } else {
-      timeout = setTimeout(() => {
-        setText(
-          deleting
-            ? current.substring(0, text.length - 1)
-            : current.substring(0, text.length + 1)
-        );
-      }, deleting ? deleteSpeed : typeSpeed);
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches || prefersReducedMotion()) {
+      return undefined;
     }
-    return () => clearTimeout(timeout);
-  }, [text, deleting, wordIndex, words, typeSpeed, deleteSpeed, pause]);
-
-  return text;
+    const els = Array.from(document.querySelectorAll("[data-magnetic]"));
+    const cleanups = els.map((el) => {
+      const move = (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - (r.left + r.width / 2)) * 0.22;
+        const y = (e.clientY - (r.top + r.height / 2)) * 0.32;
+        el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+      };
+      const leave = () => {
+        el.style.transform = "";
+      };
+      el.addEventListener("pointermove", move);
+      el.addEventListener("pointerleave", leave);
+      return () => {
+        el.removeEventListener("pointermove", move);
+        el.removeEventListener("pointerleave", leave);
+      };
+    });
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 }
 
-function CountUp({ end, suffix = "", duration = 1800, decimals = 0 }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const started = useRef(false);
+/** Local time in Worcester, MA — a small human detail in the nav and footer. */
+function useLocalTime() {
+  const format = () =>
+    new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: "America/New_York",
+    }).format(new Date());
+  const [time, setTime] = useState(format);
+  useEffect(() => {
+    const id = setInterval(() => setTime(format()), 20000);
+    return () => clearInterval(id);
+  }, []);
+  return time;
+}
 
+function useActiveSection(ids) {
+  const [active, setActive] = useState("");
+  useEffect(() => {
+    if (!("IntersectionObserver" in window)) return undefined;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
+    });
+    return () => io.disconnect();
+  }, [ids]);
+  return active;
+}
+
+function CountUp({ end, suffix = "", decimals = 0, duration = 1600 }) {
+  const ref = useRef(null);
+  // Start at the final value: correct for no-JS crawlers, reduced motion, and
+  // anyone who flings past the section before it could animate.
+  const [value, setValue] = useState(end);
   useEffect(() => {
     const node = ref.current;
-    if (!node || !("IntersectionObserver" in window)) {
-      setCount(end);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !started.current) {
-            started.current = true;
-            const startTime = performance.now();
-            const tick = (now) => {
-              const progress = Math.min((now - startTime) / duration, 1);
-              const eased = 1 - Math.pow(1 - progress, 3);
-              setCount(eased * end);
-              if (progress < 1) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
-          }
-        });
+    if (!node || !("IntersectionObserver" in window) || prefersReducedMotion()) return undefined;
+    if (node.getBoundingClientRect().top < window.innerHeight) return undefined; // already on screen
+    setValue(0);
+    let raf;
+    let started = false;
+    const finish = () => {
+      started = true;
+      setValue(end);
+    };
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || started) return;
+        started = true;
+        io.disconnect();
+        const start = performance.now();
+        const tick = (now) => {
+          const p = Math.min((now - start) / duration, 1);
+          setValue(end * (1 - Math.pow(1 - p, 4)));
+          if (p < 1) raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
       },
-      { threshold: 0.5 }
+      { threshold: 0, rootMargin: "0px 0px -12% 0px" }
     );
-    observer.observe(node);
-    return () => observer.disconnect();
+    io.observe(node);
+    const onScroll = () => {
+      if (!started && node.getBoundingClientRect().bottom < window.innerHeight * 0.88) {
+        io.disconnect();
+        finish();
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, [end, duration]);
-
   return (
-    <span ref={ref}>
-      {decimals > 0 ? count.toFixed(decimals) : Math.round(count)}
+    <span ref={ref} className="tabular">
+      {decimals ? value.toFixed(decimals) : Math.round(value)}
       {suffix}
     </span>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  MAIN COMPONENT                                                     */
-/* ------------------------------------------------------------------ */
+const Arrow = ({ className = "" }) => (
+  <svg className={`arrow ${className}`} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M6 18 18 6M8 6h10v10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
+  </svg>
+);
+
+/** Hand-drawn style underline that draws itself when revealed. */
+const Scribble = ({ className = "" }) => (
+  <svg className={`scribble ${className}`} viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path
+      d="M3 15c38-6 80-9 122-8 46 1 88 4 128 2 14-1 28-3 44-6M18 20c52-5 128-6 210-3"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      pathLength="1"
+    />
+  </svg>
+);
+
+function SectionHead({ index, label, title, children }) {
+  return (
+    <div className="section-head">
+      <div className="section-rule" data-reveal>
+        <span className="mono">§ {index}</span>
+        <span className="mono">{label}</span>
+      </div>
+      <h2 className="section-title" data-reveal>
+        {title}
+      </h2>
+      {children}
+    </div>
+  );
+}
+
+/* ================================================================== */
+/*  APP                                                                */
+/* ================================================================== */
 
 export default function App() {
+  const [theme, setTheme] = useState(initialTheme);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeSection, setActiveSection] = useState("home");
+  const [openJob, setOpenJob] = useState(0);
+  const [copied, setCopied] = useState(false);
+  const [showTop, setShowTop] = useState(false);
+  const menuBtnRef = useRef(null);
+  const menuRef = useRef(null);
+  const progressRef = useRef(null);
 
-  const role = useTypewriter(ROLES);
-  useScrollReveal();
-  useSpotlight();
+  const time = useLocalTime();
+  const active = useActiveSection(NAV.map((n) => n.id));
+  useReveal();
+  useMagnetic();
 
-  const closeMenu = () => setMenuOpen(false);
-  const toggleTheme = () => setIsDarkTheme((v) => !v);
-  const toggleImageModal = () => setShowImageModal((v) => !v);
-
+  // Apply theme to <html> so CSS variables cascade everywhere.
   useEffect(() => {
-    document.body.className = isDarkTheme ? "dark-theme" : "light-theme";
-  }, [isDarkTheme]);
+    const root = document.documentElement;
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", theme === "dark" ? "#141210" : "#efe9de");
+  }, [theme]);
 
-  useEffect(() => {
-    document.body.style.overflow = showImageModal ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [showImageModal]);
-
-  useEffect(() => {
-    const onKey = (e) => e.key === "Escape" && setShowImageModal(false);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  const handleScroll = useCallback(() => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    setScrollProgress(docHeight > 0 ? (scrollTop / docHeight) * 100 : 0);
-    setShowScrollTop(scrollTop > 400);
-    let current = "home";
-    for (const link of NAV_LINKS) {
-      const section = document.getElementById(link.id);
-      if (section && section.getBoundingClientRect().top <= 130) {
-        current = link.id;
-      }
+  const toggleTheme = (e) => {
+    const next = theme === "dark" ? "light" : "dark";
+    safeStorage.set("theme", next);
+    if (!document.startViewTransition || prefersReducedMotion()) {
+      setTheme(next);
+      return;
     }
-    setActiveSection(current);
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
-
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-
-  const downloadResume = () => {
-    const link = document.createElement("a");
-    link.href = `${process.env.PUBLIC_URL}/Mohan_Babu_Doddapaneni.pdf`;
-    link.download = "Mohan_Babu_Doddapaneni.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Circular "ink spill" reveal from the toggle button.
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+    const vt = document.startViewTransition(() => {
+      // flushSync-free: set the attribute directly so the snapshot is correct.
+      document.documentElement.dataset.theme = next;
+      setTheme(next);
+    });
+    vt.ready
+      .then(() => {
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          { duration: 650, easing: "cubic-bezier(.7,0,.2,1)", pseudoElement: "::view-transition-new(root)" }
+        );
+      })
+      .catch(() => {});
   };
 
+  // Scroll progress + back-to-top, written straight to the DOM (no re-render per frame).
+  useEffect(() => {
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? window.scrollY / max : 0;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${p})`;
+      setShowTop(window.scrollY > 900);
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  // Mobile menu: lock scroll, close on Escape, move focus in and back out.
+  const closeMenu = useCallback((returnFocus = false) => {
+    setMenuOpen(false);
+    if (returnFocus && menuBtnRef.current) menuBtnRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle("menu-open", menuOpen);
+    if (!menuOpen) return undefined;
+    const first = menuRef.current && menuRef.current.querySelector("a");
+    if (first) first.focus({ preventScroll: true });
+    const onKey = (e) => {
+      if (e.key === "Escape") closeMenu(true);
+      if (e.key === "Tab" && menuRef.current) {
+        const focusables = [menuBtnRef.current, ...menuRef.current.querySelectorAll("a")];
+        const idx = focusables.indexOf(document.activeElement);
+        if (e.shiftKey && idx <= 0) {
+          e.preventDefault();
+          focusables[focusables.length - 1].focus();
+        } else if (!e.shiftKey && idx === focusables.length - 1) {
+          e.preventDefault();
+          focusables[0].focus();
+        }
+      }
+    };
+    const onResize = () => window.innerWidth > 900 && closeMenu();
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [menuOpen, closeMenu]);
+
+  const copyEmail = async () => {
+    let ok = false;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(EMAIL);
+        ok = true;
+      }
+    } catch {
+      ok = false;
+    }
+    if (!ok) {
+      // Fallback for older browsers / non-secure contexts.
+      const ta = document.createElement("textarea");
+      ta.value = EMAIL;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        ok = document.execCommand("copy");
+      } catch {
+        ok = false;
+      }
+      document.body.removeChild(ta);
+    }
+    if (ok) {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2200);
+    } else {
+      window.location.href = `mailto:${EMAIL}`;
+    }
+  };
+
+  const year = new Date().getFullYear();
+
   return (
-    <div className="App">
-      <a href="#main-content" className="skip-link">Skip to content</a>
-      {/* Layered designed background */}
-      <div className="bg-layer" aria-hidden="true">
-        <div className="bg-aurora" />
-        <div className="bg-grid" />
-        <div className="bg-noise" />
-      </div>
+    <>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <div className="grain" aria-hidden="true" />
+      <div className="progress" ref={progressRef} aria-hidden="true" />
 
-      <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} />
-
-      {/* NAVBAR */}
-      <nav className="navbar">
-        <div className="nav-container">
-          <a href="#home" className="nav-logo" onClick={closeMenu}>
-            <span className="logo-mark">MB</span>
-            <span className="logo-text">Mohan Babu</span>
+      {/* ------------------------------------------------ NAV */}
+      <header className={`nav ${menuOpen ? "nav--open" : ""}`}>
+        <div className="nav__inner">
+          <a href="#top" className="wordmark" onClick={() => closeMenu()} aria-label="Mohan Babu Doddapaneni, back to top">
+            <span className="wordmark__mark" aria-hidden="true" />
+            <span className="wordmark__text">
+              Mohan Babu<span className="wordmark__dim"> D.</span>
+            </span>
           </a>
 
-          <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-            {NAV_LINKS.map((link) => (
-              <li key={link.id}>
-                <a
-                  href={`#${link.id}`}
-                  className={activeSection === link.id ? "active" : ""}
-                  onClick={closeMenu}
-                >
-                  {link.label}
-                </a>
-              </li>
+          <nav className="nav__links" aria-label="Primary">
+            {NAV.map((n, i) => (
+              <a key={n.id} href={`#${n.id}`} className={active === n.id ? "is-active" : ""} aria-current={active === n.id ? "true" : undefined}>
+                <span className="mono nav__num">0{i + 1}</span>
+                {n.label}
+              </a>
             ))}
-          </ul>
+          </nav>
 
-          <div className="nav-actions">
-            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle color theme">
-              {isDarkTheme ? <FaSun /> : <FaMoon />}
+          <div className="nav__tools">
+            <span className="nav__clock mono" title="My local time">
+              Worcester, MA · {time}
+            </span>
+            <button
+              type="button"
+              className="theme-btn"
+              onClick={toggleTheme}
+              aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+            >
+              <span className="theme-btn__disc" aria-hidden="true" />
             </button>
             <button
-              className={`menu-icon ${menuOpen ? "open" : ""}`}
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-label="Toggle menu"
+              type="button"
+              ref={menuBtnRef}
+              className="menu-btn"
               aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+              onClick={() => setMenuOpen((v) => !v)}
             >
-              <span />
-              <span />
-              <span />
+              <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
+              <span className="menu-btn__label mono" aria-hidden="true">
+                {menuOpen ? "Close" : "Menu"}
+              </span>
             </button>
           </div>
         </div>
-      </nav>
+      </header>
 
-      <main id="main-content">
-        {/* HERO */}
-        <header id="home" className="hero">
-          <div className="hero-inner container">
-            <div className="hero-text">
-              <span className="availability-pill">
-                <span className="status-dot" /> Available for opportunities
-              </span>
-              <p className="hero-greeting">
-                <span className="wave">👋</span> Hello, I'm
-              </p>
-              <h1 className="hero-name">Mohan Babu Doddapaneni</h1>
-              <h2 className="hero-role">
-                <span className="role-text">{role}</span>
-                <span className="cursor-blink">|</span>
-              </h2>
-              <p className="hero-tagline">
-                I ship production systems on <strong>Java, Spring Boot</strong>,{" "}
-                <strong>Angular, and React</strong>. Right now I own the admin and
-                data-access layer of a multi-tenant SaaS commerce platform serving{" "}
-                <strong>40+ retailers</strong> at 2.5M+ orders a month, and I lean on{" "}
-                <strong>AI coding tools</strong> without letting speed cost quality.
-              </p>
-
-              <div className="hero-cta">
-                <a href="#projects" className="btn btn-primary">View My Work</a>
-                <button className="btn btn-ghost" onClick={downloadResume}>
-                  <FaDownload /> Download Resume
-                </button>
-              </div>
-
-              <div className="hero-socials">
-                {CONTACTS.map(({ Icon, label, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel="noopener noreferrer"
-                    title={label}
-                    aria-label={label}
-                  >
-                    <Icon />
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            <div className="hero-visual">
-              <div className="profile-ring">
-                <div className="profile-glow" />
-                <img
-                  src={process.env.PUBLIC_URL + "/assets/profile.png"}
-                  alt="Mohan Babu Doddapaneni"
-                  className="profile-img"
-                  onClick={toggleImageModal}
-                />
-              </div>
-              <span className="badge badge-1"><FaJava style={{ color: "#f89820" }} /> Java</span>
-              <span className="badge badge-2"><SiReact style={{ color: "#61dafb" }} /> React</span>
-              <span className="badge badge-3"><FaAws style={{ color: "#ff9900" }} /> AWS</span>
-            </div>
-          </div>
-
-          <a href="#about" className="scroll-hint" aria-label="Scroll down">
-            <span className="mouse"><span className="wheel" /></span>
-          </a>
-        </header>
-
-        {showImageModal && (
-          <div className="modal-overlay" onClick={toggleImageModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="close-button" onClick={toggleImageModal} aria-label="Close">✖</button>
-              <img
-                src={process.env.PUBLIC_URL + "/assets/profile.png"}
-                alt="Mohan Babu Doddapaneni"
-                className="full-image"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* ABOUT */}
-        <section id="about" className="section about container">
-          <div className="section-head reveal">
-            <span className="section-kicker">01 · Introduction</span>
-            <h2 className="section-title">About Me</h2>
-          </div>
-          <div className="about-body reveal">
-            <p>
-              I'm a <strong>Full Stack Developer</strong> with 6+ years shipping
-              production systems on <strong>Java (8 to 21), Spring Boot microservices</strong>,{" "}
-              <strong>Angular, and React</strong>. Today I own the admin and data-access
-              layer of a multi-tenant SaaS commerce platform serving{" "}
-              <strong>40+ enterprise retailers</strong> at 2.5M+ orders a month, from the
-              data model through REST and GraphQL APIs to the front end on top.
-            </p>
-            <p>
-              I'm strongest at the work that keeps a platform trustworthy at scale:
-              pagination and caching contracts that hold at tens of millions of records,
-              tenant isolation enforced in one place, and the quiet data bugs dashboards
-              never surface. I use <strong>AI coding tools</strong> (Claude Code, GitHub
-              Copilot, Cursor) daily alongside code review, SonarQube gates, and JUnit
-              coverage, so speed does not cost quality. M.S. in Computer Science from
-              Clark University, and grounded in strong Data Structures & Algorithms.
-            </p>
-          </div>
-
-          <div className="stats-grid reveal">
-            {STATS.map((s) => (
-              <div className="stat-card" key={s.label}>
-                <div className="stat-value">
-                  <CountUp end={s.value} suffix={s.suffix} decimals={s.decimals || 0} />
-                </div>
-                <div className="stat-label">{s.label}</div>
-              </div>
+      <div id="mobile-menu" className={`sheet ${menuOpen ? "is-open" : ""}`} ref={menuRef} aria-hidden={!menuOpen} inert={!menuOpen}>
+        <nav aria-label="Mobile">
+          <ol>
+            {NAV.map((n, i) => (
+              <li key={n.id} style={{ "--i": i }}>
+                <a href={`#${n.id}`} onClick={() => closeMenu()}>
+                  <span className="mono">0{i + 1}</span>
+                  {n.label}
+                </a>
+              </li>
             ))}
+          </ol>
+        </nav>
+        <div className="sheet__foot mono">
+          <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+          <a href={PHONE_HREF}>{PHONE_DISPLAY}</a>
+        </div>
+      </div>
+
+      <main id="main">
+        {/* ------------------------------------------------ HERO */}
+        <section id="top" className="hero" aria-labelledby="hero-name">
+          <div className="wrap">
+            <div className="hero__meta mono">
+              <span className="load load--1">Portfolio — Edition {year}</span>
+              <span className="load load--2 status">
+                <span className="status__dot" aria-hidden="true" />
+                Open to senior full-stack &amp; backend roles
+              </span>
+            </div>
+
+            <h1 id="hero-name" className="hero__name">
+              <span className="line">
+                <span className="line__in">Mohan Babu</span>
+              </span>
+              <span className="line">
+                <span className="line__in">
+                  <em>Doddapaneni</em>
+                </span>
+              </span>
+            </h1>
+
+            <div className="hero__grid">
+              <p className="hero__lede load load--3">
+                Full-stack engineer working in <span className="hl">Java, Spring Boot, Angular</span> and React. Six years
+                of making multi-tenant platforms fast, correct and{" "}
+                <span className="scribble-wrap">
+                  pleasantly boring
+                  <Scribble className="scribble--hero" />
+                </span>{" "}
+                at scale.
+              </p>
+
+              <div className="hero__side load load--4">
+                <dl className="facts">
+                  <div>
+                    <dt className="mono">Currently</dt>
+                    <dd>Product Development Engineer, Fenix Commerce</dd>
+                  </div>
+                  <div>
+                    <dt className="mono">Before</dt>
+                    <dd>Adobe · Capgemini · Wipro</dd>
+                  </div>
+                  <div>
+                    <dt className="mono">Based in</dt>
+                    <dd>Worcester, Massachusetts</dd>
+                  </div>
+                </dl>
+                <div className="hero__cta">
+                  <a href="#work" className="btn btn--solid" data-magnetic>
+                    See the work
+                    <span aria-hidden="true" className="btn__down">↓</span>
+                  </a>
+                  <a href={RESUME} className="btn btn--line" download="Mohan_Babu_Doddapaneni.pdf" data-magnetic>
+                    Résumé <span className="mono btn__small">PDF</span>
+                  </a>
+                </div>
+              </div>
+
+              <figure className="portrait load load--5">
+                <div className="portrait__frame">
+                  <img
+                    src={`${process.env.PUBLIC_URL}/assets/portrait.webp`}
+                    srcSet={`${process.env.PUBLIC_URL}/assets/portrait-sm.webp 320w, ${process.env.PUBLIC_URL}/assets/portrait.webp 640w`}
+                    sizes="(max-width: 900px) 40vw, 230px"
+                    width="640"
+                    height="800"
+                    alt="Portrait of Mohan Babu Doddapaneni"
+                    decoding="async"
+                    fetchPriority="high"
+                  />
+                </div>
+                <figcaption className="mono">Fig. 01 — The author, in a blazer he rarely wears.</figcaption>
+              </figure>
+            </div>
           </div>
 
-          <div className="tech-marquee reveal" aria-hidden="true">
-            <div className="tech-track">
-              {[...TECH, ...TECH].map(({ Icon, name, color }, i) => (
-                <span className="tech-chip" key={i}>
-                  <Icon style={{ color }} />
-                  <span>{name}</span>
+          <div className="ticker" aria-hidden="true">
+            <div className="ticker__track">
+              {[0, 1].map((k) => (
+                <span className="ticker__group" key={k}>
+                  {TICKER.map((t) => (
+                    <span className="ticker__item" key={t}>
+                      {t}
+                      <span className="ticker__sep">✳</span>
+                    </span>
+                  ))}
                 </span>
               ))}
             </div>
           </div>
         </section>
 
-        {/* SKILLS */}
-        <section id="skills" className="section skills container">
-          <div className="section-head reveal">
-            <span className="section-kicker">02 · Toolbox</span>
-            <h2 className="section-title">Technical Skills</h2>
-          </div>
-          <div className="skills-grid">
-            {SKILLS.map((group, i) => {
-              const Head = group.Icon;
-              return (
-                <div className="skill-card spotlight reveal" key={group.title} style={{ transitionDelay: `${i * 70}ms` }}>
-                  <div className="skill-card-head">
-                    <span className="skill-icon"><Head /></span>
-                    <h3>{group.title}</h3>
-                  </div>
-                  <div className="skill-tags">
-                    {group.items.map(({ Icon, label, color }) => (
-                      <span className="skill-tag" key={label}>
-                        <Icon style={{ color }} /> {label}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+        {/* ------------------------------------------------ PROFILE */}
+        <section id="profile" className="section" aria-labelledby="profile-title">
+          <div className="wrap">
+            <div className="section-rule" data-reveal>
+              <span className="mono">§ 01</span>
+              <span className="mono">Profile</span>
+            </div>
+            <div className="profile">
+              <blockquote className="pull" data-reveal id="profile-title">
+                “I’m happiest chasing the bugs that <em>dashboards never show you</em> — and building things so they
+                stop happening.”
+              </blockquote>
+              <div className="profile__body" data-reveal>
+                <p>
+                  I ship production systems on Java (8 to 21), Spring Boot microservices, Angular and React. Today I own
+                  the admin and data-access layer of a multi-tenant SaaS commerce platform serving 40+ enterprise
+                  retailers, from the data model through REST and GraphQL APIs to the screens on top.
+                </p>
+                <p>
+                  My best work is the unglamorous kind that keeps a platform trustworthy: pagination and caching
+                  contracts that hold at tens of millions of records, tenant isolation enforced in one place, and quiet
+                  data bugs nobody else noticed. I use AI coding tools every day, and every change still goes through
+                  code review, SonarQube and tests.
+                </p>
+              </div>
+            </div>
+
+            <ul className="ledger" aria-label="At a glance">
+              {STATS.map((s, i) => (
+                <li key={s.label} data-reveal style={{ "--i": i }}>
+                  <span className="ledger__value">
+                    <CountUp end={s.value} suffix={s.suffix} decimals={s.decimals || 0} />
+                  </span>
+                  <span className="ledger__label">{s.label}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
-        {/* EXPERIENCE */}
-        <section id="experience" className="section experience container">
-          <div className="section-head reveal">
-            <span className="section-kicker">03 · Career</span>
-            <h2 className="section-title">Experience</h2>
+        {/* ------------------------------------------------ WORK */}
+        <section id="work" className="section" aria-labelledby="work-title">
+          <div className="wrap">
+            <SectionHead index="02" label="Experience, 2019 — now" title={<span id="work-title">Where I’ve done the work</span>} />
+
+            <ol className="jobs">
+              {EXPERIENCE.map((job, i) => {
+                const open = openJob === i;
+                return (
+                  <li key={job.company} className={`job ${open ? "is-open" : ""}`} data-reveal style={{ "--i": i }}>
+                    <h3 className="job__h">
+                      <button
+                        type="button"
+                        className="job__head"
+                        aria-expanded={open}
+                        aria-controls={`job-${i}`}
+                        id={`job-btn-${i}`}
+                        onClick={() => setOpenJob(open ? -1 : i)}
+                      >
+                        <span className="job__period mono">{job.period}</span>
+                        <span className="job__company">{job.company}</span>
+                        <span className="job__role">{job.role}</span>
+                        <span className="job__loc mono">{job.location}</span>
+                        <span className="job__toggle" aria-hidden="true" />
+                      </button>
+                    </h3>
+                    <div className="job__panel" id={`job-${i}`} role="region" aria-labelledby={`job-btn-${i}`}>
+                      <div className="job__inner">
+                        <div className="job__content" inert={!open}>
+                          <p className="job__summary">{job.summary}</p>
+                          <ul className="job__points">
+                            {job.points.map((p) => (
+                              <li key={p.slice(0, 40)}>{p}</li>
+                            ))}
+                          </ul>
+                          <ul className="tags" aria-label="Technologies">
+                            {job.tags.map((t) => (
+                              <li key={t}>{t}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
-          <div className="timeline">
-            {EXPERIENCE.map((job) => (
-              <div className="timeline-item reveal" key={job.company}>
-                <div className="timeline-dot"><FaBriefcase /></div>
-                <div className="timeline-card spotlight">
-                  <div className="timeline-top">
-                    <h3>{job.role}</h3>
-                    <span className="timeline-period">{job.period}</span>
-                  </div>
-                  <div className="timeline-meta">
-                    <span className="timeline-company">{job.company}</span>
-                    <span className="timeline-location"><FaLocationDot /> {job.location}</span>
-                  </div>
-                  <p className="timeline-summary">{job.summary}</p>
+        </section>
+
+        {/* ------------------------------------------------ FIELD NOTES */}
+        <section id="notes" className="section section--ink" aria-labelledby="notes-title">
+          <div className="wrap">
+            <SectionHead index="03" label="Field notes" title={<span id="notes-title">Notes from production</span>}>
+              <p className="section-sub" data-reveal>
+                Four real incidents, written up the way I’d write a post-mortem. The fix is rarely the hard part —
+                finding the cause is.
+              </p>
+            </SectionHead>
+
+            <div className="notes">
+              {NOTES.map((n, i) => (
+                <article className="note" key={n.title} data-reveal style={{ "--i": i }}>
+                  <header className="note__head">
+                    <span className="mono">No. {String(i + 1).padStart(2, "0")}</span>
+                    <h3>{n.title}</h3>
+                  </header>
+                  <dl className="note__body">
+                    <div>
+                      <dt className="mono">Symptom</dt>
+                      <dd>{n.symptom}</dd>
+                    </div>
+                    <div>
+                      <dt className="mono">Cause</dt>
+                      <dd>{n.cause}</dd>
+                    </div>
+                    <div>
+                      <dt className="mono">Fix</dt>
+                      <dd>{n.fix}</dd>
+                    </div>
+                  </dl>
+                  <p className="note__result">
+                    <span className="mono">Result →</span> {n.result}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------ STACK */}
+        <section id="stack" className="section" aria-labelledby="stack-title">
+          <div className="wrap">
+            <SectionHead index="04" label="Toolbox" title={<span id="stack-title">What I reach for</span>} />
+            <div className="stack">
+              {STACK.map((g, i) => (
+                <div className="stack__col" key={g.title} data-reveal style={{ "--i": i }}>
+                  <h3 className="mono">
+                    {g.title}
+                    <span className="stack__count">{String(g.items.length).padStart(2, "0")}</span>
+                  </h3>
                   <ul>
-                    {job.points.map((p, i) => (
-                      <li key={i}>{p}</li>
+                    {g.items.map((it) => (
+                      <li key={it}>{it}</li>
                     ))}
                   </ul>
-                  <div className="timeline-tags">
-                    {job.tags.map((t) => (
-                      <span key={t}>{t}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* EDUCATION & CERTIFICATIONS */}
-        <section id="education" className="section education container">
-          <div className="section-head reveal">
-            <span className="section-kicker">04 · Background</span>
-            <h2 className="section-title">Education & Certifications</h2>
-          </div>
-          <div className="edu-grid">
-            <div className="edu-col reveal">
-              <h3 className="edu-col-title"><FaGraduationCap /> Education</h3>
-              {EDUCATION.map((e) => (
-                <div className="edu-card" key={e.degree}>
-                  <h4>{e.degree}</h4>
-                  <p className="edu-school">{e.school}</p>
-                  <p className="edu-loc"><FaLocationDot /> {e.location}</p>
                 </div>
               ))}
             </div>
-            <div className="edu-col reveal">
-              <h3 className="edu-col-title"><FaAward /> Certifications</h3>
-              <div className="edu-card">
-                <ul className="cert-list">
+            <p className="aside" data-reveal>
+              <span className="mono">A note on AI —</span> I use it the way a good carpenter uses a power tool: for speed
+              on the parts that don’t need judgment. Every AI-assisted change I ship clears human review, quality gates and
+              tests before it merges.
+            </p>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------ PROJECTS */}
+        <section id="projects" className="section" aria-labelledby="projects-title">
+          <div className="wrap">
+            <SectionHead index="05" label="Selected projects" title={<span id="projects-title">Built on my own time</span>} />
+            <ul className="projects">
+              {PROJECTS.map((p, i) => (
+                <li key={p.title} data-reveal style={{ "--i": i }}>
+                  <a className="project" href={p.href} target="_blank" rel="noopener noreferrer">
+                    <span className="project__num mono">0{i + 1}</span>
+                    <span className="project__main">
+                      <span className="project__title">{p.title}</span>
+                      <span className="project__desc">{p.description}</span>
+                      <span className="tags tags--inline" aria-hidden="true">
+                        {p.tags.map((t) => (
+                          <span key={t}>{t}</span>
+                        ))}
+                      </span>
+                    </span>
+                    <span className="project__meta mono">
+                      {p.year}
+                      <span className="project__go">
+                        Code on GitHub <Arrow />
+                      </span>
+                    </span>
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------ EDUCATION */}
+        <section id="education" className="section" aria-labelledby="edu-title">
+          <div className="wrap">
+            <SectionHead index="06" label="Education & certification" title={<span id="edu-title">Schooling</span>} />
+            <div className="edu">
+              <ul className="edu__list">
+                {EDUCATION.map((e, i) => (
+                  <li key={e.degree} data-reveal style={{ "--i": i }}>
+                    <span className="edu__degree">{e.degree}</span>
+                    <span className="edu__school">{e.school}</span>
+                    <span className="mono edu__place">{e.place}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="certs" data-reveal>
+                <h3 className="mono">Certifications</h3>
+                <ul>
                   {CERTIFICATIONS.map((c) => (
-                    <li key={c}><FaCircleCheck /> {c}</li>
+                    <li key={c}>{c}</li>
                   ))}
                 </ul>
               </div>
@@ -734,100 +953,76 @@ export default function App() {
           </div>
         </section>
 
-        {/* PROJECTS */}
-        <section id="projects" className="section projects container">
-          <div className="section-head reveal">
-            <span className="section-kicker">05 · Selected Work</span>
-            <h2 className="section-title">Projects</h2>
-          </div>
-          <div className="projects-grid">
-            {PROJECTS.map((p, i) => {
-              const PIcon = p.Icon;
-              return (
-                <article className="project-card spotlight reveal" key={p.title} style={{ transitionDelay: `${i * 100}ms` }}>
-                  <div className="project-banner" style={{ background: p.accent }}>
-                    <span className="project-icon"><PIcon /></span>
-                  </div>
-                  <div className="project-body">
-                    <h3>{p.title}</h3>
-                    <p>{p.description}</p>
-                    <div className="project-tags">
-                      {p.tags.map((t) => (
-                        <span key={t}>{t}</span>
-                      ))}
-                    </div>
-                    {(p.code || p.demo) && (
-                      <div className="project-links">
-                        {p.code && (
-                          <a href={p.code} target="_blank" rel="noopener noreferrer" className="project-link">
-                            <FaGithub /> View Code
-                          </a>
-                        )}
-                        {p.demo && (
-                          <a href={p.demo} target="_blank" rel="noopener noreferrer" className="project-link primary">
-                            <FaArrowUpRightFromSquare /> Live Demo
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* CONTACT */}
-        <section id="contact" className="section contact container">
-          <div className="section-head reveal">
-            <span className="section-kicker">06 · Get In Touch</span>
-            <h2 className="section-title">Let's Work Together</h2>
-            <p className="section-sub">
-              I'm open to <strong>Senior Full-Stack &amp; Backend Engineering</strong> roles and
-              exciting collaborations. Let's build something great.
+        {/* ------------------------------------------------ CONTACT */}
+        <section id="contact" className="contact" aria-labelledby="contact-title">
+          <div className="wrap">
+            <div className="section-rule section-rule--light" data-reveal>
+              <span className="mono">§ 07</span>
+              <span className="mono">Contact</span>
+            </div>
+            <h2 id="contact-title" className="contact__title" data-reveal>
+              Let’s build something that{" "}
+              <span className="scribble-wrap">
+                <em>lasts.</em>
+                <Scribble className="scribble--contact" />
+              </span>
+            </h2>
+            <p className="contact__lede" data-reveal>
+              I’m looking for senior full-stack and backend roles where the systems are big and the details matter. The
+              fastest way to reach me is email.
             </p>
-          </div>
-          <div className="contact-grid">
-            {CONTACTS.map(({ Icon, label, value, href, color }, i) => (
-              <a
-                key={label}
-                href={href}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel="noopener noreferrer"
-                className="contact-card reveal"
-                style={{ transitionDelay: `${i * 70}ms` }}
-              >
-                <span className="contact-icon" style={{ color }}><Icon /></span>
-                <span className="contact-meta">
-                  <span className="contact-label">{label}</span>
-                  <span className="contact-value">{value}</span>
-                </span>
+
+            <div className="contact__email" data-reveal>
+              <a href={`mailto:${EMAIL}`} className="email-link">
+                {EMAIL}
               </a>
-            ))}
+              <button type="button" className="copy-btn mono" onClick={copyEmail} data-magnetic>
+                {copied ? "Copied ✓" : "Copy"}
+              </button>
+              <span className="sr-only" role="status" aria-live="polite">
+                {copied ? "Email address copied to clipboard" : ""}
+              </span>
+            </div>
+
+            <ul className="contact__list" data-reveal>
+              <li>
+                <span className="mono">Phone</span>
+                <a href={PHONE_HREF}>{PHONE_DISPLAY}</a>
+              </li>
+              <li>
+                <span className="mono">LinkedIn</span>
+                <a href={LINKEDIN} target="_blank" rel="noopener noreferrer">
+                  <FaLinkedinIn aria-hidden="true" /> mohan-babu-doddapaneni
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+              <li>
+                <span className="mono">GitHub</span>
+                <a href={GITHUB} target="_blank" rel="noopener noreferrer">
+                  <FaGithub aria-hidden="true" /> mohan-babu-doddapaneni
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+              <li>
+                <span className="mono">Résumé</span>
+                <a href={RESUME} download="Mohan_Babu_Doddapaneni.pdf">
+                  Download PDF
+                </a>
+              </li>
+            </ul>
           </div>
-          <div className="contact-cta reveal">
-            <a href="mailto:mohanbabud25@gmail.com" className="btn btn-primary">
-              <FaEnvelope /> Say Hello
-            </a>
-          </div>
+
+          <footer className="footer wrap">
+            <span className="mono">© {year} Mohan Babu Doddapaneni</span>
+            <span className="mono footer__made">Designed &amp; built by hand. Set in Fraunces &amp; Instrument Sans.</span>
+            <span className="mono">Worcester, MA · {time}</span>
+          </footer>
         </section>
       </main>
 
-      <footer className="footer">
-        <p className="footer-name">Mohan Babu Doddapaneni</p>
-        <p className="footer-note">
-          Designed &amp; built with React · &copy; {new Date().getFullYear()} · All rights reserved.
-        </p>
-      </footer>
-
-      {showScrollTop && (
-        <button className="scroll-to-top" onClick={scrollToTop} aria-label="Back to top">
-          <FaArrowUp />
-        </button>
-      )}
-      <a href="tel:+19782084167" className="contact-float" aria-label="Call me">
-        <FaPhone /><span>Call Me</span>
+      <a href="#top" className={`to-top ${showTop ? "is-shown" : ""}`} aria-label="Back to top" tabIndex={showTop ? 0 : -1}>
+        <span aria-hidden="true">↑</span>
       </a>
-    </div>
+    </>
   );
 }
