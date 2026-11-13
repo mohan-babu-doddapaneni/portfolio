@@ -590,42 +590,6 @@ section[id] {
   max-width: 26ch;
 }
 
-.hl {
-  background: linear-gradient(transparent 62%, color-mix(in srgb, var(--accent) 30%, transparent) 62%) no-repeat 0 0 / 0% 100%;
-  animation: marker 1s var(--ease-out) 1.3s forwards;
-}
-
-.scribble-wrap {
-  position: relative;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.scribble {
-  position: absolute;
-  left: -3%;
-  width: 106%;
-  height: 0.42em;
-  bottom: -0.22em;
-  color: var(--accent);
-  overflow: visible;
-  pointer-events: none;
-}
-
-.scribble path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-}
-
-.scribble--hero path {
-  animation: draw 1.1s var(--ease-inout) 1.5s forwards;
-}
-
-[data-reveal].is-in .scribble--contact path,
-.is-in .scribble--contact path {
-  animation: draw 1.1s var(--ease-inout) 0.5s forwards;
-}
-
 .facts {
   display: grid;
   gap: 14px;
@@ -664,7 +628,9 @@ section[id] {
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  background: var(--paper-2);
+  border-radius: 4px;
+  background: #f4f3f1;
+  box-shadow: 0 0 0 1px var(--line), 0 24px 48px -28px rgba(26, 23, 19, 0.45);
   clip-path: inset(100% 0 0 0);
   animation: unveil 1.3s var(--ease-inout) 0.45s forwards;
 }
@@ -673,23 +639,8 @@ section[id] {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.06) sepia(0.18);
   transform: scale(1.12);
   animation: settle 1.8s var(--ease-out) 0.45s forwards;
-  transition: filter 0.8s var(--ease-out);
-}
-
-.portrait:hover img {
-  filter: grayscale(0) contrast(1) sepia(0);
-}
-
-.portrait figcaption {
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 0.62rem;
-  line-height: 1.5;
-  text-transform: none;
-  letter-spacing: 0.02em;
 }
 
 /* load sequence for hero bits */
@@ -759,7 +710,7 @@ section[id] {
 
 /* ---------------------------------------------------------------- sections */
 .section {
-  padding-block: clamp(80px, 11vw, 160px);
+  padding-block: clamp(64px, 8vw, 120px);
 }
 
 .section-head {
@@ -854,8 +805,7 @@ section[id] {
   font-size: clamp(1.75rem, 1rem + 2.6vw, 3.2rem);
   font-weight: 330;
   line-height: 1.12;
-  letter-spacing: -0.025em;
-  text-indent: -0.42em;
+  letter-spacing: -0.022em;
 }
 
 .pull em {
@@ -871,20 +821,10 @@ section[id] {
   padding-top: 8px;
 }
 
-.profile__body p:first-child::first-letter {
-  float: left;
-  font-family: var(--font-display);
-  font-size: 3.6em;
-  line-height: 0.82;
-  font-weight: 400;
-  margin: 0.06em 0.1em 0 0;
-  color: var(--accent);
-}
-
 .ledger {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-top: clamp(56px, 8vw, 110px);
+  margin-top: clamp(48px, 6vw, 88px);
   border-top: 1px solid var(--line-strong);
 }
 
@@ -931,7 +871,7 @@ section[id] {
   position: relative;
   width: 100%;
   display: grid;
-  grid-template-columns: 150px minmax(0, 1.1fr) minmax(0, 1fr) 150px 28px;
+  grid-template-columns: 170px minmax(0, 1.1fr) minmax(0, 1fr) 150px 28px;
   gap: 20px;
   align-items: baseline;
   padding: 28px 0;
@@ -1036,7 +976,7 @@ section[id] {
 
 .job__content {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
+  grid-template-columns: 170px minmax(0, 1fr);
   column-gap: 20px;
   padding-bottom: 40px;
   opacity: 0;
@@ -1114,7 +1054,7 @@ section[id] {
   --line-strong: color-mix(in srgb, var(--paper) 50%, transparent);
   --ink-2: color-mix(in srgb, var(--paper) 82%, var(--ink));
   --muted: color-mix(in srgb, var(--paper) 62%, var(--ink));
-  --accent-text: var(--accent);
+  --accent-text: #ff7a4f; /* 6.9:1 on ink */
 }
 
 :root[data-theme="dark"] .section--ink {
@@ -1348,7 +1288,7 @@ section[id] {
 .project__meta {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: flex-end;
   gap: 16px;
   color: var(--muted);
@@ -1433,7 +1373,7 @@ section[id] {
   padding-top: clamp(80px, 11vw, 150px);
   --line: rgba(18, 15, 12, 0.22);
   --line-strong: rgba(18, 15, 12, 0.6);
-  --muted: rgba(18, 15, 12, 0.72);
+  --muted: var(--poster-ink); /* full ink: small labels need 4.5:1 on the poster colour */
   --accent: var(--poster-ink);
   --accent-text: var(--poster-ink);
   --ink: var(--poster-ink);
@@ -1464,12 +1404,6 @@ section[id] {
 
 .contact__title em {
   font-variation-settings: "SOFT" 100, "WONK" 1;
-}
-
-.scribble--contact {
-  color: #fff6ea;
-  height: 0.28em;
-  bottom: -0.12em;
 }
 
 .contact__lede {
@@ -1670,18 +1604,6 @@ section[id] {
   }
 }
 
-@keyframes marker {
-  to {
-    background-size: 100% 100%;
-  }
-}
-
-@keyframes draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
 @keyframes marquee {
   to {
     transform: translateX(-50%);
@@ -1742,7 +1664,7 @@ section[id] {
   }
 
   .job__head {
-    grid-template-columns: 120px minmax(0, 1fr) minmax(0, 1fr) 28px;
+    grid-template-columns: 150px minmax(0, 1fr) minmax(0, 1fr) 28px;
   }
 
   .job__loc {
@@ -1750,7 +1672,7 @@ section[id] {
   }
 
   .job__content {
-    grid-template-columns: 120px minmax(0, 1fr);
+    grid-template-columns: 150px minmax(0, 1fr);
   }
 }
 
@@ -1801,7 +1723,7 @@ section[id] {
   .project__meta {
     grid-column: 2;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     padding-top: 0;
     text-align: left;
@@ -1955,9 +1877,6 @@ section[id] {
     grid-area: cta;
   }
 
-  .portrait figcaption {
-    font-size: 0.56rem;
-  }
 
   .hero__cta .btn {
     flex: 1 1 auto;

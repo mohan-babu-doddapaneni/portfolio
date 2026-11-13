@@ -37,21 +37,21 @@ const TICKER = [
   "12 platform modules",
   "Java 8 → 21",
   "Weekly releases, not quarterly",
-  "1.4M-event holiday surge, survived",
+  "1.4M-event holiday peak",
 ];
 
 const STATS = [
   { value: 6, suffix: "+", label: "Years shipping production software" },
-  { value: 40, suffix: "+", label: "Retailers on the platform I own" },
+  { value: 40, suffix: "+", label: "Enterprise retailers on the platform" },
   { value: 2.5, suffix: "M", label: "Orders processed every month", decimals: 1 },
-  { value: 12, suffix: "", label: "Modules in the Business Console" },
+  { value: 12, suffix: "", label: "Platform modules I build across" },
 ];
 
 const EXPERIENCE = [
   {
     company: "Fenix Commerce",
     role: "Product Development Engineer",
-    period: "2026 — Now",
+    period: "Jan 2026 — Present",
     location: "Worcester, MA",
     summary:
       "I own the multi-tenant Business Console on a Java, Spring Boot, Angular, Elasticsearch and AWS commerce platform serving 40+ retailers across 12 modules at 2.5M+ orders per month.",
@@ -69,8 +69,8 @@ const EXPERIENCE = [
   {
     company: "Adobe",
     role: "Full Stack Developer",
-    period: "2024 — 2026",
-    location: "Massachusetts",
+    period: "Sep 2024 — Jan 2026",
+    location: "Massachusetts, USA",
     summary:
       "Built a cloud-native asset management and real-time collaboration platform inside Adobe Creative Cloud on Java, Spring Boot, React, Next.js, Kafka and AWS.",
     points: [
@@ -78,14 +78,15 @@ const EXPERIENCE = [
       "Broke a monolithic delivery path into Spring Boot microservices so teams could deploy independently, supporting 50% faster feature delivery across Photoshop and Illustrator.",
       "Shipped adaptive interfaces in React, Next.js and Tailwind. Engagement rose 10% and interface errors dropped 30%; tighter Redux state handling cut validation errors 25%.",
       "Built real-time alerting on WebSockets and Kafka so users stopped losing work to silent overwrites, and connected styluses and tablets through secure, event-driven APIs.",
-      "Cut query response times 18% by partitioning and indexing the PostgreSQL tables behind large asset searches.",
+      "Shipped AI-driven layout suggestions built from user history and asset metadata, speeding up design creation for new users by 30%.",
+      "Cut query response times 18% by partitioning and indexing the PostgreSQL tables behind large asset searches, and secured assets and session data end to end with TLS and OAuth 2.0.",
     ],
     tags: ["Java", "Spring Boot", "React", "Next.js", "Kafka", "AWS", "PostgreSQL"],
   },
   {
     company: "Capgemini",
     role: "Associate Consultant, Full Stack",
-    period: "2020 — 2023",
+    period: "Sep 2020 — Jul 2023",
     location: "Hyderabad, India",
     summary:
       "Built enterprise Java, Spring Boot and React applications for financial-services and product-engineering clients.",
@@ -94,14 +95,15 @@ const EXPERIENCE = [
       "Rebuilt the backend on modular Spring Boot services with Hibernate, cutting API latency 50% and feature development time 40%.",
       "Cut reported security vulnerabilities 90% by hardening Spring Security: RBAC, token auth, method-level access control, CSRF protection and secure sessions.",
       "Migrated 18 Java projects to Maven in under 30 days and remediated log4j across the portfolio ahead of the client deadline.",
-      "Replaced always-on batch jobs with AWS Lambda for event-driven processing, lifting uptime 20%, and cut post-deployment defects 30% with JUnit coverage.",
+      "Delivered client dashboards in React over Node.js REST services, and replaced always-on batch jobs with AWS Lambda for event-driven processing, lifting uptime 20%.",
+      "Cut post-deployment defects 30% with JUnit coverage and profiling, and stood up a Swagger API portal documenting every endpoint.",
     ],
     tags: ["Spring Boot", "React", "Node.js", "AWS", "Spring Security"],
   },
   {
     company: "Wipro",
     role: "Junior Full Stack Developer",
-    period: "2019 — 2020",
+    period: "Jul 2019 — Aug 2020",
     location: "India",
     summary:
       "Built a KYC and AML compliance platform for a banking client on Angular, Spring Boot, Thymeleaf and PostgreSQL.",
@@ -109,6 +111,7 @@ const EXPERIENCE = [
       "Built KYC onboarding in Angular Reactive Forms with dynamic validation, supporting 5,000+ customer profiles.",
       "Reshaped Spring Boot JSON responses around what analysts actually needed, cutting AML alert review time 30%.",
       "Configured Spring Security across four KYC modules and designed review screens that made flagging suspicious activity 25% faster.",
+      "Wrote the PostgreSQL queries behind analyst comments, risk scores and audit trails across 10,000+ transaction records.",
     ],
     tags: ["Angular", "Spring Boot", "Spring Security", "PostgreSQL"],
   },
@@ -157,7 +160,6 @@ const STACK = [
 const PROJECTS = [
   {
     title: "Career Path Recommendation System",
-    year: "Graduate work",
     description:
       "Parses résumés with NLP, predicts likely career paths and names the skill gaps in the way, then serves the results over REST. Python and Django over PostgreSQL.",
     tags: ["Python", "Django", "NLP", "PostgreSQL"],
@@ -165,7 +167,6 @@ const PROJECTS = [
   },
   {
     title: "Restaurant Ordering Portal",
-    year: "Side project",
     description:
       "A normalized schema for menus, modifiers and orders, with transactional placement so a dropped or duplicated request never leaves half an order behind. Processed 300+ real orders.",
     tags: ["Java", "Angular", "MySQL", "Transactions"],
@@ -390,20 +391,6 @@ const Arrow = ({ className = "" }) => (
   </svg>
 );
 
-/** Hand-drawn style underline that draws itself when revealed. */
-const Scribble = ({ className = "" }) => (
-  <svg className={`scribble ${className}`} viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <path
-      d="M3 15c38-6 80-9 122-8 46 1 88 4 128 2 14-1 28-3 44-6M18 20c52-5 128-6 210-3"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      pathLength="1"
-    />
-  </svg>
-);
-
 function SectionHead({ index, label, title, children }) {
   return (
     <div className="section-head">
@@ -580,7 +567,7 @@ export default function App() {
       {/* ------------------------------------------------ NAV */}
       <header className={`nav ${menuOpen ? "nav--open" : ""}`}>
         <div className="nav__inner">
-          <a href="#top" className="wordmark" onClick={() => closeMenu()} aria-label="Mohan Babu Doddapaneni, back to top">
+          <a href="#top" className="wordmark" onClick={() => closeMenu()} aria-label="Mohan Babu D. — back to top">
             <span className="wordmark__mark" aria-hidden="true" />
             <span className="wordmark__text">
               Mohan Babu<span className="wordmark__dim"> D.</span>
@@ -649,7 +636,7 @@ export default function App() {
         <section id="top" className="hero" aria-labelledby="hero-name">
           <div className="wrap">
             <div className="hero__meta mono">
-              <span className="load load--1">Portfolio — Edition {year}</span>
+              <span className="load load--1">Full-stack engineer · Worcester, MA</span>
               <span className="load load--2 status">
                 <span className="status__dot" aria-hidden="true" />
                 Open to senior full-stack &amp; backend roles
@@ -669,13 +656,8 @@ export default function App() {
 
             <div className="hero__grid">
               <p className="hero__lede load load--3">
-                Full-stack engineer working in <span className="hl">Java, Spring Boot, Angular</span> and React. Six years
-                of making multi-tenant platforms fast, correct and{" "}
-                <span className="scribble-wrap">
-                  pleasantly boring
-                  <Scribble className="scribble--hero" />
-                </span>{" "}
-                at scale.
+                I build full-stack products in Java, Spring Boot, Angular and React — six years of keeping multi-tenant
+                platforms fast, correct and reliable at scale.
               </p>
 
               <div className="hero__side load load--4">
@@ -717,7 +699,6 @@ export default function App() {
                     fetchPriority="high"
                   />
                 </div>
-                <figcaption className="mono">Fig. 01 — The author, in a blazer he rarely wears.</figcaption>
               </figure>
             </div>
           </div>
@@ -746,10 +727,10 @@ export default function App() {
               <span className="mono">Profile</span>
             </div>
             <div className="profile">
-              <blockquote className="pull" data-reveal id="profile-title">
-                “I’m happiest chasing the bugs that <em>dashboards never show you</em> — and building things so they
-                stop happening.”
-              </blockquote>
+              <h2 className="pull" data-reveal id="profile-title">
+                I do my best work on the problems <em>dashboards don’t show</em>: data that is quietly wrong, screens
+                that slow down as tenants grow, and failures that hide their real cause.
+              </h2>
               <div className="profile__body" data-reveal>
                 <p>
                   I ship production systems on Java (8 to 21), Spring Boot microservices, Angular and React. Today I own
@@ -757,9 +738,9 @@ export default function App() {
                   retailers, from the data model through REST and GraphQL APIs to the screens on top.
                 </p>
                 <p>
-                  My best work is the unglamorous kind that keeps a platform trustworthy: pagination and caching
-                  contracts that hold at tens of millions of records, tenant isolation enforced in one place, and quiet
-                  data bugs nobody else noticed. I use AI coding tools every day, and every change still goes through
+                  I focus on the work that keeps a platform trustworthy: pagination and caching
+                  contracts that hold at tens of millions of records, tenant isolation enforced in one place, and data
+                  bugs that are easy to miss. I use AI coding tools every day, and every change still goes through
                   code review, SonarQube and tests.
                 </p>
               </div>
@@ -781,7 +762,7 @@ export default function App() {
         {/* ------------------------------------------------ WORK */}
         <section id="work" className="section" aria-labelledby="work-title">
           <div className="wrap">
-            <SectionHead index="02" label="Experience, 2019 — now" title={<span id="work-title">Where I’ve done the work</span>} />
+            <SectionHead index="02" label="2019 — Present" title={<span id="work-title">Experience</span>} />
 
             <ol className="jobs">
               {EXPERIENCE.map((job, i) => {
@@ -871,7 +852,7 @@ export default function App() {
         {/* ------------------------------------------------ STACK */}
         <section id="stack" className="section" aria-labelledby="stack-title">
           <div className="wrap">
-            <SectionHead index="04" label="Toolbox" title={<span id="stack-title">What I reach for</span>} />
+            <SectionHead index="04" label="Technical skills" title={<span id="stack-title">Skills &amp; tools</span>} />
             <div className="stack">
               {STACK.map((g, i) => (
                 <div className="stack__col" key={g.title} data-reveal style={{ "--i": i }}>
@@ -888,9 +869,9 @@ export default function App() {
               ))}
             </div>
             <p className="aside" data-reveal>
-              <span className="mono">A note on AI —</span> I use it the way a good carpenter uses a power tool: for speed
-              on the parts that don’t need judgment. Every AI-assisted change I ship clears human review, quality gates and
-              tests before it merges.
+              <span className="mono">On AI tools —</span> I use Claude Code, GitHub Copilot and Cursor daily for
+              scaffolding, migrations and reading unfamiliar code. Every AI-assisted change still goes through code review,
+              SonarQube quality gates and tests before it merges.
             </p>
           </div>
         </section>
@@ -898,7 +879,7 @@ export default function App() {
         {/* ------------------------------------------------ PROJECTS */}
         <section id="projects" className="section" aria-labelledby="projects-title">
           <div className="wrap">
-            <SectionHead index="05" label="Selected projects" title={<span id="projects-title">Built on my own time</span>} />
+            <SectionHead index="05" label="Selected projects" title={<span id="projects-title">Projects</span>} />
             <ul className="projects">
               {PROJECTS.map((p, i) => (
                 <li key={p.title} data-reveal style={{ "--i": i }}>
@@ -914,9 +895,8 @@ export default function App() {
                       </span>
                     </span>
                     <span className="project__meta mono">
-                      {p.year}
                       <span className="project__go">
-                        Code on GitHub <Arrow />
+                        GitHub profile <Arrow />
                       </span>
                     </span>
                     <span className="sr-only"> (opens in a new tab)</span>
@@ -930,7 +910,7 @@ export default function App() {
         {/* ------------------------------------------------ EDUCATION */}
         <section id="education" className="section" aria-labelledby="edu-title">
           <div className="wrap">
-            <SectionHead index="06" label="Education & certification" title={<span id="edu-title">Schooling</span>} />
+            <SectionHead index="06" label="Education & certifications" title={<span id="edu-title">Education</span>} />
             <div className="edu">
               <ul className="edu__list">
                 {EDUCATION.map((e, i) => (
@@ -961,11 +941,7 @@ export default function App() {
               <span className="mono">Contact</span>
             </div>
             <h2 id="contact-title" className="contact__title" data-reveal>
-              Let’s build something that{" "}
-              <span className="scribble-wrap">
-                <em>lasts.</em>
-                <Scribble className="scribble--contact" />
-              </span>
+              Let’s build something that <em>lasts.</em>
             </h2>
             <p className="contact__lede" data-reveal>
               I’m looking for senior full-stack and backend roles where the systems are big and the details matter. The
@@ -1014,15 +990,15 @@ export default function App() {
 
           <footer className="footer wrap">
             <span className="mono">© {year} Mohan Babu Doddapaneni</span>
-            <span className="mono footer__made">Designed &amp; built by hand. Set in Fraunces &amp; Instrument Sans.</span>
-            <span className="mono">Worcester, MA · {time}</span>
+                        <span className="mono">Worcester, MA · {time}</span>
           </footer>
         </section>
-      </main>
-
-      <a href="#top" className={`to-top ${showTop ? "is-shown" : ""}`} aria-label="Back to top" tabIndex={showTop ? 0 : -1}>
+        <a href="#top" className={`to-top ${showTop ? "is-shown" : ""}`} aria-label="Back to top" tabIndex={showTop ? 0 : -1}>
         <span aria-hidden="true">↑</span>
       </a>
+      </main>
+
+
     </>
   );
 }
